@@ -132,13 +132,16 @@ export default function DashboardLayout({
           <SidebarMenu>
             {navItems.map((item) => (
               <SidebarMenuItem key={item.href}>
-                <Link href={item.href} legacyBehavior passHref>
+                <Link href={item.href} passHref>
                   <SidebarMenuButton
                     isActive={pathname === item.href}
                     tooltip={{ children: item.label }}
+                    asChild
                   >
-                    <item.icon />
-                    <span>{item.label}</span>
+                    <span>
+                      <item.icon />
+                      <span>{item.label}</span>
+                    </span>
                   </SidebarMenuButton>
                 </Link>
               </SidebarMenuItem>
@@ -148,13 +151,16 @@ export default function DashboardLayout({
         <SidebarFooter>
           <SidebarMenu>
             <SidebarMenuItem>
-              <Link href="/dashboard/settings" legacyBehavior passHref>
+              <Link href="/dashboard/settings" passHref>
                 <SidebarMenuButton
                   isActive={pathname === "/dashboard/settings"}
                   tooltip={{ children: "Settings" }}
+                  asChild
                 >
-                  <Settings />
-                  <span>Settings</span>
+                  <span>
+                    <Settings />
+                    <span>Settings</span>
+                  </span>
                 </SidebarMenuButton>
               </Link>
             </SidebarMenuItem>
