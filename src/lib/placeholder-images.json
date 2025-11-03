@@ -1,3 +1,10 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "crop-leaf",
+      "description": "A close-up of a green leaf with some brown spots, possibly indicating a disease.",
+      "imageUrl": "https://images.unsplash.com/photo-1660904900487-3c6fbcb3b387?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjcm9wJTIwbGVhZnxlbnwwfHx8fDE3NjIxODk0OTV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "crop leaf"
+    }
+  ]
 }
