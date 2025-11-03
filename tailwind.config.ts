@@ -9,25 +9,14 @@ export default {
   ],
   theme: {
     extend: {
-      fontFamily: {
-        body: ['Inter', 'sans-serif'],
-        headline: ['Inter', 'sans-serif'],
-        code: ['monospace'],
-      },
       colors: {
-        background: 'hsl(var(--background))',
+        background: 'hsl(var(--background))', // #FFFFFF
         foreground: 'hsl(var(--foreground))',
-        card: {
-          DEFAULT: 'hsl(var(--card))',
-          foreground: 'hsl(var(--card-foreground))',
-        },
-        popover: {
-          DEFAULT: 'hsl(var(--popover))',
-          foreground: 'hsl(var(--popover-foreground))',
-        },
         primary: {
-          DEFAULT: 'hsl(var(--primary))',
+          DEFAULT: 'hsl(var(--primary))', // #0A84FF
           foreground: 'hsl(var(--primary-foreground))',
+          hover: '#007AFF',
+          disabled: '#DDEFFF',
         },
         secondary: {
           DEFAULT: 'hsl(var(--secondary))',
@@ -42,18 +31,18 @@ export default {
           foreground: 'hsl(var(--accent-foreground))',
         },
         destructive: {
-          DEFAULT: 'hsl(var(--destructive))',
+          DEFAULT: 'hsl(var(--destructive))', // #FF3B30
           foreground: 'hsl(var(--destructive-foreground))',
         },
-        border: 'hsl(var(--border))',
+        success: 'hsl(var(--success))', // #34C759
+        warning: 'hsl(var(--warning))', // #FFD60A
+        border: 'hsl(var(--border))', // #E6E6EA
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
-        chart: {
-          '1': 'hsl(var(--chart-1))',
-          '2': 'hsl(var(--chart-2))',
-          '3': 'hsl(var(--chart-3))',
-          '4': 'hsl(var(--chart-4))',
-          '5': 'hsl(var(--chart-5))',
+        gray: {
+          50: '#F2F2F5',
+          100: '#E6E6EA',
+          400: '#8E8E93',
         },
         sidebar: {
           DEFAULT: 'hsl(var(--sidebar-background))',
@@ -66,10 +55,30 @@ export default {
           ring: 'hsl(var(--sidebar-ring))',
         },
       },
+      boxShadow: {
+        card: '0 6px 18px rgba(15,15,15,0.06)',
+        button: '0 6px 12px rgba(10,132,255,0.12)',
+      },
       borderRadius: {
-        lg: 'var(--radius)',
-        md: 'calc(var(--radius) - 2px)',
-        sm: 'calc(var(--radius) - 4px)',
+        lg: '12px', // card
+        md: '8px', // button
+        sm: '6px', // input
+      },
+      fontFamily: {
+        sans: ['"SF Pro Text"', 'Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        body: ['"SF Pro Text"', 'Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        headline: ['"SF Pro Display"', 'Inter', 'system-ui', '-apple-system', 'sans-serif'],
+      },
+      fontSize: {
+        h1: ['32px', {lineHeight: '1.35', fontWeight: '600', letterSpacing: '-0.01em'}],
+        h2: ['24px', {lineHeight: '1.4', fontWeight: '600', letterSpacing: '-0.01em'}],
+        body: ['16px', {lineHeight: '1.55', fontWeight: '400'}],
+        small: ['13px', {lineHeight: '1.6', fontWeight: '400'}],
+      },
+      transitionDuration: {
+        fast: '160ms',
+        normal: '240ms',
+        slow: '320ms',
       },
       keyframes: {
         'accordion-down': {

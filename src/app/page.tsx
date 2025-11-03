@@ -34,59 +34,66 @@ function LeafIcon(props: React.SVGProps<SVGSVGElement>) {
 
 export default function LoginPage() {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-background p-4">
+    <div className="flex items-center justify-center min-h-screen bg-background p-4 font-sans">
       <div className="w-full max-w-md">
-        <div className="flex justify-center mb-6">
+        <div className="flex justify-center mb-8">
           <Link
             href="#"
-            className="flex items-center gap-2 text-foreground"
+            className="flex items-center gap-2.5 text-foreground"
             prefetch={false}
           >
-            <LeafIcon className="h-8 w-8 text-primary" />
-            <span className="text-2xl font-bold">AgriVision Pro</span>
+            <LeafIcon className="h-7 w-7 text-primary" />
+            <span className="text-2xl font-semibold tracking-tight">AgriVision Pro</span>
           </Link>
         </div>
-        <Card>
-          <CardHeader className="space-y-1 text-center">
-            <CardTitle className="text-2xl">Welcome Back</CardTitle>
-            <CardDescription>
+        <Card className="rounded-lg shadow-card">
+          <CardHeader className="space-y-2 text-center p-6">
+            <CardTitle className="text-2xl font-semibold tracking-tight">Welcome Back</CardTitle>
+            <CardDescription className="text-muted-foreground">
               Enter your credentials to access your dashboard.
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-6 p-6">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email" className="text-sm font-semibold text-[#1C1C1E]">Email</Label>
               <Input
                 id="email"
                 type="email"
                 placeholder="manager@farm.com"
                 required
+                className="rounded-sm !border-gray-100 focus:glow"
               />
             </div>
             <div className="space-y-2">
               <div className="flex items-center">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password" className="text-sm font-semibold text-[#1C1C1E]">Password</Label>
                 <Link
                   href="#"
-                  className="ml-auto inline-block text-sm underline"
+                  className="ml-auto inline-block text-sm text-primary hover:underline"
                   prefetch={false}
                 >
-                  Forgot your password?
+                  Forgot password?
                 </Link>
               </div>
-              <Input id="password" type="password" required />
+              <Input id="password" type="password" required className="rounded-sm !border-gray-100 focus:glow" />
             </div>
-            <Link href="/dashboard" className="w-full">
-              <Button className="w-full">Sign In</Button>
-            </Link>
-            <Button variant="outline" className="w-full">
-              Sign in with Google
-            </Button>
+            <div className="space-y-3">
+               <Link href="/dashboard" className="w-full" passHref>
+                <Button 
+                  className="w-full font-semibold text-[15px] h-11 rounded-md shadow-button hover:bg-primary-hover transition-transform duration-normal active:translate-y-px"
+                >
+                  Sign In
+                </Button>
+              </Link>
+              <Button variant="outline" className="w-full h-11 rounded-md border-primary/50 text-primary hover:bg-primary/10 hover:text-primary">
+                Sign in with Google
+              </Button>
+            </div>
           </CardContent>
         </Card>
-        <div className="mt-4 text-center text-sm">
+        <div className="mt-6 text-center text-sm text-gray-400">
           Don&apos;t have an account?{" "}
-          <Link href="#" className="underline" prefetch={false}>
+          <Link href="#" className="font-medium text-primary hover:underline" prefetch={false}>
             Sign up
           </Link>
         </div>
