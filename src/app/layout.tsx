@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
+import { FirebaseProvider } from "@/firebase/client-provider";
 
 export const metadata: Metadata = {
   title: "AgriVision Pro",
@@ -27,7 +28,9 @@ export default function RootLayout({
         />
       </head>
       <body className="antialiased">
-        {children}
+        <FirebaseProvider>
+          {children}
+        </FirebaseProvider>
         <Toaster />
       </body>
     </html>
