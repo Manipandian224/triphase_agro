@@ -98,10 +98,16 @@ type SensorData = {
 };
 
 export default function DashboardPage() {
+  const { rtdb } = useFirebase();
   const [sensorData, setSensorData] = useState<SensorData | null>(null);
   const [loading, setLoading] = useState(true);
   
   useEffect(() => {
+    if (!rtdb) {
+      // Firebase Realtime DB is not initialized yet.
+      return;
+    }
+    
     const db = getDatabase();
     const sensorRef = ref(db, 'sensors/live');
 
@@ -117,7 +123,7 @@ export default function DashboardPage() {
     return () => {
       off(sensorRef, 'value', unsubscribe);
     };
-  }, []);
+  }, [rtdb]);
 
   const kpiData = [
     {
