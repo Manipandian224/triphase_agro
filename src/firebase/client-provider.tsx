@@ -11,6 +11,7 @@ import { Auth } from 'firebase/auth';
 import { Firestore } from 'firebase/firestore';
 import { Functions } from 'firebase/functions';
 import { FirebaseStorage } from 'firebase/storage';
+import { FirebaseErrorListener } from '@/components/FirebaseErrorListener';
 
 import { initializeFirebase } from './index';
 
@@ -44,6 +45,7 @@ export const FirebaseProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <FirebaseContext.Provider value={firebaseServices}>
+      <FirebaseErrorListener />
       {children}
     </FirebaseContext.Provider>
   );
