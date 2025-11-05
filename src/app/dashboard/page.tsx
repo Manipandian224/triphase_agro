@@ -86,6 +86,13 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
+type SensorDataFromDevice = {
+  SoilMoisture: number;
+  Temperature: number;
+  Humidity: number;
+  PumpStatus: boolean;
+};
+
 type SensorData = {
   pumpStatus: 'ON' | 'OFF';
   threePhasePower: 'OK' | 'FAULT';
@@ -99,21 +106,32 @@ type SensorData = {
 
 export default function DashboardPage() {
   const { rtdb } = useFirebase();
-  const [sensorData, setSensorData] = useState<SensorData | null>(null);
+  const [sensorData, setSensorData] = useState<Partial<SensorData>>({});
   const [loading, setLoading] = useState(true);
   
   useEffect(() => {
     if (!rtdb) {
-      // Firebase Realtime DB is not initialized yet.
       return;
     }
     
     const db = getDatabase();
-    const sensorRef = ref(db, 'sensors/live');
+    const sensorRef = ref(db, 'Irrigation/');
 
     const unsubscribe = onValue(sensorRef, (snapshot) => {
-      const data = snapshot.val();
-      setSensorData(data);
+      const data: SensorDataFromDevice = snapshot.val();
+      if (data) {
+        setSensorData({
+          soilMoisture: data.SoilMoisture,
+          airTemp: data.Temperature,
+          humidity: data.Humidity,
+          pumpStatus: data.PumpStatus ? 'ON' : 'OFF',
+          // Assuming default values for other properties for now
+          threePhasePower: 'OK',
+          connectivity: 'Online',
+          cropHealth: 85, // Example value
+          waterFlow: 0, // Example value
+        });
+      }
       setLoading(false);
     }, (error) => {
       console.error("Firebase Realtime Database read failed:", error);
