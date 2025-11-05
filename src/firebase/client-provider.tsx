@@ -9,6 +9,7 @@ import {
 } from 'react';
 import { Auth } from 'firebase/auth';
 import { Firestore } from 'firebase/firestore';
+import { Database } from 'firebase/database';
 import { Functions } from 'firebase/functions';
 import { FirebaseStorage } from 'firebase/storage';
 import { FirebaseErrorListener } from '@/components/FirebaseErrorListener';
@@ -18,6 +19,7 @@ import { initializeFirebase } from './index';
 interface FirebaseContextType {
   auth: Auth | null;
   db: Firestore | null;
+  rtdb: Database | null;
   functions: Functions | null;
   storage: FirebaseStorage | null;
 }
@@ -25,6 +27,7 @@ interface FirebaseContextType {
 const FirebaseContext = createContext<FirebaseContextType>({
   auth: null,
   db: null,
+  rtdb: null,
   functions: null,
   storage: null,
 });
@@ -34,6 +37,7 @@ export const FirebaseProvider = ({ children }: { children: ReactNode }) => {
     useState<FirebaseContextType>({
       auth: null,
       db: null,
+      rtdb: null,
       functions: null,
       storage: null,
     });

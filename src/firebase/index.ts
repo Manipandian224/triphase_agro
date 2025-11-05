@@ -3,11 +3,13 @@ import { Auth, getAuth } from 'firebase/auth';
 import { Firestore, getFirestore } from 'firebase/firestore';
 import { Functions, getFunctions } from 'firebase/functions';
 import { FirebaseStorage, getStorage } from 'firebase/storage';
+import { Database, getDatabase } from 'firebase/database';
 import firebaseApp from './config';
 
 type FirebaseServices = {
   auth: Auth;
   db: Firestore;
+  rtdb: Database;
   functions: Functions;
   storage: FirebaseStorage;
 };
@@ -21,6 +23,7 @@ export const initializeFirebase = () => {
 
   const auth = getAuth(firebaseApp);
   const db = getFirestore(firebaseApp);
+  const rtdb = getDatabase(firebaseApp);
   const functions = getFunctions(firebaseApp);
   const storage = getStorage(firebaseApp);
 
@@ -38,6 +41,6 @@ export const initializeFirebase = () => {
   }
 
 
-  services = { auth, db, functions, storage };
+  services = { auth, db, rtdb, functions, storage };
   return services;
 };

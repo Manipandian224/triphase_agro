@@ -1,5 +1,6 @@
 "use client"
 
+import { useState, useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -42,9 +43,8 @@ import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import type { ChartConfig } from "@/components/ui/chart";
 import { cn } from "@/lib/utils";
 import { useFirebase } from "@/firebase/client-provider";
-import { useDoc } from "@/hooks/use-doc";
-import { doc } from "firebase/firestore";
 import { Skeleton } from "@/components/ui/skeleton";
+import { getDatabase, ref, onValue, off } from "firebase/database";
 
 const alerts = [
   {
@@ -86,9 +86,38 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
+type SensorData = {
+  pumpStatus: 'ON' | 'OFF';
+  threePhasePower: 'OK' | 'FAULT';
+  connectivity: 'Online' | 'Offline';
+  cropHealth: number;
+  soilMoisture: number;
+  airTemp: number;
+  humidity: number;
+  waterFlow: number;
+};
+
 export default function DashboardPage() {
-  const { db } = useFirebase();
-  const { data: sensorData, loading } = useDoc(db ? doc(db, "sensors", "live") : null);
+  const [sensorData, setSensorData] = useState<SensorData | null>(null);
+  const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+    const db = getDatabase();
+    const sensorRef = ref(db, 'sensors/live');
+
+    const unsubscribe = onValue(sensorRef, (snapshot) => {
+      const data = snapshot.val();
+      setSensorData(data);
+      setLoading(false);
+    }, (error) => {
+      console.error("Firebase Realtime Database read failed:", error);
+      setLoading(false);
+    });
+
+    return () => {
+      off(sensorRef, 'value', unsubscribe);
+    };
+  }, []);
 
   const kpiData = [
     {
