@@ -24,6 +24,20 @@ export const initializeFirebase = () => {
   const functions = getFunctions(firebaseApp);
   const storage = getStorage(firebaseApp);
 
+  // Note: This is a sample initialization. In a real app, you'd want to
+  // ensure this is only called once.
+  if (process.env.NODE_ENV === 'development') {
+    // try {
+    //   connectAuthEmulator(auth, 'http://localhost:9099');
+    //   connectFirestoreEmulator(db, 'localhost', 8080);
+    //   connectFunctionsEmulator(functions, 'localhost', 5001);
+    //   connectStorageEmulator(storage, 'localhost', 9199);
+    // } catch (e) {
+    //   console.error('Error connecting to Firebase emulators. Please ensure they are running.', e);
+    // }
+  }
+
+
   services = { auth, db, functions, storage };
   return services;
 };

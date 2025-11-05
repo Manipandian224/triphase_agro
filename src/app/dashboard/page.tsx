@@ -11,8 +11,6 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableHead,
-  TableHeader,
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
@@ -43,44 +41,10 @@ import {
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import type { ChartConfig } from "@/components/ui/chart";
 import { cn } from "@/lib/utils";
-
-const kpiData = [
-  {
-    title: "Pump Status",
-    value: "ON",
-    change: "Last change: 2h ago",
-    icon: Power,
-    status: "ok",
-  },
-  {
-    title: "3-Phase Power",
-    value: "OK",
-    change: "All phases active",
-    icon: Zap,
-    status: "ok",
-  },
-  {
-    title: "Connectivity",
-    value: "Online",
-    change: "All sensors reporting",
-    icon: CircleDot,
-    status: "ok",
-  },
-  {
-    title: "Crop Health",
-    value: "92/100",
-    change: "+2% this week",
-    icon: Leaf,
-    status: "ok",
-  },
-];
-
-const sensorData = [
-  { name: "Soil Moisture", value: "36.5%", icon: Droplets },
-  { name: "Air Temp", value: "28.3°C", icon: Thermometer },
-  { name: "Humidity", value: "72.1%", icon: Wind },
-  { name: "Water Flow", value: "12.7 L/min", icon: Waves },
-];
+import { useFirebase } from "@/firebase/client-provider";
+import { useDoc } from "@/hooks/use-doc";
+import { doc } from "firebase/firestore";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const alerts = [
   {
@@ -123,6 +87,48 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export default function DashboardPage() {
+  const { db } = useFirebase();
+  const { data: sensorData, loading } = useDoc(db ? doc(db, "sensors", "live") : null);
+
+  const kpiData = [
+    {
+      title: "Pump Status",
+      value: sensorData?.pumpStatus ?? "N/A",
+      change: "Last change: 2h ago",
+      icon: Power,
+      status: sensorData?.pumpStatus === "ON" ? "ok" : "warning",
+    },
+    {
+      title: "3-Phase Power",
+      value: sensorData?.threePhasePower ?? "N/A",
+      change: "All phases active",
+      icon: Zap,
+      status: sensorData?.threePhasePower === "OK" ? "ok" : "critical",
+    },
+    {
+      title: "Connectivity",
+      value: sensorData?.connectivity ?? "N/A",
+      change: "All sensors reporting",
+      icon: CircleDot,
+      status: sensorData?.connectivity === "Online" ? "ok" : "warning",
+    },
+    {
+      title: "Crop Health",
+      value: `${sensorData?.cropHealth ?? "0"}/100`,
+      change: "+2% this week",
+      icon: Leaf,
+      status: "ok",
+    },
+  ];
+  
+  const liveSensorData = [
+    { name: "Soil Moisture", value: `${sensorData?.soilMoisture?.toFixed(1) ?? "N/A"}%`, icon: Droplets },
+    { name: "Air Temp", value: `${sensorData?.airTemp?.toFixed(1) ?? "N/A"}°C`, icon: Thermometer },
+    { name: "Humidity", value: `${sensorData?.humidity?.toFixed(1) ?? "N/A"}%`, icon: Wind },
+    { name: "Water Flow", value: `${sensorData?.waterFlow?.toFixed(1) ?? "N/A"} L/min`, icon: Waves },
+  ];
+
+
   return (
     <div className="grid gap-4 md:gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
       {kpiData.map((kpi, index) => (
@@ -138,8 +144,8 @@ export default function DashboardPage() {
             />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{kpi.value}</div>
-            <p className="text-xs text-muted-foreground">{kpi.change}</p>
+             {loading ? <Skeleton className="h-8 w-24" /> : <div className="text-2xl font-bold">{kpi.value}</div>}
+             {loading ? <Skeleton className="h-4 w-32 mt-1" /> : <p className="text-xs text-muted-foreground">{kpi.change}</p>}
           </CardContent>
         </Card>
       ))}
@@ -150,7 +156,7 @@ export default function DashboardPage() {
           <CardDescription>Real-time data from field sensors.</CardDescription>
         </CardHeader>
         <CardContent className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-          {sensorData.map((sensor, index) => (
+          {liveSensorData.map((sensor, index) => (
             <div key={index} className="flex items-center space-x-4">
               <div className="p-3 rounded-full bg-muted">
                 <sensor.icon className="h-6 w-6 text-muted-foreground" />
@@ -159,7 +165,7 @@ export default function DashboardPage() {
                 <div className="text-sm text-muted-foreground">
                   {sensor.name}
                 </div>
-                <div className="text-lg font-bold">{sensor.value}</div>
+                 {loading ? <Skeleton className="h-6 w-20 mt-1" /> : <div className="text-lg font-bold">{sensor.value}</div>}
               </div>
             </div>
           ))}

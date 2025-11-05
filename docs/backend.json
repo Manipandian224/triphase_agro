@@ -1,0 +1,67 @@
+{
+  "entities": {
+    "SensorData": {
+      "title": "Sensor Data",
+      "description": "A collection of sensor readings at a specific point in time.",
+      "type": "object",
+      "properties": {
+        "pumpStatus": {
+          "type": "string",
+          "description": "The status of the pump (e.g., 'ON', 'OFF').",
+          "enum": ["ON", "OFF"]
+        },
+        "threePhasePower": {
+          "type": "string",
+          "description": "The status of the 3-phase power (e.g., 'OK', 'FAULT').",
+          "enum": ["OK", "FAULT"]
+        },
+        "connectivity": {
+          "type": "string",
+          "description": "The connectivity status of the system (e.g., 'Online', 'Offline').",
+          "enum": ["Online", "Offline"]
+        },
+        "cropHealth": {
+          "type": "number",
+          "description": "The overall crop health score (0-100)."
+        },
+        "soilMoisture": {
+          "type": "number",
+          "description": "The soil moisture level as a percentage."
+        },
+        "airTemp": {
+          "type": "number",
+          "description": "The air temperature in degrees Celsius."
+        },
+        "humidity": {
+          "type": "number",
+          "description": "The relative humidity as a percentage."
+        },
+        "waterFlow": {
+          "type": "number",
+          "description": "The water flow rate in Liters per minute."
+        }
+      },
+      "required": [
+        "pumpStatus",
+        "threePhasePower",
+        "connectivity",
+        "cropHealth",
+        "soilMoisture",
+        "airTemp",
+        "humidity",
+        "waterFlow"
+      ]
+    }
+  },
+  "auth": {
+    "providers": ["anonymous"]
+  },
+  "firestore": {
+    "/sensors/{sensorId}": {
+      "schema": {
+        "$ref": "#/entities/SensorData"
+      },
+      "description": "Stores live and historical sensor data for different devices."
+    }
+  }
+}
