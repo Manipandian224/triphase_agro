@@ -90,7 +90,7 @@ type SensorDataFromDevice = {
   SoilMoisture: number;
   Temperature: number;
   Humidity: number;
-  PumpStatus: boolean;
+  PumpStatus: "ON" | "OFF" | boolean;
 };
 
 type SensorData = {
@@ -120,11 +120,18 @@ export default function DashboardPage() {
     const unsubscribe = onValue(sensorRef, (snapshot) => {
       const data: SensorDataFromDevice = snapshot.val();
       if (data) {
+        let pumpStatus: 'ON' | 'OFF';
+        if (typeof data.PumpStatus === 'boolean') {
+          pumpStatus = data.PumpStatus ? 'ON' : 'OFF';
+        } else {
+          pumpStatus = data.PumpStatus === 'ON' ? 'ON' : 'OFF';
+        }
+        
         setSensorData({
           soilMoisture: data.SoilMoisture,
           airTemp: data.Temperature,
           humidity: data.Humidity,
-          pumpStatus: data.PumpStatus ? 'ON' : 'OFF',
+          pumpStatus: pumpStatus,
           // Assuming default values for other properties for now
           threePhasePower: 'OK',
           connectivity: 'Online',
@@ -329,4 +336,3 @@ export default function DashboardPage() {
       </Card>
     </div>
   );
-}

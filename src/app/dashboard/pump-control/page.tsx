@@ -35,7 +35,12 @@ export default function PumpControlPage() {
       pumpStatusRef,
       (snapshot) => {
         const status = snapshot.val();
-        setPumpStatus(status as boolean);
+        // Handle both boolean and string "ON"/"OFF"
+        if (typeof status === 'boolean') {
+          setPumpStatus(status);
+        } else if (typeof status === 'string') {
+          setPumpStatus(status.toUpperCase() === "ON");
+        }
         setLoading(false);
       },
       (error) => {
@@ -67,11 +72,12 @@ export default function PumpControlPage() {
     setIsUpdating(true);
     const db = getDatabase();
     const pumpStatusRef = ref(db, "Irrigation/PumpStatus");
+    const newStatus = checked ? "ON" : "OFF";
 
     try {
-      await set(pumpStatusRef, checked);
+      await set(pumpStatusRef, newStatus);
       toast({
-        title: `Pump turned ${checked ? "ON" : "OFF"}`,
+        title: `Pump turned ${newStatus}`,
         description: "The pump status has been successfully updated.",
       });
     } catch (error) {
@@ -140,4 +146,3 @@ export default function PumpControlPage() {
       </Card>
     </div>
   );
-}
