@@ -1,17 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   Bell,
   Bot,
   BrainCircuit,
-  History,
   LayoutDashboard,
   Map,
   Menu,
-  Settings,
+  UserCircle,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -59,8 +57,6 @@ const navItems = [
   { href: "/dashboard/field-view", icon: Map, label: "Field View" },
   { href: "/dashboard/ai-crop-health", icon: BrainCircuit, label: "AI Analysis" },
   { href: "/dashboard/ai-chatbot", icon: Bot, label: "AI Chatbot" },
-  { href: "/dashboard/logs", icon: History, label: "Logs" },
-  { href: "/dashboard/settings", icon: Settings, label: "Settings" },
 ];
 
 function VerticalNavbar() {
@@ -71,7 +67,7 @@ function VerticalNavbar() {
       {/* Logo Section */}
       <div className="p-6 flex items-center gap-3">
         <LeafIcon className="w-8 h-8 text-primary" />
-        <span className="text-xl font-semibold text-foreground">AgriVision Pro</span>
+        <span className="text-xl font-semibold text-foreground">Tri-phase Agro</span>
       </div>
 
       {/* Navigation Items */}
@@ -112,10 +108,15 @@ function VerticalNavbar() {
                 </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="mb-2 w-56 rounded-xl shadow-soft-depth">
-                <DropdownMenuLabel>Farm Manager</DropdownMenuLabel>
+                <DropdownMenuLabel>
+                  <p>Farm Manager</p>
+                  <p className="text-xs text-muted-foreground font-normal">manager@farm.com</p>
+                </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>Settings</DropdownMenuItem>
-                <DropdownMenuItem>Support</DropdownMenuItem>
+                 <DropdownMenuItem>
+                  <UserCircle className="mr-2 h-4 w-4" />
+                  <span>My Profile</span>
+                </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <Link href="/">
                     <DropdownMenuItem>Logout</DropdownMenuItem>
@@ -154,10 +155,15 @@ function Header() {
             </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="rounded-xl shadow-soft-depth">
-            <DropdownMenuLabel>Farm Manager</DropdownMenuLabel>
+            <DropdownMenuLabel>
+              <p>Farm Manager</p>
+              <p className="text-xs text-muted-foreground font-normal">manager@farm.com</p>
+            </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Settings</DropdownMenuItem>
-            <DropdownMenuItem>Support</DropdownMenuItem>
+            <DropdownMenuItem>
+              <UserCircle className="mr-2 h-4 w-4" />
+              <span>My Profile</span>
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <Link href="/">
                 <DropdownMenuItem>Logout</DropdownMenuItem>
@@ -184,7 +190,7 @@ function MobileNav() {
                  <SheetHeader className="p-6 flex flex-row items-center gap-3 border-b">
                     <LeafIcon className="w-8 h-8 text-primary" />
                     <SheetTitle>
-                      <span className="text-xl font-semibold text-foreground">AgriVision Pro</span>
+                      <span className="text-xl font-semibold text-foreground">Tri-phase Agro</span>
                     </SheetTitle>
                 </SheetHeader>
                 <nav className="flex-1 px-4 py-4 space-y-2">
@@ -223,10 +229,15 @@ function MobileNav() {
                             </button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="mb-2 w-56 rounded-xl shadow-soft-depth">
-                            <DropdownMenuLabel>Farm Manager</DropdownMenuLabel>
+                            <DropdownMenuLabel>
+                              <p>Farm Manager</p>
+                              <p className="text-xs text-muted-foreground font-normal">manager@farm.com</p>
+                            </DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem>Settings</DropdownMenuItem>
-                            <DropdownMenuItem>Support</DropdownMenuItem>
+                            <DropdownMenuItem>
+                              <UserCircle className="mr-2 h-4 w-4" />
+                              <span>My Profile</span>
+                            </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <Link href="/">
                                 <DropdownMenuItem>Logout</DropdownMenuItem>

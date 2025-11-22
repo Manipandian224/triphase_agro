@@ -53,7 +53,7 @@ export default function LoginPage() {
                 prefetch={false}
             >
                 <LeafIcon className="h-8 w-8 text-primary" />
-                <span className="text-3xl font-bold tracking-tight">AgriVision Pro</span>
+                <span className="text-3xl font-bold tracking-tight">Tri-phase Agro</span>
             </Link>
             </div>
             <Card className="rounded-3xl shadow-soft-depth-lg border-white/20 bg-white/70 backdrop-blur-xl">

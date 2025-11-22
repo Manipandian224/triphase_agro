@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import Image from "next/image";
 import {
   Card,
   CardContent,
@@ -16,7 +15,6 @@ import {
   Leaf,
   Power,
   Thermometer,
-  Zap,
   Wifi,
   WifiOff,
   Loader2,
@@ -28,7 +26,7 @@ import {
   ChartLegend,
   ChartLegendContent,
 } from "@/components/ui/chart";
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis, ResponsiveContainer } from "recharts";
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import type { ChartConfig } from "@/components/ui/chart";
 import { cn } from "@/lib/utils";
 import { useFirebase } from "@/firebase/client-provider";
@@ -79,15 +77,11 @@ export default function DashboardPage() {
   // State for live data from /Irrigation/
   const [liveData, setLiveData] = useState<Partial<IrrigationData>>({});
   
-  // State for the field image URL from /SmartFarm/
-  const [fieldImageUrl, setFieldImageUrl] = useState<string | null>(null);
-
   // State for historical data for the chart
   const [historicalData, setHistoricalData] = useState<ChartDataPoint[]>([]);
   
   // Loading states
   const [loadingInitial, setLoadingInitial] = useState(true);
-  const [loadingImage, setLoadingImage] = useState(true);
   const [isUpdating, setIsUpdating] = useState(false);
   
   // Connectivity status based on LastUpdate timestamp
@@ -144,24 +138,6 @@ export default function DashboardPage() {
     };
   }, [rtdb, liveData.LastUpdate]);
 
-  // Effect for fetching the field image URL
-  useEffect(() => {
-    if (!rtdb) return;
-
-    const db = getDatabase();
-    const smartFarmRef = ref(db, 'SmartFarm/cropImageURL');
-
-    const unsubscribeImage = onValue(smartFarmRef, (snapshot) => {
-        const url = snapshot.val();
-        if (url) {
-            setFieldImageUrl(url);
-        }
-        setLoadingImage(false);
-    });
-
-    return () => off(smartFarmRef, 'value', unsubscribeImage);
-  }, [rtdb]);
-
   const sensorCards = useMemo(() => [
     { name: "Soil Moisture", value: liveData.SoilMoisture, unit: "%", icon: Leaf, configKey: "soilMoisture" },
     { name: "Air Temperature", value: liveData.Temperature, unit: "°C", icon: Thermometer, configKey: "temperature" },
@@ -203,7 +179,7 @@ export default function DashboardPage() {
 
 
   return (
-    <div className="grid gap-6 md:gap-8 grid-cols-1 lg:grid-cols-4">
+    <div className="grid gap-6 md:gap-8 grid-cols-1 lg:grid-cols-2">
         {/* Main Status Cards */}
         <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
@@ -246,26 +222,9 @@ export default function DashboardPage() {
                  )}
             </CardContent>
         </Card>
-        <Card className="lg:col-span-2">
-             <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">My Field</CardTitle>
-            </CardHeader>
-            <CardContent>
-                {loadingImage ? <Skeleton className="h-[60px] w-full rounded-lg"/> : (
-                    fieldImageUrl ? (
-                        <div className="aspect-video relative rounded-lg overflow-hidden border">
-                            <Image src={fieldImageUrl} alt="My Field" fill className="object-cover" />
-                        </div>
-                    ) : (
-                        <div className="text-center text-muted-foreground py-4">No Image Available</div>
-                    )
-                )}
-            </CardContent>
-        </Card>
-
 
       {/* Live Sensor Stream Section */}
-      <Card className="lg:col-span-4">
+      <Card className="lg:col-span-2">
         <CardHeader>
           <CardTitle>Live Sensor Stream</CardTitle>
           <CardDescription>Real-time data from field sensors.</CardDescription>
@@ -297,7 +256,7 @@ export default function DashboardPage() {
       </Card>
       
       {/* Historical Trends Chart */}
-      <Card className="lg:col-span-4">
+      <Card className="lg:col-span-2">
         <CardHeader>
             <CardTitle>Historical Trends</CardTitle>
             <CardDescription>Live chart of the last 50 sensor readings.</CardDescription>

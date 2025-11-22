@@ -4,7 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { FirebaseProvider } from "@/firebase/client-provider";
 
 export const metadata: Metadata = {
-  title: "AgriVision Pro",
+  title: "Tri-phase Agro",
   description: "Smart 3-Phase Irrigation & AI Crop Monitor",
 };
 
