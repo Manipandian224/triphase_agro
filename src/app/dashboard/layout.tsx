@@ -130,7 +130,7 @@ function VerticalNavbar() {
 
 function Header() {
   return (
-    <header className="flex h-16 items-center gap-4 border-b bg-card/50 backdrop-blur-sm px-4 lg:h-[68px] lg:px-6 md:justify-end sticky top-0 z-30">
+    <header className="flex h-16 items-center gap-4 bg-card/50 backdrop-blur-sm px-4 lg:h-[68px] lg:px-6 md:justify-end sticky top-0 z-30">
       <div className="w-full flex-1 md:hidden">
         <MobileNav />
       </div>
