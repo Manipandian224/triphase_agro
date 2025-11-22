@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    --background: 132 24% 96%; /* #E6F2E8 - Light Green */
+    --background: 132 24% 96%; /* #F6F8FA - Light Greenish Gray */
     --foreground: 240 10% 3.9%;
 
     --card: 0 0% 100%;
@@ -37,11 +37,11 @@
 
     --radius: 0.5rem;
     
-    --chart-1: 126 42% 70%;
-    --chart-2: 41 57% 61%;
-    --chart-3: 2 100% 59%;
-    --chart-4: 240 4.8% 95.9%;
-    --chart-5: 240 4% 56.1%;
+    --chart-1: 122 39% 49%;
+    --chart-2: 22 89% 53%;
+    --chart-3: 220 83% 60%;
+    --chart-4: 39 91% 55%;
+    --chart-5: 197 90% 50%;
   }
 
   .dark {
@@ -77,11 +77,11 @@
     --input: 240 3.7% 15.9%;
     --ring: 126 42% 70%;
 
-    --chart-1: 126 42% 70%;
-    --chart-2: 41 57% 61%;
-    --chart-3: 2 100% 59%;
-    --chart-4: 240 3.7% 15.9%;
-    --chart-5: 240 5% 64.9%;
+    --chart-1: 122 39% 49%;
+    --chart-2: 22 89% 53%;
+    --chart-3: 220 83% 60%;
+    --chart-4: 39 91% 55%;
+    --chart-5: 197 90% 50%;
   }
 }
 
@@ -97,4 +97,10 @@
   h2 { @apply text-h2; }
   p { @apply text-body; }
   small { @apply text-small; }
+}
+
+@layer components {
+  .bg-background {
+    background-color: #F6F8FA;
+  }
 }
