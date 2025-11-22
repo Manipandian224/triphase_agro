@@ -59,7 +59,6 @@ const navItems = [
   { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
   { href: "/dashboard/field-view", icon: Map, label: "Field View" },
   { href: "/dashboard/ai-crop-health", icon: BrainCircuit, label: "AI Crop Health" },
-  { href: "/dashboard/pump-control", icon: Power, label: "Pump Control" },
   { href: "/dashboard/logs", icon: History, label: "Logs" },
   { href: "/dashboard/settings", icon: Settings, label: "Settings" },
 ];
