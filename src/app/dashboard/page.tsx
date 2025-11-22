@@ -204,7 +204,7 @@ export default function DashboardPage() {
                 {loadingImage ? <Skeleton className="h-[60px] w-full rounded-lg"/> : (
                     fieldImageUrl ? (
                         <div className="aspect-video relative rounded-lg overflow-hidden border">
-                            <Image src={fieldImageUrl} alt="My Field" layout="fill" objectFit="cover" />
+                            <Image src={fieldImageUrl} alt="My Field" fill className="object-cover" />
                         </div>
                     ) : (
                         <div className="text-center text-muted-foreground py-4">No Image Available</div>

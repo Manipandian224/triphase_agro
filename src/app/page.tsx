@@ -39,9 +39,8 @@ export default function LoginPage() {
         <Image 
             src="https://images.unsplash.com/photo-1597992953285-a56b57f57335?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxmYXJtJTIwYWVyaWFsfGVufDB8fHx8MTc2MjI5ODk4N3ww&ixlib=rb-4.1.0&q=80&w=1920"
             alt="Aerial view of a farm"
-            layout="fill"
-            objectFit="cover"
-            className="absolute inset-0 z-0 opacity-20"
+            fill
+            className="absolute inset-0 z-0 opacity-20 object-cover"
             data-ai-hint="farm aerial"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent z-10"></div>
