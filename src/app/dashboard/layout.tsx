@@ -29,6 +29,8 @@ import {
 import {
   Sheet,
   SheetContent,
+  SheetHeader,
+  SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
@@ -76,7 +78,7 @@ function VerticalNavbar() {
       {/* Navigation Items */}
       <nav className="flex-1 px-4 space-y-2">
         {navItems.map((item) => (
-          <Link href={item.href} key={item.label} passHref>
+          <Link href={item.href} key={item.label}>
             <Button
               variant="ghost"
               className={cn(
@@ -180,13 +182,15 @@ function MobileNav() {
                 </Button>
             </SheetTrigger>
             <SheetContent side="left" className="p-0 flex flex-col w-60 bg-card">
-                 <div className="p-6 flex items-center gap-3 border-b">
+                 <SheetHeader className="p-6 flex flex-row items-center gap-3 border-b">
                     <LeafIcon className="w-8 h-8 text-primary" />
-                    <span className="text-xl font-semibold text-foreground">AgriVision Pro</span>
-                </div>
+                    <SheetTitle>
+                      <span className="text-xl font-semibold text-foreground">AgriVision Pro</span>
+                    </SheetTitle>
+                </SheetHeader>
                 <nav className="flex-1 px-4 py-4 space-y-2">
                     {navItems.map((item) => (
-                    <Link href={item.href} key={item.label} passHref>
+                    <Link href={item.href} key={item.label}>
                         <Button
                         variant="ghost"
                         onClick={() => setIsOpen(false)}
