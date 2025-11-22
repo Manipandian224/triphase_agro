@@ -3,13 +3,13 @@
 import { FirebaseApp, getApp, getApps, initializeApp } from 'firebase/app';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDuEt_wKAofgMCATixd6HVEtrcXIZMDMU",
-  authDomain: "agri-vision-pro.firebaseapp.com",
-  databaseURL: "https://agri-vision-pro-default-rtdb.firebaseio.com/",
-  projectId: "agri-vision-pro",
-  storageBucket: "agri-vision-pro.appspot.com",
-  messagingSenderId: "xxxxxxx",
-  appId: "1:xxxxxx:web:xxxxxx"
+  apiKey:  "AIzaSyDueT_wkAOfgMCATixd63HVETrcXIZMDMU",
+  authDomain:  "studio-3704992952-1479e.firebaseapp.com",
+  databaseURL: "https://studio-3704992952-1479e-default-rtdb.firebaseio.com",
+  projectId:"studio-3704992952-1479e",
+  storageBucket:  "studio-3704992952-1479e.firebasestorage.app",
+  messagingSenderId: "860698344863",
+  appId: "1:860698344863:web:95106ba8aa08f188f151aa"
 };
 
 // Initialize Firebase
