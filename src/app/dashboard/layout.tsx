@@ -96,7 +96,7 @@ function VerticalNavbar() {
       <div className="p-4 border-t">
          <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <button className="w-full flex items-center gap-3 rounded-lg p-2 hover:bg-secondary">
+                <button suppressHydrationWarning className="w-full flex items-center gap-3 rounded-lg p-2 hover:bg-secondary">
                     <Avatar className="h-9 w-9">
                     <AvatarImage
                         src="https://picsum.photos/seed/user/36/36"
@@ -207,7 +207,7 @@ function MobileNav() {
                  <div className="p-4 border-t">
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <button className="w-full flex items-center gap-3 rounded-lg p-2 hover:bg-secondary">
+                            <button suppressHydrationWarning className="w-full flex items-center gap-3 rounded-lg p-2 hover:bg-secondary">
                                 <Avatar className="h-9 w-9">
                                 <AvatarImage
                                     src="https://picsum.photos/seed/user/36/36"
