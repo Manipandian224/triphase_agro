@@ -1,6 +1,6 @@
 'use server';
 /**
- * @fileOverview Analyzes crop health from an image, providing a label, confidence score, bounding boxes (if available), and recommended actions.
+ * @fileOverview Analyzes crop health from an image, providing a label, confidence score, and a list of problems and solutions.
  *
  * - analyzeCropHealthFromImage - A function that handles the crop health analysis process.
  * - AnalyzeCropHealthFromImageInput - The input type for the analyzeCropHealthFromImage function.
@@ -14,26 +14,20 @@ const AnalyzeCropHealthFromImageInputSchema = z.object({
   photoDataUri: z
     .string()
     .describe(
-      "A photo of a crop, as a data URI that must include a MIME type and use Base64 encoding. Expected format: 'data:<mimetype>;base64,<encoded_data>'."
+      "A photo of a crop, as a data URI that must include a MIME type and use Base64 encoding. Expected format: 'data:<mimetype>;base64,<encoded_data>'"
     ),
 });
 export type AnalyzeCropHealthFromImageInput = z.infer<typeof AnalyzeCropHealthFromImageInputSchema>;
 
 const AnalyzeCropHealthFromImageOutputSchema = z.object({
-  label: z.string().describe('The AI analysis label (disease/healthy).'),
+  label: z.string().describe('The AI analysis label (e.g., "Corn Leaf Blight", "Healthy").'),
   confidence: z.number().describe('The confidence score of the AI analysis (0-1).'),
-  boundingBoxes: z
-    .array(
-      z.object({
-        x: z.number().describe('The x coordinate of the bounding box (0-1).'),
-        y: z.number().describe('The y coordinate of the bounding box (0-1).'),
-        w: z.number().describe('The width of the bounding box (0-1).'),
-        h: z.number().describe('The height of the bounding box (0-1).'),
-      })
-    )
-    .optional()
-    .describe('The bounding boxes identifying the area of interest.'),
-  recommendedActions: z.string().describe('Recommended actions based on the AI analysis.'),
+  problems: z
+    .array(z.string())
+    .describe('A point-by-point list of problems identified in the crop.'),
+  solutions: z
+    .array(z.string())
+    .describe('A point-by-point list of recommended solutions for the identified problems.'),
 });
 export type AnalyzeCropHealthFromImageOutput = z.infer<typeof AnalyzeCropHealthFromImageOutputSchema>;
 
@@ -47,12 +41,16 @@ const analyzeCropHealthFromImagePrompt = ai.definePrompt({
   name: 'analyzeCropHealthFromImagePrompt',
   input: {schema: AnalyzeCropHealthFromImageInputSchema},
   output: {schema: AnalyzeCropHealthFromImageOutputSchema},
-  prompt: `You are an AI expert in diagnosing crop health from images. Analyze the provided image and provide a label (disease/healthy), confidence score, bounding boxes (if available), and recommended actions.
+  prompt: `You are an expert AI botanist. Analyze the provided image to diagnose crop health. 
 
   Analyze the following image:
   {{media url=photoDataUri}}
 
-  Return the analysis in JSON format. Include bounding boxes if the image contains identifiable areas of interest related to the diagnosis.
+  Return the analysis in JSON format.
+  - Provide a short, specific label for the diagnosis (e.g., "Corn Leaf Blight", "Healthy").
+  - Provide a confidence score for your analysis.
+  - List the observed problems in a point-by-point format.
+  - Recommend clear, actionable solutions for each problem in a point-by-point format.
   `,
 });
 

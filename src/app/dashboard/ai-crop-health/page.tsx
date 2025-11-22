@@ -1,15 +1,12 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import {
   analyzeCropHealthFromImage,
   type AnalyzeCropHealthFromImageOutput,
 } from "@/ai/flows/analyze-crop-health-from-image";
-import {
-  explainCropHealthAnalysis,
-  type ExplainCropHealthAnalysisOutput,
-} from "@/ai/flows/explain-crop-health-analysis";
+import { translateText } from "@/ai/flows/translate-text";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -19,166 +16,171 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { AlertCircle, BrainCircuit, Info, Loader2, Upload } from "lucide-react";
-import { PlaceHolderImages } from "@/lib/placeholder-images";
+import {
+  AlertCircle,
+  BrainCircuit,
+  Languages,
+  ListChecks,
+  Loader2,
+  Upload,
+  CheckCircle,
+  XCircle,
+} from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { useFirebase } from "@/firebase/client-provider";
+import { getDatabase, ref, onValue, off } from "firebase/database";
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-const exampleImage = PlaceHolderImages.find((p) => p.id === "crop-leaf")!;
+type TranslatedContent = {
+  problems: string[];
+  solutions: string[];
+};
 
 export default function AiCropHealthPage() {
-  const [imagePreview, setImagePreview] = useState<string | null>(
-    exampleImage.imageUrl
-  );
+  const { rtdb } = useFirebase();
+
+  const [imageFromDb, setImageFromDb] = useState<string | null>(null);
   const [analysis, setAnalysis] =
     useState<AnalyzeCropHealthFromImageOutput | null>(null);
-  const [explanation, setExplanation] =
-    useState<ExplainCropHealthAnalysisOutput | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isExplaining, setIsExplaining] = useState(false);
+  const [translatedContent, setTranslatedContent] =
+    useState<TranslatedContent | null>(null);
+
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [isTranslating, setIsTranslating] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [targetLang, setTargetLang] = useState("en");
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string);
+  // Effect to listen for image URL from Realtime Database
+  useEffect(() => {
+    if (!rtdb) return;
+
+    const db = getDatabase();
+    const imageRef = ref(db, "SmartFarm/cropImageURL");
+
+    const unsubscribe = onValue(imageRef, (snapshot) => {
+      const url = snapshot.val();
+      if (url && url !== imageFromDb) {
+        setImageFromDb(url);
         setAnalysis(null);
-        setExplanation(null);
+        setTranslatedContent(null);
         setError(null);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+        setTargetLang("en");
+      }
+    });
 
-  const handleAnalyzeClick = async () => {
-    if (!imagePreview) {
-      setError("Please select an image first.");
-      return;
-    }
+    return () => off(imageRef, "value", unsubscribe);
+  }, [rtdb, imageFromDb]);
 
-    setIsLoading(true);
-    setError(null);
-    setAnalysis(null);
-    setExplanation(null);
+  // Effect to automatically analyze when a new image is set from the DB
+  useEffect(() => {
+    const handleAutoAnalyze = async () => {
+      if (!imageFromDb) return;
 
-    try {
-      const result = await analyzeCropHealthFromImage({
-        photoDataUri: imagePreview,
-      });
-      setAnalysis(result);
-    } catch (e) {
-      setError("Failed to analyze image. Please try again.");
-      console.error(e);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+      setIsAnalyzing(true);
+      setError(null);
 
-  const handleExplainClick = async () => {
-    if (!imagePreview || !analysis) return;
+      try {
+        const result = await analyzeCropHealthFromImage({
+          photoDataUri: imageFromDb,
+        });
+        setAnalysis(result);
+      } catch (e) {
+        setError("Failed to analyze image. Please try again.");
+        console.error(e);
+      } finally {
+        setIsAnalyzing(false);
+      }
+    };
 
-    setIsExplaining(true);
-    try {
-      const result = await explainCropHealthAnalysis({
-        imageUrl: imagePreview,
-        label: analysis.label,
-        confidence: analysis.confidence,
-      });
-      setExplanation(result);
-    } catch (e) {
-      setError("Failed to get explanation. Please try again.");
-      console.error(e);
-    } finally {
-      setIsExplaining(false);
-    }
-  };
+    handleAutoAnalyze();
+  }, [imageFromDb]);
+
+  // Effect to handle translation when language or analysis changes
+  useEffect(() => {
+    const handleTranslate = async () => {
+      if (!analysis || targetLang === "en") {
+        setTranslatedContent(null);
+        return;
+      }
+
+      setIsTranslating(true);
+      try {
+        const [translatedProblems, translatedSolutions] = await Promise.all([
+          translateText({
+            text: analysis.problems.join("\n"),
+            targetLanguage: targetLang,
+          }),
+          translateText({
+            text: analysis.solutions.join("\n"),
+            targetLanguage: targetLang,
+          }),
+        ]);
+
+        setTranslatedContent({
+          problems: translatedProblems.translatedText.split("\n"),
+          solutions: translatedSolutions.translatedText.split("\n"),
+        });
+      } catch (e) {
+        console.error("Translation failed:", e);
+        setError("Failed to translate analysis.");
+      } finally {
+        setIsTranslating(false);
+      }
+    };
+
+    handleTranslate();
+  }, [targetLang, analysis]);
 
   const getBadgeVariant = (
     label: string
-  ): "default" | "destructive" | "secondary" => {
+  ): "default" | "destructive" | "secondary" | "success" => {
     if (label.toLowerCase() === "healthy") {
-      return "default";
+      return "success";
     }
     return "destructive";
   };
+
+  const displayedProblems = translatedContent?.problems || analysis?.problems;
+  const displayedSolutions =
+    translatedContent?.solutions || analysis?.solutions;
 
   return (
     <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
       <Card className="lg:col-span-2">
         <CardHeader>
-          <CardTitle>Crop Health Analyzer</CardTitle>
+          <CardTitle>Automated Crop Health Analysis</CardTitle>
           <CardDescription>
-            Upload an image of a crop leaf to get an AI-powered health
-            analysis.
+            Live image from your field is automatically analyzed by AI.
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent>
           <div className="relative aspect-video w-full overflow-hidden rounded-lg border bg-muted">
-            {imagePreview ? (
-              <>
-                <Image
-                  src={imagePreview}
-                  alt="Crop preview"
-                  fill
-                  className="object-contain"
-                  data-ai-hint={exampleImage.imageHint}
-                />
-                {analysis?.boundingBoxes?.map((box, index) => (
-                  <div
-                    key={index}
-                    className="absolute border-2 border-destructive rounded-sm"
-                    style={{
-                      left: `${box.x * 100}%`,
-                      top: `${box.y * 100}%`,
-                      width: `${box.w * 100}%`,
-                      height: `${box.h * 100}%`,
-                    }}
-                  />
-                ))}
-              </>
+            {imageFromDb ? (
+              <Image
+                src={imageFromDb}
+                alt="Latest crop from field"
+                fill
+                className="object-contain"
+              />
             ) : (
               <div className="flex flex-col items-center justify-center h-full bg-muted/50">
-                <Upload className="h-12 w-12 text-muted-foreground" />
-                <p className="mt-2 text-sm text-muted-foreground">
-                  Image preview will appear here
+                <Loader2 className="h-12 w-12 text-muted-foreground animate-spin" />
+                <p className="mt-4 text-sm text-muted-foreground">
+                  Waiting for image from your field...
                 </p>
               </div>
             )}
           </div>
-
-          <Input
-            id="picture"
-            type="file"
-            ref={fileInputRef}
-            onChange={handleImageChange}
-            accept="image/*"
-            className="hidden"
-          />
         </CardContent>
-        <CardFooter className="gap-2">
-          <Button
-            variant="outline"
-            onClick={() => fileInputRef.current?.click()}
-          >
-            <Upload className="mr-2 h-4 w-4" /> Change Image
-          </Button>
-          <Button
-            onClick={handleAnalyzeClick}
-            disabled={isLoading || !imagePreview}
-          >
-            {isLoading ? (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            ) : (
-              <BrainCircuit className="mr-2 h-4 w-4" />
-            )}
-            Analyze
-          </Button>
-        </CardFooter>
       </Card>
 
       <div className="space-y-8 lg:col-span-1">
@@ -187,10 +189,14 @@ export default function AiCropHealthPage() {
             <CardTitle>Analysis Results</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            {isLoading && (
-              <div className="flex items-center space-x-2 text-muted-foreground">
-                <Loader2 className="h-4 w-4 animate-spin" />
-                <span>Analyzing...</span>
+            {(isAnalyzing || !imageFromDb) && !analysis && (
+              <div className="flex items-center space-x-2 text-muted-foreground justify-center py-8 text-center">
+                <Loader2 className="h-5 w-5 animate-spin" />
+                <span>
+                  {imageFromDb
+                    ? "Analyzing new image..."
+                    : "Waiting for image..."}
+                </span>
               </div>
             )}
             {error && (
@@ -203,7 +209,10 @@ export default function AiCropHealthPage() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="font-medium">Status</span>
-                  <Badge variant={getBadgeVariant(analysis.label)} className="text-sm capitalize">
+                  <Badge
+                    variant={getBadgeVariant(analysis.label)}
+                    className="text-sm capitalize"
+                  >
                     {analysis.label}
                   </Badge>
                 </div>
@@ -214,59 +223,83 @@ export default function AiCropHealthPage() {
                       {(analysis.confidence * 100).toFixed(0)}%
                     </span>
                   </div>
-                  <Progress value={analysis.confidence * 100} className="h-2" />
+                  <Progress
+                    value={analysis.confidence * 100}
+                    className="h-2"
+                  />
                 </div>
 
                 <Separator />
 
-                <h3 className="font-semibold">Recommended Actions</h3>
-                <p className="text-sm text-muted-foreground">
-                  {analysis.recommendedActions}
-                </p>
+                <div className="space-y-4">
+                  <div>
+                    <h3 className="font-semibold flex items-center gap-2 mb-2">
+                      <XCircle className="text-destructive h-5 w-5" />
+                      Problems Identified
+                    </h3>
+                    <ul className="space-y-1 list-disc list-inside text-muted-foreground text-sm pl-2">
+                      {displayedProblems?.map((item, i) => (
+                        <li key={`problem-${i}`}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
 
-                <Button
-                  onClick={handleExplainClick}
-                  disabled={isExplaining}
-                  variant="secondary"
-                  className="w-full"
-                >
-                  {isExplaining ? (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  ) : (
-                    <Info className="mr-2 h-4 w-4" />
+                  <div>
+                    <h3 className="font-semibold flex items-center gap-2 mb-2">
+                      <CheckCircle className="text-success h-5 w-5" />
+                      Recommended Solutions
+                    </h3>
+                    <ul className="space-y-1 list-disc list-inside text-muted-foreground text-sm pl-2">
+                      {displayedSolutions?.map((item, i) => (
+                        <li key={`solution-${i}`}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+
+                <Separator />
+
+                <div className="space-y-2">
+                  <Label
+                    htmlFor="language-select"
+                    className="flex items-center gap-2 text-sm font-medium"
+                  >
+                    <Languages className="h-4 w-4" /> Translate Analysis
+                  </Label>
+                  <Select
+                    value={targetLang}
+                    onValueChange={setTargetLang}
+                    disabled={isTranslating}
+                  >
+                    <SelectTrigger id="language-select">
+                      <SelectValue placeholder="Select Language" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="en">English</SelectItem>
+                      <SelectItem value="es">Spanish</SelectItem>
+                      <SelectItem value="fr">French</SelectItem>
+                      <SelectItem value="de">German</SelectItem>
+                      <SelectItem value="hi">Hindi</SelectItem>
+                      <SelectItem value="ja">Japanese</SelectItem>
+                      <SelectItem value="pt">Portuguese</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {isTranslating && (
+                    <p className="text-xs text-muted-foreground flex items-center gap-1.5">
+                      <Loader2 className="h-3 w-3 animate-spin" /> Translating...
+                    </p>
                   )}
-                  Explain This Analysis
-                </Button>
+                </div>
               </div>
             )}
-            {!analysis && !isLoading && !error && (
+            {!analysis && !isAnalyzing && !error && imageFromDb && (
               <div className="text-center text-muted-foreground py-8">
                 <BrainCircuit className="mx-auto h-12 w-12" />
-                <p className="mt-2">Analysis results will be shown here.</p>
+                <p className="mt-2">Ready for analysis.</p>
               </div>
             )}
           </CardContent>
         </Card>
-
-        {explanation && (
-          <Card>
-            <CardHeader>
-              <CardTitle>AI Explanation</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4 text-sm">
-              <div>
-                <h4 className="font-semibold mb-1">Key Features Identified</h4>
-                <p className="text-muted-foreground">{explanation.explanation}</p>
-              </div>
-              <div>
-                <h4 className="font-semibold mb-1">Confidence Reasoning</h4>
-                <p className="text-muted-foreground">
-                  {explanation.confidenceReasoning}
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-        )}
       </div>
     </div>
   );
