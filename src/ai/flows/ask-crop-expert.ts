@@ -20,13 +20,13 @@ const ContentPartSchema = z.object({
   media: MediaPartSchema.optional(),
 });
 
-export const ChatMessageSchema = z.object({
+const ChatMessageSchema = z.object({
   role: z.enum(['user', 'model']),
   content: z.array(ContentPartSchema),
 });
 export type ChatMessage = z.infer<typeof ChatMessageSchema>;
 
-export const AskCropExpertInputSchema = z.object({
+const AskCropExpertInputSchema = z.object({
   history: z.array(ChatMessageSchema).describe('The chat history.'),
   question: z
     .string()
@@ -41,7 +41,7 @@ export const AskCropExpertInputSchema = z.object({
 });
 export type AskCropExpertInput = z.infer<typeof AskCropExpertInputSchema>;
 
-export const AskCropExpertOutputSchema = z.object({
+const AskCropExpertOutputSchema = z.object({
   answer: z.string().describe('The AI\'s response to the user\'s question.'),
 });
 export type AskCropExpertOutput = z.infer<typeof AskCropExpertOutputSchema>;
