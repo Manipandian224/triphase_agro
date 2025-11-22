@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import Image from "next/image";
 
 function LeafIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -34,70 +35,79 @@ function LeafIcon(props: React.SVGProps<SVGSVGElement>) {
 
 export default function LoginPage() {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-background p-4 font-sans">
-      <div className="w-full max-w-md">
-        <div className="flex justify-center mb-8">
-          <Link
-            href="#"
-            className="flex items-center gap-2.5 text-foreground"
-            prefetch={false}
-          >
-            <LeafIcon className="h-7 w-7 text-primary" />
-            <span className="text-2xl font-semibold tracking-tight">AgriVision Pro</span>
-          </Link>
-        </div>
-        <Card className="rounded-lg shadow-card">
-          <CardHeader className="space-y-2 text-center p-6">
-            <CardTitle className="text-2xl font-semibold tracking-tight">Welcome Back</CardTitle>
-            <CardDescription className="text-muted-foreground">
-              Enter your credentials to access your dashboard.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6 p-6">
-            <div className="space-y-2">
-              <Label htmlFor="email" className="text-sm font-semibold text-[#1C1C1E]">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="manager@farm.com"
-                required
-                className="rounded-sm !border-gray-100 focus:glow"
-              />
+    <div className="flex items-center justify-center min-h-screen w-full bg-background font-sans relative overflow-hidden">
+        <Image 
+            src="https://images.unsplash.com/photo-1597992953285-a56b57f57335?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxmYXJtJTIwYWVyaWFsfGVufDB8fHx8MTc2MjI5ODk4N3ww&ixlib=rb-4.1.0&q=80&w=1920"
+            alt="Aerial view of a farm"
+            layout="fill"
+            objectFit="cover"
+            className="absolute inset-0 z-0 opacity-20"
+            data-ai-hint="farm aerial"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent z-10"></div>
+
+        <div className="w-full max-w-md z-20">
+            <div className="flex justify-center mb-8">
+            <Link
+                href="#"
+                className="flex items-center gap-2.5 text-foreground"
+                prefetch={false}
+            >
+                <LeafIcon className="h-8 w-8 text-primary" />
+                <span className="text-3xl font-bold tracking-tight">AgriVision Pro</span>
+            </Link>
             </div>
-            <div className="space-y-2">
-              <div className="flex items-center">
-                <Label htmlFor="password" className="text-sm font-semibold text-[#1C1C1E]">Password</Label>
-                <Link
-                  href="#"
-                  className="ml-auto inline-block text-sm text-primary hover:underline"
-                  prefetch={false}
-                >
-                  Forgot password?
+            <Card className="rounded-3xl shadow-soft-depth-lg border-white/20 bg-white/70 backdrop-blur-xl">
+            <CardHeader className="space-y-2 text-center p-8">
+                <CardTitle className="text-3xl font-bold tracking-tight">Welcome Back</CardTitle>
+                <CardDescription className="text-muted-foreground pt-1">
+                Enter your credentials to access your farm dashboard.
+                </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6 p-8 pt-0">
+                <div className="space-y-2">
+                <Label htmlFor="email" className="text-sm font-medium">Email</Label>
+                <Input
+                    id="email"
+                    type="email"
+                    placeholder="manager@farm.com"
+                    required
+                    className="rounded-lg bg-white/50 border-white/50 h-12"
+                    suppressHydrationWarning
+                />
+                </div>
+                <div className="space-y-2">
+                 <Label htmlFor="password" className="text-sm font-medium">Password</Label>
+                <Input 
+                    id="password" 
+                    type="password"
+                    required 
+                    className="rounded-lg bg-white/50 border-white/50 h-12"
+                    suppressHydrationWarning
+                />
+                </div>
+                <div className="space-y-4 pt-4">
+                <Link href="/dashboard" className="w-full" passHref>
+                    <Button 
+                    className="w-full font-semibold text-base h-14 rounded-xl shadow-soft-depth bg-primary/90 text-primary-foreground hover:bg-primary hover:shadow-glow-primary transition-all duration-fast active:translate-y-px"
+                    suppressHydrationWarning
+                    >
+                    Sign In
+                    </Button>
                 </Link>
-              </div>
-              <Input id="password" type="password" required className="rounded-sm !border-gray-100 focus:glow" />
-            </div>
-            <div className="space-y-3">
-               <Link href="/dashboard" className="w-full" passHref>
-                <Button 
-                  className="w-full font-semibold text-[15px] h-11 rounded-md shadow-button hover:bg-primary-hover transition-transform duration-normal active:translate-y-px"
-                >
-                  Sign In
+                <Button variant="outline" className="w-full h-14 rounded-xl border-primary/30 text-primary bg-white/50 hover:bg-white/80 hover:text-primary hover:border-primary/50">
+                    Sign in with Google
                 </Button>
-              </Link>
-              <Button variant="outline" className="w-full h-11 rounded-md border-primary/50 text-primary hover:bg-primary/10 hover:text-primary">
-                Sign in with Google
-              </Button>
+                </div>
+            </CardContent>
+            </Card>
+            <div className="mt-8 text-center text-sm text-foreground/60">
+            Don&apos;t have an account?{" "}
+            <Link href="#" className="font-medium text-primary/90 hover:text-primary hover:underline" prefetch={false}>
+                Sign up
+            </Link>
             </div>
-          </CardContent>
-        </Card>
-        <div className="mt-6 text-center text-sm text-gray-400">
-          Don&apos;t have an account?{" "}
-          <Link href="#" className="font-medium text-primary hover:underline" prefetch={false}>
-            Sign up
-          </Link>
         </div>
-      </div>
     </div>
   );
 }

@@ -4,8 +4,8 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%; /* #FFFFFF */
-    --foreground: 240 10% 3.9%; /* Using a dark grey for text */
+    --background: 132 24% 96%; /* #E6F2E8 - Light Green */
+    --foreground: 240 10% 3.9%;
 
     --card: 0 0% 100%;
     --card-foreground: 240 10% 3.9%;
@@ -13,39 +13,39 @@
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
 
-    --primary: 217 100% 52%; /* #0A84FF */
-    --primary-foreground: 0 0% 100%; /* White */
+    --primary: 126 42% 70%; /* #A7D1AB - Soft Green */
+    --primary-foreground: 240 10% 3.9%;
 
-    --secondary: 240 4.8% 95.9%; /* #F2F2F5 */
+    --secondary: 132 24% 90%; /* A slightly darker light green for secondary elements */
     --secondary-foreground: 240 5.9% 10%;
 
-    --muted: 240 4% 56.1%; /* #8E8E93 */
+    --muted: 240 4% 56.1%;
     --muted-foreground: 240 4% 56.1%;
 
-    --accent: 240 4.8% 95.9%; /* #F2F2F5 */
+    --accent: 41 57% 61%; /* #D6AD60 - Amber */
     --accent-foreground: 240 5.9% 10%;
 
-    --destructive: 2 100% 59%; /* #FF3B30 */
+    --destructive: 2 100% 59%;
     --destructive-foreground: 0 0% 98%;
 
-    --success: 142 60% 50%; /* #34C759 */
-    --warning: 50 100% 52%; /* #FFD60A */
+    --success: 142 60% 50%; 
+    --warning: 41 57% 61%; /* Amber for warnings */
 
-    --border: 240 3.7% 91.4%; /* #E6E6EA */
-    --input: 240 3.7% 91.4%;
-    --ring: 217 100% 52%; /* #0A84FF */
+    --border: 126 20% 85%; /* A border color derived from primary */
+    --input: 126 20% 85%;
+    --ring: 126 42% 70%; /* Soft Green for rings */
 
-    --radius: 0.5rem; /* This will be overridden by custom radius in tailwind config */
+    --radius: 0.5rem;
     
-    --chart-1: 217 100% 52%;
-    --chart-2: 50 100% 52%;
+    --chart-1: 126 42% 70%;
+    --chart-2: 41 57% 61%;
     --chart-3: 2 100% 59%;
     --chart-4: 240 4.8% 95.9%;
     --chart-5: 240 4% 56.1%;
   }
 
   .dark {
-    /* Keeping dark mode for completeness, though design is light-focused */
+    /* For dark mode, we can invert or use a different theme if needed. Sticking to a light theme for now as requested. */
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
 
@@ -55,8 +55,8 @@
     --popover: 240 10% 3.9%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 217 100% 52%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 126 42% 70%;
+    --primary-foreground: 240 10% 3.9%;
 
     --secondary: 240 3.7% 15.9%;
     --secondary-foreground: 0 0% 98%;
@@ -64,21 +64,21 @@
     --muted: 240 3.7% 15.9%;
     --muted-foreground: 240 5% 64.9%;
 
-    --accent: 240 3.7% 15.9%;
+    --accent: 41 57% 61%;
     --accent-foreground: 0 0% 98%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-
+    
     --success: 142 70% 45%;
-    --warning: 48 96% 50%;
+    --warning: 41 57% 61%;
 
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
-    --ring: 217 100% 52%;
+    --ring: 126 42% 70%;
 
-    --chart-1: 217 100% 52%;
-    --chart-2: 50 100% 52%;
+    --chart-1: 126 42% 70%;
+    --chart-2: 41 57% 61%;
     --chart-3: 2 100% 59%;
     --chart-4: 240 3.7% 15.9%;
     --chart-5: 240 5% 64.9%;
@@ -91,7 +91,7 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-family: "SF Pro Text", "Inter", system-ui, -apple-system, sans-serif;
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
   }
   h1 { @apply text-h1; }
   h2 { @apply text-h2; }

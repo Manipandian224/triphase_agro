@@ -10,84 +10,80 @@ import {
 } from "@/components/ui/card";
 import { Power, Loader2 } from "lucide-react";
 import { useFirebase } from "@/firebase/client-provider";
-import { getDatabase, ref, onValue, set } from "firebase/database";
+import { ref, onValue, set } from "firebase/database";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
 
 export default function PumpControlPage() {
-  const { rtdb } = useFirebase();
+  const { rtdb } = useFirebase();      // your Realtime DB instance
   const { toast } = useToast();
+
   const [pumpStatus, setPumpStatus] = useState<boolean | null>(null);
   const [loading, setLoading] = useState(true);
   const [isUpdating, setIsUpdating] = useState(false);
 
   useEffect(() => {
-    if (!rtdb) {
-      return;
-    }
+    if (!rtdb) return;
 
-    const db = getDatabase();
-    const pumpStatusRef = ref(db, "Irrigation/PumpStatus");
+    const pumpStatusRef = ref(rtdb, "Irrigation/PumpStatus");
 
     const unsubscribe = onValue(
       pumpStatusRef,
       (snapshot) => {
         const status = snapshot.val();
-        // Handle both boolean and string "ON"/"OFF"
-        if (typeof status === 'boolean') {
+
+        if (typeof status === "boolean") {
           setPumpStatus(status);
-        } else if (typeof status === 'string') {
+        } else if (typeof status === "string") {
           setPumpStatus(status.toUpperCase() === "ON");
         }
+
         setLoading(false);
       },
-      (error) => {
-        console.error("Firebase Realtime Database read failed:", error);
+      () => {
         toast({
           variant: "destructive",
           title: "Error fetching pump status",
-          description: "Could not connect to the database.",
+          description: "Could not connect to RTDB.",
         });
         setLoading(false);
       }
     );
 
-    return () => {
-      unsubscribe();
-    };
-  }, [rtdb, toast]);
+    return () => unsubscribe();
+  }, [rtdb]);
 
   const handlePumpToggle = async (checked: boolean) => {
     if (!rtdb) {
       toast({
         variant: "destructive",
         title: "Database not connected",
-        description: "Cannot change pump status.",
+        description: "Cannot update pump status.",
       });
       return;
     }
 
     setIsUpdating(true);
-    const db = getDatabase();
-    const pumpStatusRef = ref(db, "Irrigation/PumpStatus");
+
+    const pumpStatusRef = ref(rtdb, "Irrigation/PumpStatus");
     const newStatus = checked ? "ON" : "OFF";
 
     try {
       await set(pumpStatusRef, newStatus);
+
       toast({
         title: `Pump turned ${newStatus}`,
-        description: "The pump status has been successfully updated.",
+        description: "Successfully updated.",
       });
     } catch (error) {
-      console.error("Failed to update pump status:", error);
       toast({
         variant: "destructive",
-        title: "Update Failed",
-        description: "Could not change the pump status. Please try again.",
+        title: "Failed to update",
+        description: "Try again.",
       });
-      // Revert UI state on failure
+
       setPumpStatus(!checked);
     } finally {
       setIsUpdating(false);
@@ -100,23 +96,28 @@ export default function PumpControlPage() {
         <CardHeader>
           <CardTitle>Pump Control</CardTitle>
           <CardDescription>
-            Manually override and control the main water pump.
+            Manually override main water pump.
           </CardDescription>
         </CardHeader>
+
         <CardContent className="space-y-6">
           <div className="flex items-center justify-between rounded-lg border p-4">
             <div className="flex items-center space-x-3">
               <Power className="h-6 w-6 text-muted-foreground" />
+
               <div>
-                <Label htmlFor="pump-switch" className="text-base font-bold">
+                <Label className="text-base font-bold">
                   Main Pump
                 </Label>
+
                 {loading ? (
                   <Skeleton className="h-5 w-20 mt-1" />
                 ) : (
                   <p
                     className={`text-sm font-medium ${
-                      pumpStatus ? "text-success" : "text-muted-foreground"
+                      pumpStatus
+                        ? "text-green-600"
+                        : "text-muted-foreground"
                     }`}
                   >
                     {pumpStatus ? "ON" : "OFF"}
@@ -124,25 +125,29 @@ export default function PumpControlPage() {
                 )}
               </div>
             </div>
+
             {loading ? (
               <Skeleton className="h-6 w-11 rounded-full" />
             ) : (
               <div className="relative flex items-center">
-                 {isUpdating && <Loader2 className="h-4 w-4 animate-spin absolute -left-6" />}
+                {isUpdating && (
+                  <Loader2 className="h-4 w-4 animate-spin absolute -left-6" />
+                )}
+
                 <Switch
-                  id="pump-switch"
                   checked={pumpStatus ?? false}
                   onCheckedChange={handlePumpToggle}
-                  disabled={isUpdating || pumpStatus === null}
-                  aria-label="Toggle main water pump"
+                  disabled={isUpdating}
                 />
               </div>
             )}
           </div>
+
           <p className="text-xs text-muted-foreground text-center">
-            Changes made here will be sent to your irrigation controller in real-time.
+            Updates are sent to your irrigation controller in real-time.
           </p>
         </CardContent>
       </Card>
     </div>
   );
+}

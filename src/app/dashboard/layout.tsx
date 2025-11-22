@@ -66,23 +66,22 @@ function VerticalNavbar() {
   const pathname = usePathname();
 
   return (
-    <aside className="fixed left-0 top-0 hidden h-screen w-60 border-r border-gray-100 bg-white md:flex flex-col">
+    <aside className="fixed left-0 top-0 hidden h-screen w-60 border-r bg-card md:flex flex-col shadow-soft-depth">
       {/* Logo Section */}
       <div className="p-6 flex items-center gap-3">
         <LeafIcon className="w-8 h-8 text-primary" />
-        <span className="text-[17px] font-semibold text-[#1C1C1E]">AgriVision Pro</span>
+        <span className="text-xl font-semibold text-foreground">AgriVision Pro</span>
       </div>
 
       {/* Navigation Items */}
-      <nav className="flex-1 px-4 space-y-1">
+      <nav className="flex-1 px-4 space-y-2">
         {navItems.map((item) => (
           <Link href={item.href} key={item.label} passHref>
             <Button
               variant="ghost"
               className={cn(
-                "w-full flex items-center justify-start gap-3 px-4 py-2 rounded-[8px] text-[15px] font-medium text-gray-900/70 hover:bg-[#E6F2FF] hover:text-primary transition-colors duration-200 ease-in-out",
-                "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[rgba(10,132,255,0.28)]",
-                 pathname === item.href && "bg-[#E6F2FF] text-primary"
+                "w-full flex items-center justify-start gap-3 px-4 py-2 rounded-lg text-base font-medium text-foreground/70 hover:bg-secondary hover:text-primary transition-colors duration-fast",
+                 pathname === item.href && "bg-primary/10 text-primary font-semibold"
               )}
             >
               <item.icon className="w-5 h-5" />
@@ -93,25 +92,25 @@ function VerticalNavbar() {
       </nav>
 
       {/* Profile Section */}
-      <div className="p-4 border-t border-gray-100">
+      <div className="p-4 border-t">
          <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <button className="w-full flex items-center gap-3 rounded-md p-2 hover:bg-gray-50/50">
-                    <Avatar className="h-8 w-8">
+                <button className="w-full flex items-center gap-3 rounded-lg p-2 hover:bg-secondary">
+                    <Avatar className="h-9 w-9">
                     <AvatarImage
-                        src="https://picsum.photos/seed/user/32/32"
+                        src="https://picsum.photos/seed/user/36/36"
                         alt="@user"
                         data-ai-hint="profile avatar"
                     />
                     <AvatarFallback>FM</AvatarFallback>
                     </Avatar>
                     <div className="text-left">
-                        <p className="text-[15px] font-medium text-[#1C1C1E]">Farm Manager</p>
-                         <p className="text-[13px] text-gray-400">View Profile</p>
+                        <p className="text-base font-semibold text-foreground">Farm Manager</p>
+                         <p className="text-sm text-muted-foreground">View Profile</p>
                     </div>
                 </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="mb-2 w-56">
+            <DropdownMenuContent align="end" className="mb-2 w-56 rounded-xl shadow-soft-depth">
                 <DropdownMenuLabel>Farm Manager</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>Settings</DropdownMenuItem>
@@ -130,21 +129,21 @@ function VerticalNavbar() {
 
 function Header() {
   return (
-    <header className="flex h-14 items-center gap-4 border-b bg-card px-4 lg:h-[60px] lg:px-6 md:justify-end">
+    <header className="flex h-16 items-center gap-4 border-b bg-card/50 backdrop-blur-sm px-4 lg:h-[68px] lg:px-6 md:justify-end sticky top-0 z-30">
       <div className="w-full flex-1 md:hidden">
         <MobileNav />
       </div>
-      <Button variant="outline" size="icon" className="h-8 w-8">
-        <Bell className="h-4 w-4" />
+      <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full">
+        <Bell className="h-5 w-5" />
         <span className="sr-only">Toggle notifications</span>
       </Button>
       <div className="hidden md:block">
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
             <Button variant="secondary" size="icon" className="rounded-full">
-                <Avatar className="h-8 w-8">
+                <Avatar className="h-9 w-9">
                 <AvatarImage
-                    src="https://picsum.photos/seed/user/32/32"
+                    src="https://picsum.photos/seed/user/36/36"
                     alt="@user"
                     data-ai-hint="profile avatar"
                 />
@@ -153,7 +152,7 @@ function Header() {
                 <span className="sr-only">Toggle user menu</span>
             </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align="end" className="rounded-xl shadow-soft-depth">
             <DropdownMenuLabel>Farm Manager</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Settings</DropdownMenuItem>
@@ -180,20 +179,20 @@ function MobileNav() {
                     <span className="sr-only">Toggle Menu</span>
                 </Button>
             </SheetTrigger>
-            <SheetContent side="left" className="p-0 flex flex-col w-60">
+            <SheetContent side="left" className="p-0 flex flex-col w-60 bg-card">
                  <div className="p-6 flex items-center gap-3 border-b">
                     <LeafIcon className="w-8 h-8 text-primary" />
-                    <span className="text-[17px] font-semibold text-[#1C1C1E]">AgriVision Pro</span>
+                    <span className="text-xl font-semibold text-foreground">AgriVision Pro</span>
                 </div>
-                <nav className="flex-1 px-4 py-4 space-y-1">
+                <nav className="flex-1 px-4 py-4 space-y-2">
                     {navItems.map((item) => (
                     <Link href={item.href} key={item.label} passHref>
                         <Button
                         variant="ghost"
                         onClick={() => setIsOpen(false)}
                         className={cn(
-                            "w-full flex items-center justify-start gap-3 px-4 py-2 rounded-[8px] text-[15px] font-medium text-gray-900/70 hover:bg-[#E6F2FF] hover:text-primary transition-colors duration-200 ease-in-out",
-                            pathname === item.href && "bg-[#E6F2FF] text-primary"
+                          "w-full flex items-center justify-start gap-3 px-4 py-2 rounded-lg text-base font-medium text-foreground/70 hover:bg-secondary hover:text-primary transition-colors duration-fast",
+                           pathname === item.href && "bg-primary/10 text-primary font-semibold"
                         )}
                         >
                         <item.icon className="w-5 h-5" />
@@ -202,25 +201,25 @@ function MobileNav() {
                     </Link>
                     ))}
                 </nav>
-                 <div className="p-4 border-t border-gray-100">
+                 <div className="p-4 border-t">
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <button className="w-full flex items-center gap-3 rounded-md p-2 hover:bg-gray-50/50">
-                                <Avatar className="h-8 w-8">
+                            <button className="w-full flex items-center gap-3 rounded-lg p-2 hover:bg-secondary">
+                                <Avatar className="h-9 w-9">
                                 <AvatarImage
-                                    src="https://picsum.photos/seed/user/32/32"
+                                    src="https://picsum.photos/seed/user/36/36"
                                     alt="@user"
                                     data-ai-hint="profile avatar"
                                 />
                                 <AvatarFallback>FM</AvatarFallback>
                                 </Avatar>
                                 <div className="text-left">
-                                    <p className="text-[15px] font-medium text-[#1C1C1E]">Farm Manager</p>
-                                    <p className="text-[13px] text-gray-400">View Profile</p>
+                                    <p className="text-base font-semibold text-foreground">Farm Manager</p>
+                                    <p className="text-sm text-muted-foreground">View Profile</p>
                                 </div>
                             </button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="mb-2 w-56">
+                        <DropdownMenuContent align="end" className="mb-2 w-56 rounded-xl shadow-soft-depth">
                             <DropdownMenuLabel>Farm Manager</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem>Settings</DropdownMenuItem>
@@ -247,7 +246,7 @@ export default function DashboardLayout({
       <VerticalNavbar />
       <div className="flex flex-col md:ml-60">
         <Header />
-        <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
+        <main className="flex flex-1 flex-col gap-6 p-6 lg:gap-8 lg:p-8">
           {children}
         </main>
       </div>
