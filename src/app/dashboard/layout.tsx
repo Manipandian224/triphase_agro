@@ -113,10 +113,12 @@ function VerticalNavbar() {
                   <p className="text-xs text-muted-foreground font-normal">manager@farm.com</p>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                 <DropdownMenuItem>
-                  <UserCircle className="mr-2 h-4 w-4" />
-                  <span>My Profile</span>
-                </DropdownMenuItem>
+                 <Link href="/dashboard/my-profile">
+                    <DropdownMenuItem>
+                      <UserCircle className="mr-2 h-4 w-4" />
+                      <span>My Profile</span>
+                    </DropdownMenuItem>
+                 </Link>
                 <DropdownMenuSeparator />
                 <Link href="/">
                     <DropdownMenuItem>Logout</DropdownMenuItem>
@@ -160,10 +162,12 @@ function Header() {
               <p className="text-xs text-muted-foreground font-normal">manager@farm.com</p>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <UserCircle className="mr-2 h-4 w-4" />
-              <span>My Profile</span>
-            </DropdownMenuItem>
+             <Link href="/dashboard/my-profile">
+                <DropdownMenuItem>
+                  <UserCircle className="mr-2 h-4 w-4" />
+                  <span>My Profile</span>
+                </DropdownMenuItem>
+             </Link>
             <DropdownMenuSeparator />
             <Link href="/">
                 <DropdownMenuItem>Logout</DropdownMenuItem>
@@ -234,10 +238,12 @@ function MobileNav() {
                               <p className="text-xs text-muted-foreground font-normal">manager@farm.com</p>
                             </DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem>
-                              <UserCircle className="mr-2 h-4 w-4" />
-                              <span>My Profile</span>
-                            </DropdownMenuItem>
+                             <Link href="/dashboard/my-profile">
+                                <DropdownMenuItem>
+                                  <UserCircle className="mr-2 h-4 w-4" />
+                                  <span>My Profile</span>
+                                </DropdownMenuItem>
+                             </Link>
                             <DropdownMenuSeparator />
                             <Link href="/">
                                 <DropdownMenuItem>Logout</DropdownMenuItem>
