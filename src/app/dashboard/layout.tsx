@@ -5,14 +5,13 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   Bell,
+  Bot,
   BrainCircuit,
   History,
   LayoutDashboard,
   Map,
   Menu,
-  Power,
   Settings,
-  X,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -58,7 +57,8 @@ function LeafIcon(props: React.SVGProps<SVGSVGElement>) {
 const navItems = [
   { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
   { href: "/dashboard/field-view", icon: Map, label: "Field View" },
-  { href: "/dashboard/ai-crop-health", icon: BrainCircuit, label: "AI Crop Health" },
+  { href: "/dashboard/ai-crop-health", icon: BrainCircuit, label: "AI Analysis" },
+  { href: "/dashboard/ai-chatbot", icon: Bot, label: "AI Chatbot" },
   { href: "/dashboard/logs", icon: History, label: "Logs" },
   { href: "/dashboard/settings", icon: Settings, label: "Settings" },
 ];
