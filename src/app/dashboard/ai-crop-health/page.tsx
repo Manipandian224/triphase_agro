@@ -283,6 +283,9 @@ export default function AiCropHealthPage() {
                       <SelectItem value="hi">Hindi</SelectItem>
                       <SelectItem value="ja">Japanese</SelectItem>
                       <SelectItem value="pt">Portuguese</SelectItem>
+                      <SelectItem value="ta">Tamil</SelectItem>
+                      <SelectItem value="te">Telugu</SelectItem>
+                      <SelectItem value="bn">Bengali</SelectItem>
                     </SelectContent>
                   </Select>
                   {isTranslating && (
