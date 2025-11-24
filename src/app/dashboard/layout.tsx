@@ -13,12 +13,15 @@ import {
   BarChart,
   Settings,
   Leaf,
+  HeartPulse,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { AiChatBot } from '@/components/ai-chat-bot';
 
 const navLinks = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutGrid },
+  { href: '/dashboard/health-analysis', label: 'Health Analysis', icon: HeartPulse },
   { href: '/dashboard/plant-details', label: 'Plant Details', icon: Leaf },
   { href: '/dashboard/analytics', label: 'Analytics', icon: BarChart },
   { href: '/dashboard/settings', label: 'Settings', icon: Settings },
@@ -64,6 +67,7 @@ export default function DashboardLayout({
             {children}
         </div>
       </main>
+      <AiChatBot />
     </div>
   );
 }

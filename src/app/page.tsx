@@ -8,18 +8,24 @@ import {
   Wifi,
   Power,
   Leaf,
-  BarChart,
   ChevronRight,
 } from 'lucide-react';
 import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-  ChartConfig,
-} from '@/components/ui/chart';
-import { Bar, XAxis, YAxis, CartesianGrid, BarChart as RechartsBarChart, Line, LineChart, ResponsiveContainer, Legend, Tooltip } from 'recharts';
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Legend,
+} from 'recharts';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
+import { useDoc } from '@/hooks/use-doc';
+import { doc } from 'firebase/firestore';
+import { useFirebase } from '@/firebase/client-provider';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const statusCards = [
   {
@@ -124,14 +130,49 @@ const cropHealthChartData = [
   { date: 'Jun 5', health: 93 },
 ];
 
-export default function DashboardPage() {
-  return (
-    <div className="flex-1 space-y-8 p-4 md:p-8 pt-6 bg-secondary/20">
-      <div className="flex items-center justify-between space-y-2">
-        <h2 className="text-4xl font-bold tracking-tight">Dashboard</h2>
-      </div>
+function LiveDashboardContent() {
+  const { db } = useFirebase();
 
-      {/* Status Cards */}
+  // NOTE: This assumes a single sensor document with a known ID.
+  // In a real app, you might get this ID from user selection, etc.
+  const sensorRef = db ? doc(db, 'sensors', 'main-field-sensor') : null;
+  const { data: liveSensorData, loading } = useDoc(sensorRef);
+
+  const getStatusCardValue = (title: string) => {
+    if (loading || !liveSensorData) return <Skeleton className="h-6 w-1/2" />;
+    switch (title) {
+      case 'Pump Status':
+        return liveSensorData.pumpStatus;
+      case '3-Phase Power':
+        return liveSensorData.threePhasePower;
+      case 'Connectivity':
+        return liveSensorData.connectivity;
+      case 'Crop Health':
+        return `${liveSensorData.cropHealth.toFixed(0)}%`;
+      default:
+        return 'N/A';
+    }
+  };
+
+  const getSensorValue = (title: string) => {
+     if (loading || !liveSensorData) return <Skeleton className="h-6 w-1/2" />;
+     switch (title) {
+      case 'Soil Moisture':
+        return `${liveSensorData.soilMoisture.toFixed(1)}%`;
+      case 'Air Temperature':
+        return `${liveSensorData.airTemp.toFixed(1)}°C`;
+      case 'Humidity':
+        return `${liveSensorData.humidity.toFixed(1)}%`;
+      case 'Water Flow':
+        return `${liveSensorData.waterFlow.toFixed(1)} L/min`;
+      default:
+        return 'N/A';
+    }
+  }
+
+
+  return (
+    <>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {statusCards.map(card => (
           <Card key={card.title} className="bg-card">
@@ -140,14 +181,13 @@ export default function DashboardPage() {
               <card.icon className={`h-5 w-5 ${card.color}`} />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{card.value}</div>
+              <div className="text-2xl font-bold">{getStatusCardValue(card.title)}</div>
                <Badge variant={'outline'} className={`mt-2 ${card.color} border-current`}>Normal</Badge>
             </CardContent>
           </Card>
         ))}
       </div>
-      
-      {/* Sensor Data */}
+
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {sensorData.map(sensor => (
           <Card key={sensor.title} className="bg-card flex flex-col">
@@ -157,7 +197,7 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent className="flex-1 flex flex-col justify-between">
               <div>
-                <div className="text-2xl font-bold">{sensor.value}</div>
+                <div className="text-2xl font-bold">{getSensorValue(sensor.title)}</div>
                 <p className="text-xs text-muted-foreground">+2.1% from last hour</p>
               </div>
               <div className="h-[80px] -ml-6 mt-4">
@@ -171,7 +211,21 @@ export default function DashboardPage() {
           </Card>
         ))}
       </div>
+    </>
+  )
 
+}
+
+
+export default function DashboardPage() {
+  return (
+    <div className="flex-1 space-y-8 p-4 md:p-8 pt-6 bg-secondary/20">
+      <div className="flex items-center justify-between space-y-2">
+        <h2 className="text-4xl font-bold tracking-tight">Dashboard</h2>
+      </div>
+
+      <LiveDashboardContent />
+      
       {/* Recent Activity & Crop Health */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
         <Card className="col-span-4 bg-card">
@@ -245,5 +299,3 @@ function AlertItem({level, message, time}: AlertItemProps) {
     </div>
   )
 }
-
-    
