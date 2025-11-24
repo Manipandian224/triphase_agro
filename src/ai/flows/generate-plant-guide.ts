@@ -76,7 +76,7 @@ const generatePlantGuideFlow = ai.defineFlow(
   {
     name: 'generatePlantGuideFlow',
     inputSchema: GeneratePlantGuideInputSchema,
-    outputSchema: GeneratePlantGuideGuideOutputSchema,
+    outputSchema: GeneratePlantGuideOutputSchema,
   },
   async (input) => {
     // Step 1: Generate the text-based guide content and the main plant image in parallel.
