@@ -129,7 +129,7 @@ function LiveDashboardContent() {
               <CardContent className="flex-1 flex flex-col justify-between">
                 <div>
                   <div className="text-3xl font-bold">{value}</div>
-                  <p className="text-xs text-muted-foreground">{change}</p>
+                  <div className="text-xs text-muted-foreground">{change}</div>
                 </div>
                 <div className="h-[80px] -ml-6 mt-4">
                   <ResponsiveContainer width="100%" height="100%">
