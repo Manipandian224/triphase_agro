@@ -9,7 +9,7 @@ import {
   LayoutDashboard,
   Map,
   Menu,
-  Store,
+  Sprout,
   UserCircle,
 } from "lucide-react";
 import { useState } from "react";
@@ -58,7 +58,7 @@ const navItems = [
   { href: "/dashboard/field-view", icon: Map, label: "Field View" },
   { href: "/dashboard/ai-crop-health", icon: BrainCircuit, label: "AI Analysis" },
   { href: "/dashboard/ai-chatbot", icon: Bot, label: "AI Chatbot" },
-  { href: "/dashboard/products", icon: Store, label: "Products" },
+  { href: "/dashboard/plant-guide", icon: Sprout, label: "Plant Guide" },
 ];
 
 function VerticalNavbar() {
