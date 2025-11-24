@@ -26,12 +26,12 @@ export const DiseaseInfoSchema = z.object({
 export type DiseaseInfo = z.infer<typeof DiseaseInfoSchema>;
 
 const DiseaseInfoWithImageSchema = DiseaseInfoSchema.extend({
-  diseaseImage: z.string().describe('A data URI of an AI-generated image showing the disease symptoms.'),
+  diseaseImage: z.string().optional().describe('A data URI of an AI-generated image showing the disease symptoms.'),
 });
 type DiseaseInfoWithImage = z.infer<typeof DiseaseInfoWithImageSchema>;
 
 export const GeneratePlantGuideOutputSchema = z.object({
-  plantImage: z.string().describe('A data URI of the AI-generated, product-style plant image.'),
+  plantImage: z.string().optional().describe('A data URI of the AI-generated, product-style plant image.'),
   plantDetails: z.object({
     plantName: z.string(),
     botanicalName: z.string(),

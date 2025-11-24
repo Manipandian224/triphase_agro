@@ -77,7 +77,7 @@ export default function PlantGuidePage() {
             <CardTitle className="text-3xl font-bold tracking-tight">AI Plant Guide Generator</CardTitle>
           </div>
           <CardDescription className="text-lg">
-            Enter a plant name to generate a comprehensive care and disease guide with AI-generated images.
+            Enter a plant name to generate a comprehensive care and disease guide.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -124,11 +124,12 @@ export default function PlantGuidePage() {
               <CardContent className="p-4">
                 <div className="relative aspect-square w-full overflow-hidden rounded-lg">
                   <Image
-                    src={guide.plantImage}
+                    src={guide.plantImage || "https://picsum.photos/seed/plant/600/600"}
                     alt={`AI generated image of ${guide.plantDetails.plantName}`}
                     fill
                     className="object-cover"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    data-ai-hint="plant product"
                   />
                 </div>
               </CardContent>
@@ -207,11 +208,9 @@ export default function PlantGuidePage() {
                       <AccordionContent>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-2">
                             <div className="md:col-span-1 space-y-4">
-                                {disease.diseaseImage && (
-                                    <div className="relative aspect-video w-full overflow-hidden rounded-lg border">
-                                        <Image src={disease.diseaseImage} alt={`AI-generated image of ${disease.name}`} fill className="object-cover" />
-                                    </div>
-                                )}
+                                <div className="relative aspect-video w-full overflow-hidden rounded-lg border">
+                                    <Image src={disease.diseaseImage || `https://picsum.photos/seed/disease${index}/600/400`} alt={`Placeholder image for ${disease.name}`} fill className="object-cover" data-ai-hint="plant disease" />
+                                </div>
                                 <p className="text-sm"><strong>Cause:</strong> {disease.cause}</p>
                             </div>
                             <div className="md:col-span-2 space-y-4">

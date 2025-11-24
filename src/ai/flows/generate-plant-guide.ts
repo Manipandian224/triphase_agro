@@ -79,56 +79,23 @@ const generatePlantGuideFlow = ai.defineFlow(
     outputSchema: GeneratePlantGuideOutputSchema,
   },
   async (input) => {
-    // Step 1: Generate the text-based guide content and the main plant image in parallel.
-    const [guideContentResponse, plantImageResponse] = await Promise.all([
-      plantGuidePrompt(input),
-      ai.generate({
-        model: 'googleai/imagen-4.0-fast-generate-001',
-        prompt: `A photorealistic, high-resolution product-style image of a healthy ${input.plantName} plant in a stylish pot. The background must be pure white (#FFFFFF) or very light gray (#F8F8F8). The lighting should be bright and even, with minimal, soft shadows. The plant should be centered. This image is for an e-commerce website like Shopify or Florasay.`,
-      }),
-    ]);
+    // Step 1: Generate the text-based guide content.
+    const guideContentResponse = await plantGuidePrompt(input);
 
     const guideContent = guideContentResponse.output;
     if (!guideContent) {
       throw new Error('Failed to generate plant guide content.');
     }
-    if (!plantImageResponse.media.url) {
-      throw new Error('Failed to generate the main plant image.');
-    }
-
-    // Step 2: Generate images for the first two diseases.
-    const diseaseImagePrompts = guideContent.commonDiseases
-      .slice(0, 2)
-      .map((disease) =>
-        ai.generate({
-          model: 'googleai/imagen-4.0-fast-generate-001',
-          prompt: `A close-up, photorealistic reference image showing the symptoms of "${disease.name}" on a ${input.plantName} plant. The image should clearly display the following symptoms: ${disease.symptoms}. Focus on accuracy for disease identification.`,
-        })
-      );
-
-    const diseaseImageResponses = await Promise.all(diseaseImagePrompts);
-
-    // Step 3: Combine text content with all generated images.
-    const finalDiseases = guideContent.commonDiseases.map((disease, index) => {
-      // Add the generated image URL to the first two diseases.
-      if (index < 2) {
-        return {
-          ...disease,
-          diseaseImage: diseaseImageResponses[index].media.url,
-        };
-      }
-      // For the rest, return as is without an image.
-      return {
-        ...disease,
-        diseaseImage: '', // No image for diseases beyond the first two.
-      };
-    });
-
+    
+    // Step 2: Return content without images.
     return {
-      plantImage: plantImageResponse.media.url,
+      plantImage: '', // Placeholder, will not be generated
       plantDetails: guideContent.plantDetails,
       growthDuration: guideContent.growthDuration,
-      commonDiseases: finalDiseases,
+      commonDiseases: guideContent.commonDiseases.map(disease => ({
+        ...disease,
+        diseaseImage: '', // Placeholder, will not be generated
+      })),
       summary: guideContent.summary,
     };
   }
