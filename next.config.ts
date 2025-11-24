@@ -33,7 +33,13 @@ const nextConfig: NextConfig = {
         hostname: 'dvbksfogxynifnfsbxoc.supabase.co',
         port: '',
         pathname: '/**',
-      }
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
 };
