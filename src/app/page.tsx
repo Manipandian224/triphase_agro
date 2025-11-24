@@ -9,6 +9,8 @@ import {
   Power,
   Leaf,
   ChevronRight,
+  Zap,
+  Activity,
 } from 'lucide-react';
 import {
   Line,
@@ -22,104 +24,13 @@ import {
 } from 'recharts';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
-import { useDoc } from '@/hooks/use-doc';
-import { doc } from 'firebase/firestore';
-import { useFirebase } from '@/firebase/client-provider';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useRtdbValue } from '@/hooks/use-rtdb-value';
+import { useFirebase } from '@/firebase/client-provider';
+import { ref } from 'firebase/database';
+import { SensorData } from '@/types/sensor-data';
+import { Button } from '@/components/ui/button';
 
-const statusCards = [
-  {
-    title: 'Pump Status',
-    value: 'ON',
-    icon: Droplets,
-    color: 'text-green-400',
-    bgColor: 'bg-green-400/10',
-    variant: 'success',
-  },
-  {
-    title: '3-Phase Power',
-    value: 'OK',
-    icon: Power,
-    color: 'text-green-400',
-    bgColor: 'bg-green-400/10',
-    variant: 'success',
-  },
-  {
-    title: 'Connectivity',
-    value: 'Online',
-    icon: Wifi,
-    color: 'text-green-400',
-    bgColor: 'bg-green-400/10',
-    variant: 'success',
-  },
-  {
-    title: 'Crop Health',
-    value: '92%',
-    icon: Leaf,
-    color: 'text-green-400',
-    bgColor: 'bg-green-400/10',
-    variant: 'success',
-  },
-];
-
-const sensorData = [
-  {
-    title: 'Soil Moisture',
-    value: '68%',
-    icon: Droplets,
-    chartData: [
-      { time: '00:00', value: 65 },
-      { time: '04:00', value: 68 },
-      { time: '08:00', value: 62 },
-      { time: '12:00', value: 70 },
-      { time: '16:00', value: 68 },
-      { time: '20:00', value: 66 },
-    ],
-    color: "hsl(var(--primary))",
-  },
-  {
-    title: 'Air Temperature',
-    value: '24°C',
-    icon: Thermometer,
-    chartData: [
-      { time: '00:00', value: 22 },
-      { time: '04:00', value: 21 },
-      { time: '08:00', value: 23 },
-      { time: '12:00', value: 26 },
-      { time: '16:00', value: 25 },
-      { time: '20:00', value: 23 },
-    ],
-    color: 'hsl(20, 80%, 60%)',
-  },
-  {
-    title: 'Humidity',
-    value: '55%',
-    icon: Wind,
-    chartData: [
-      { time: '00:00', value: 58 },
-      { time: '04:00', value: 60 },
-      { time: '08:00', value: 55 },
-      { time: '12:00', value: 50 },
-      { time: '16:00', value: 52 },
-      { time: '20:00', value: 54 },
-    ],
-    color: 'hsl(200, 80%, 60%)',
-  },
-    {
-    title: 'Water Flow',
-    value: '12 L/min',
-    icon: Wind, // Placeholder icon
-    chartData: [
-      { time: '00:00', value: 10 },
-      { time: '04:00', value: 12 },
-      { time: '08:00', value: 11 },
-      { time: '12:00', value: 15 },
-      { time: '16:00', value: 14 },
-      { time: '20:00', value: 12 },
-    ],
-    color: 'hsl(180, 80%, 60%)',
-  },
-];
 
 const cropHealthChartData = [
   { date: 'May 1', health: 85 },
@@ -131,85 +42,114 @@ const cropHealthChartData = [
 ];
 
 function LiveDashboardContent() {
-  const { db } = useFirebase();
+  const { rtdb } = useFirebase();
 
   // NOTE: This assumes a single sensor document with a known ID.
-  // In a real app, you might get this ID from user selection, etc.
-  const sensorRef = db ? doc(db, 'sensors', 'main-field-sensor') : null;
-  const { data: liveSensorData, loading } = useDoc(sensorRef);
+  const sensorRef = rtdb ? ref(rtdb, 'sensors/main-field-sensor') : null;
+  const { data: liveSensorData, loading } = useRtdbValue<SensorData>(sensorRef);
 
-  const getStatusCardValue = (title: string) => {
-    if (loading || !liveSensorData) return <Skeleton className="h-6 w-1/2" />;
+  const getStatusCard = (title: string) => {
+    if (loading || !liveSensorData) {
+      return { value: <Skeleton className="h-8 w-20" />, badge: <Skeleton className="h-5 w-16" />, icon: Activity, color: 'text-muted-foreground' };
+    }
     switch (title) {
       case 'Pump Status':
-        return liveSensorData.pumpStatus;
+        const pumpOn = liveSensorData.pumpStatus === 'ON';
+        return { value: liveSensorData.pumpStatus, badge: pumpOn ? 'Active' : 'Idle', icon: Droplets, color: pumpOn ? 'text-green-400' : 'text-yellow-400' };
       case '3-Phase Power':
-        return liveSensorData.threePhasePower;
+        const powerOk = liveSensorData.threePhasePower === 'OK';
+        return { value: liveSensorData.threePhasePower, badge: powerOk ? 'Nominal' : 'Fault', icon: Power, color: powerOk ? 'text-green-400' : 'text-red-400' };
       case 'Connectivity':
-        return liveSensorData.connectivity;
+        const isOnline = liveSensorData.connectivity === 'Online';
+        return { value: liveSensorData.connectivity, badge: isOnline ? 'Connected' : 'Offline', icon: Wifi, color: isOnline ? 'text-green-400' : 'text-muted-foreground' };
       case 'Crop Health':
-        return `${liveSensorData.cropHealth.toFixed(0)}%`;
+        const health = liveSensorData.cropHealth;
+        return { value: `${health.toFixed(0)}%`, badge: health > 85 ? 'Excellent' : 'Good', icon: Leaf, color: health > 85 ? 'text-green-400' : 'text-yellow-400'};
       default:
-        return 'N/A';
+        return { value: 'N/A', badge: 'Unknown', icon: Activity, color: 'text-muted-foreground' };
     }
   };
 
-  const getSensorValue = (title: string) => {
-     if (loading || !liveSensorData) return <Skeleton className="h-6 w-1/2" />;
-     switch (title) {
+  const getSensorReading = (title: string) => {
+    if (loading || !liveSensorData) return { value: <Skeleton className="h-8 w-24" />, change: <Skeleton className="h-4 w-32" /> };
+    switch (title) {
       case 'Soil Moisture':
-        return `${liveSensorData.soilMoisture.toFixed(1)}%`;
+        return { value: `${liveSensorData.soilMoisture.toFixed(1)}%`, change: "+1.2% vs last hr" };
       case 'Air Temperature':
-        return `${liveSensorData.airTemp.toFixed(1)}°C`;
+        return { value: `${liveSensorData.airTemp.toFixed(1)}°C`, change: "-0.5°C vs last hr" };
       case 'Humidity':
-        return `${liveSensorData.humidity.toFixed(1)}%`;
+        return { value: `${liveSensorData.humidity.toFixed(1)}%`, change: "+2.0% vs last hr" };
       case 'Water Flow':
-        return `${liveSensorData.waterFlow.toFixed(1)} L/min`;
+        return { value: `${liveSensorData.waterFlow.toFixed(1)} L/min`, change: "Stable" };
       default:
-        return 'N/A';
+        return { value: 'N/A', change: ''};
     }
-  }
+  };
+
+  const statusCards = ['Pump Status', '3-Phase Power', 'Connectivity', 'Crop Health'];
+  const sensorReadings = [
+    { title: 'Soil Moisture', icon: Droplets, chartData: [{ time: '00:00', value: 65 }, { time: '04:00', value: 68 }, { time: '08:00', value: 62 }, { time: '12:00', value: 70 }, { time: '16:00', value: 68 }, { time: '20:00', value: 66 }], color: 'hsl(var(--primary))' },
+    { title: 'Air Temperature', icon: Thermometer, chartData: [{ time: '00:00', value: 22 }, { time: '04:00', value: 21 }, { time: '08:00', value: 23 }, { time: '12:00', value: 26 }, { time: '16:00', value: 25 }, { time: '20:00', value: 23 }], color: 'hsl(20, 80%, 60%)' },
+    { title: 'Humidity', icon: Wind, chartData: [{ time: '00:00', value: 58 }, { time: '04:00', value: 60 }, { time: '08:00', value: 55 }, { time: '12:00', value: 50 }, { time: '16:00', value: 52 }, { time: '20:00', value: 54 }], color: 'hsl(200, 80%, 60%)' },
+    { title: 'Water Flow', icon: Zap, chartData: [{ time: '00:00', value: 10 }, { time: '04:00', value: 12 }, { time: '08:00', value: 11 }, { time: '12:00', value: 15 }, { time: '16:00', value: 14 }, { time: '20:00', value: 12 }], color: 'hsl(180, 80%, 60%)' },
+  ];
 
 
   return (
     <>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {statusCards.map(card => (
-          <Card key={card.title} className="bg-card">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">{card.title}</CardTitle>
-              <card.icon className={`h-5 w-5 ${card.color}`} />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{getStatusCardValue(card.title)}</div>
-               <Badge variant={'outline'} className={`mt-2 ${card.color} border-current`}>Normal</Badge>
-            </CardContent>
-          </Card>
-        ))}
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        {statusCards.map(title => {
+          const { value, badge, icon: Icon, color } = getStatusCard(title);
+          return (
+            <Card key={title} className="bg-card shadow-soft-sm border-white/10">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium text-muted-foreground">{title}</CardTitle>
+                <Icon className={`h-5 w-5 ${color}`} />
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-bold">{value}</div>
+                <Badge variant={'outline'} className={`mt-2 text-xs font-medium border-current ${color}`}>
+                  {badge}
+                </Badge>
+              </CardContent>
+            </Card>
+          )
+        })}
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {sensorData.map(sensor => (
-          <Card key={sensor.title} className="bg-card flex flex-col">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">{sensor.title}</CardTitle>
-              <sensor.icon className="h-5 w-5 text-muted-foreground" />
-            </CardHeader>
-            <CardContent className="flex-1 flex flex-col justify-between">
-              <div>
-                <div className="text-2xl font-bold">{getSensorValue(sensor.title)}</div>
-                <p className="text-xs text-muted-foreground">+2.1% from last hour</p>
-              </div>
-              <div className="h-[80px] -ml-6 mt-4">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={sensor.chartData}>
-                    <Line type="monotone" dataKey="value" stroke={sensor.color} strokeWidth={2} dot={false} />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        {sensorReadings.map(sensor => {
+          const {value, change} = getSensorReading(sensor.title);
+          return (
+             <Card key={sensor.title} className="bg-card flex flex-col shadow-soft-sm border-white/10">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium text-muted-foreground">{sensor.title}</CardTitle>
+                <sensor.icon className="h-5 w-5 text-muted-foreground" />
+              </CardHeader>
+              <CardContent className="flex-1 flex flex-col justify-between">
+                <div>
+                  <div className="text-3xl font-bold">{value}</div>
+                  <p className="text-xs text-muted-foreground">{change}</p>
+                </div>
+                <div className="h-[80px] -ml-6 mt-4">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={sensor.chartData}>
+                      <Tooltip 
+                        contentStyle={{
+                          backgroundColor: "hsl(var(--popover))",
+                          borderColor: "hsl(var(--border))",
+                          color: "hsl(var(--popover-foreground))"
+                        }}
+                        cursor={{fill: 'hsl(var(--secondary))'}}
+                      />
+                      <Line type="monotone" dataKey="value" stroke={sensor.color} strokeWidth={2} dot={false} />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+          )
+        })}
       </div>
     </>
   )
@@ -219,16 +159,15 @@ function LiveDashboardContent() {
 
 export default function DashboardPage() {
   return (
-    <div className="flex-1 space-y-8 p-4 md:p-8 pt-6 bg-secondary/20">
+    <div className="flex-1 space-y-8 p-4 md:p-8 pt-6">
       <div className="flex items-center justify-between space-y-2">
-        <h2 className="text-4xl font-bold tracking-tight">Dashboard</h2>
+        <h2 className="text-4xl font-bold tracking-tighter">Live Field Dashboard</h2>
       </div>
 
       <LiveDashboardContent />
       
-      {/* Recent Activity & Crop Health */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-        <Card className="col-span-4 bg-card">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
+        <Card className="col-span-4 bg-card shadow-soft-lg border-white/10">
           <CardHeader>
             <CardTitle>Crop Health Over Time</CardTitle>
           </CardHeader>
@@ -241,19 +180,19 @@ export default function DashboardPage() {
                     <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} unit="%"/>
                     <Tooltip 
                       contentStyle={{
-                        backgroundColor: "hsl(var(--card))",
+                        backgroundColor: "hsl(var(--popover))",
                         borderColor: "hsl(var(--border))",
                       }}
                     />
-                    <Legend />
-                    <Line type="monotone" dataKey="health" name="Health Score" stroke="hsl(var(--primary))" strokeWidth={3} dot={{r: 4, fill: "hsl(var(--primary))"}} activeDot={{ r: 8 }}/>
+                    <Legend wrapperStyle={{fontSize: "0.875rem"}}/>
+                    <Line type="monotone" dataKey="health" name="Health Score" stroke="hsl(var(--primary))" strokeWidth={3} dot={{r: 4, fill: "hsl(var(--primary))"}} activeDot={{ r: 8, strokeWidth: 2, stroke: 'hsl(var(--background))' }}/>
                   </LineChart>
               </ResponsiveContainer>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="col-span-4 lg:col-span-3 bg-card">
+        <Card className="col-span-4 lg:col-span-3 bg-card shadow-soft-lg border-white/10">
           <CardHeader>
             <CardTitle>Recent Alerts</CardTitle>
           </CardHeader>
@@ -261,10 +200,12 @@ export default function DashboardPage() {
             <AlertItem level="High" message="Soil moisture is critically low in Section A-3." time="25m ago" />
             <AlertItem level="Medium" message="Pump 2 showing pressure fluctuations." time="1h ago" />
             <AlertItem level="Low" message="Connectivity issue detected on Sensor-11B." time="3h ago" />
-            <div className="flex justify-end">
-              <Link href="#" className="text-sm font-medium text-primary hover:underline flex items-center">
-                View All Alerts <ChevronRight className="h-4 w-4 ml-1" />
-              </Link>
+            <div className="flex justify-end pt-2">
+              <Button asChild variant="link" className="text-primary h-auto p-0">
+                <Link href="#">
+                  View All Alerts <ChevronRight className="h-4 w-4 ml-1" />
+                </Link>
+              </Button>
             </div>
           </CardContent>
         </Card>
@@ -286,14 +227,14 @@ function AlertItem({level, message, time}: AlertItemProps) {
     Low: 'bg-blue-500',
   }
   return (
-    <div className="flex items-start gap-4 p-3 rounded-lg bg-secondary/50">
+    <div className="flex items-start gap-4 p-4 rounded-lg bg-secondary/80 border border-border">
       <div className="flex h-3 w-3 mt-1.5">
           <span className={`relative flex h-3 w-3 rounded-full ${levelColors[level]}`}>
             <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${levelColors[level]} opacity-75`}></span>
           </span>
       </div>
       <div className="flex-1">
-        <p className="font-medium text-sm">{message}</p>
+        <p className="font-medium text-sm text-foreground">{message}</p>
         <p className="text-xs text-muted-foreground">{time}</p>
       </div>
     </div>

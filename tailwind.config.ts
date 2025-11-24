@@ -73,8 +73,12 @@ export default {
       },
        boxShadow: {
         'glow-primary': '0 0 15px hsl(var(--primary) / 0.5), 0 0 25px hsl(var(--primary) / 0.3)',
+        'soft-sm': '0 2px 4px hsl(var(--background) / 0.05), 0 1px 2px hsl(var(--background) / 0.1)',
+        'soft-lg': '0 10px 25px hsl(var(--background) / 0.05), 0 4px 10px hsl(var(--background) / 0.1)',
       }
     },
   },
   plugins: [require('tailwindcss-animate')],
 } satisfies Config;
+
+    

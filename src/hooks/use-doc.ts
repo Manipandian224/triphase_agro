@@ -1,7 +1,8 @@
+
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
-import { onSnapshot, DocumentReference, doc, Firestore } from 'firebase/firestore';
+import { onSnapshot, DocumentReference } from 'firebase/firestore';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError } from '@/firebase/errors';
 
@@ -62,3 +63,5 @@ export function useDoc<T>(ref: DocumentReference<T> | null) {
 
   return { data, loading, error };
 }
+
+    

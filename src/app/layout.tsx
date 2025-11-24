@@ -5,7 +5,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { FirebaseProvider } from "@/firebase/client-provider";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"], variable: '--font-inter' });
 
 export const metadata: Metadata = {
   title: "AuraFlora",
@@ -40,3 +40,5 @@ export default function RootLayout({
     </html>
   );
 }
+
+    
