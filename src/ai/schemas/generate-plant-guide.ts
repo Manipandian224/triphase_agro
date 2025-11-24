@@ -1,4 +1,3 @@
-'use server';
 /**
  * @fileOverview Zod schemas and TypeScript types for the generatePlantGuide flow.
  *
