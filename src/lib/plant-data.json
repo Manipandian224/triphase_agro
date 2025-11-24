@@ -1,0 +1,78 @@
+{
+  "heroPlant": {
+    "name": "Monstera Deliciosa",
+    "description": "A popular and easy-to-care-for houseplant known for its large, glossy, and unique split leaves.",
+    "price": "65.00",
+    "image": "https://picsum.photos/seed/monstera/800/800"
+  },
+  "topSelling": [
+    {
+      "name": "Snake Plant",
+      "description": "Low maintenance, air purifying",
+      "price": "45.00",
+      "image": "https://picsum.photos/seed/snakeplant/400/400"
+    },
+    {
+      "name": "Pothos",
+      "description": "Trailing vine, very forgiving",
+      "price": "25.00",
+      "image": "https://picsum.photos/seed/pothos/400/400"
+    },
+    {
+      "name": "ZZ Plant",
+      "description": "Drought tolerant, low light",
+      "price": "50.00",
+      "image": "https://picsum.photos/seed/zzplant/400/400"
+    },
+    {
+      "name": "Fiddle Leaf Fig",
+      "description": "Statement tree, loves light",
+      "price": "85.00",
+      "image": "https://picsum.photos/seed/fiddleleaf/400/400"
+    },
+    {
+      "name": "Calathea Orbifolia",
+      "description": "Stunning foliage, needs humidity",
+      "price": "55.00",
+      "image": "https://picsum.photos/seed/calathea/400/400"
+    },
+    {
+      "name": "Bird of Paradise",
+      "description": "Tropical vibes, large leaves",
+      "price": "75.00",
+      "image": "https://picsum.photos/seed/birdparadise/400/400"
+    }
+  ],
+  "growthDetails": {
+    "stages": [
+      { "name": "Germination", "duration": "14-21 Days" },
+      { "name": "Seedling", "duration": "2-3 Months" },
+      { "name": "Vegetative", "duration": "3-6 Months" },
+      { "name": "Flowering", "duration": "Varies" },
+      { "name": "Maturity", "duration": "1-2 Years" }
+    ],
+    "totalDays": "365-730",
+    "care": [
+      {
+        "name": "Water Schedule",
+        "value": "Once a week",
+        "description": "Allow top 2 inches of soil to dry out before watering again. Avoid overwatering."
+      },
+      {
+        "name": "Sunlight",
+        "value": "Bright, Indirect",
+        "description": "Prefers bright, indirect light. Can tolerate lower light but may not grow as quickly."
+      },
+      {
+        "name": "Temperature",
+        "value": "18-29°C",
+        "description": "Ideal temperature range. Keep away from drafts and sudden temperature changes."
+      },
+      {
+        "name": "Fertilizer",
+        "value": "Monthly",
+        "description": "Feed with a balanced liquid fertilizer every month during the growing season (spring-summer)."
+      }
+    ]
+  }
+}

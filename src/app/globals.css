@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    --background: 132 24% 96%; /* #F6F8FA - Light Greenish Gray */
+    --background: 210 20% 98%; /* Original light background */
     --foreground: 240 10% 3.9%;
 
     --card: 0 0% 100%;
@@ -12,28 +12,28 @@
 
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
-
+    
     --primary: 126 42% 70%; /* #A7D1AB - Soft Green */
     --primary-foreground: 240 10% 3.9%;
 
-    --secondary: 132 24% 90%; /* A slightly darker light green for secondary elements */
+    --secondary: 132 24% 90%;
     --secondary-foreground: 240 5.9% 10%;
 
     --muted: 240 4% 56.1%;
     --muted-foreground: 240 4% 56.1%;
 
-    --accent: 41 57% 61%; /* #D6AD60 - Amber */
+    --accent: 41 57% 61%;
     --accent-foreground: 240 5.9% 10%;
 
     --destructive: 2 100% 59%;
     --destructive-foreground: 0 0% 98%;
 
-    --success: 142 60% 50%; 
-    --warning: 41 57% 61%; /* Amber for warnings */
+    --success: 142 60% 50%;
+    --warning: 41 57% 61%;
 
-    --border: 126 20% 85%; /* A border color derived from primary */
+    --border: 126 20% 85%;
     --input: 126 20% 85%;
-    --ring: 126 42% 70%; /* Soft Green for rings */
+    --ring: 126 42% 70%;
 
     --radius: 0.5rem;
     
@@ -44,38 +44,38 @@
     --chart-5: 197 90% 50%;
   }
 
+  /* Plant Details Dark Theme */
   .dark {
-    /* For dark mode, we can invert or use a different theme if needed. Sticking to a light theme for now as requested. */
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
+    --background: 120 14% 6%; /* #0b0f0b */
+    --foreground: 120 10% 90%;
 
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
+    --card: 120 10% 9%; /* #141A14 */
+    --card-foreground: 120 10% 90%;
 
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 120 10% 9%;
+    --popover-foreground: 120 10% 90%;
 
-    --primary: 126 42% 70%;
-    --primary-foreground: 240 10% 3.9%;
+    --primary: 142 100% 60%; /* #34ff73 - Neon Green */
+    --primary-foreground: 120 14% 6%;
 
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
+    --secondary: 120 10% 12%;
+    --secondary-foreground: 120 10% 90%;
 
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
+    --muted: 120 10% 12%;
+    --muted-foreground: 120 5% 65%;
 
-    --accent: 41 57% 61%;
-    --accent-foreground: 0 0% 98%;
+    --accent: 142 100% 60%;
+    --accent-foreground: 120 14% 6%;
 
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 62.8% 45.6%;
     --destructive-foreground: 0 0% 98%;
     
     --success: 142 70% 45%;
     --warning: 41 57% 61%;
 
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 126 42% 70%;
+    --border: 120 10% 15%;
+    --input: 120 10% 15%;
+    --ring: 142 100% 60%;
 
     --chart-1: 122 39% 49%;
     --chart-2: 22 89% 53%;
@@ -93,6 +93,9 @@
     @apply bg-background text-foreground;
     font-family: "Inter", system-ui, -apple-system, sans-serif;
   }
+  .dark body {
+    background-color: hsl(var(--background));
+  }
   h1 { @apply text-h1; }
   h2 { @apply text-h2; }
   p { @apply text-body; }
@@ -102,5 +105,8 @@
 @layer components {
   .bg-background {
     background-color: #F6F8FA;
+  }
+  .dark .bg-background {
+    background-color: hsl(var(--background));
   }
 }

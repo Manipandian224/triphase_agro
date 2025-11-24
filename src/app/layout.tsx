@@ -27,7 +27,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="antialiased">
+      <body>
         <FirebaseProvider>
           {children}
         </FirebaseProvider>
