@@ -60,10 +60,10 @@ export default function PlantDetailsPage() {
         </div>
       </section>
 
-      {/* Top Selling Plants Section */}
+      {/* Popular Plants Section */}
       <section className="container mx-auto px-6">
         <h2 className="text-4xl font-bold mb-8">
-          Our <GlowText>[Top Selling]</GlowText>
+          Explore <GlowText>[Popular Plants]</GlowText>
         </h2>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
           {topSelling.map((plant) => (
@@ -81,18 +81,6 @@ export default function PlantDetailsPage() {
                 <div className='flex-grow mt-4'>
                     <h3 className="font-bold text-xl">{plant.name}</h3>
                     <p className="text-sm text-muted-foreground">{plant.description}</p>
-                </div>
-                <div className="space-y-3 pt-2 text-sm">
-                   <div className="flex items-center gap-2 text-muted-foreground">
-                       <Clock className="h-4 w-4 text-primary" />
-                       <span className='font-medium text-foreground/80'>Duration:</span>
-                       <span>{plant.duration}</span>
-                   </div>
-                   <div className="flex items-center gap-2 text-muted-foreground">
-                       <CloudSun className="h-4 w-4 text-primary" />
-                       <span className='font-medium text-foreground/80'>Climate:</span>
-                       <span>{plant.climate}</span>
-                   </div>
                 </div>
               </CardContent>
             </Card>
