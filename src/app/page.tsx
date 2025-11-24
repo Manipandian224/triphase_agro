@@ -1,112 +1,144 @@
-"use client";
 
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import Image from "next/image";
+'use client';
 
-function LeafIcon(props: React.SVGProps<SVGSVGElement>) {
+import Image from 'next/image';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { ArrowRight, CheckCircle, Leaf, MessageCircle, Star, ShoppingCart } from 'lucide-react';
+import products from '@/lib/products.json';
+
+const GlowText = ({ children }: { children: React.ReactNode }) => (
+  <span className="text-primary" style={{ textShadow: '0 0 12px hsl(var(--primary))' }}>
+    {children}
+  </span>
+);
+
+export default function HomePage() {
+  const topSelling = products.slice(0, 3);
+  const featuredProduct = products[4];
+
   return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M11 20A7 7 0 0 1 4 13q0-4.5 4.5-5.5A7 7 0 0 1 18 10a7 7 0 0 1-7 10z" />
-      <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" />
-    </svg>
-  );
-}
-
-export default function LoginPage() {
-  return (
-    <div className="flex items-center justify-center min-h-screen w-full bg-background font-sans relative overflow-hidden">
-        <Image 
-            src="https://images.unsplash.com/photo-1597992953285-a56b57f57335?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxmYXJtJTIwYWVyaWFsfGVufDB8fHx8MTc2MjI5ODk4N3ww&ixlib=rb-4.1.0&q=80&w=1920"
-            alt="Aerial view of a farm"
-            fill
-            className="absolute inset-0 z-0 opacity-20 object-cover"
-            data-ai-hint="farm aerial"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent z-10"></div>
-
-        <div className="w-full max-w-md z-20">
-            <div className="flex justify-center mb-8">
-            <Link
-                href="#"
-                className="flex items-center gap-2.5 text-foreground"
-                prefetch={false}
-            >
-                <LeafIcon className="h-8 w-8 text-primary" />
-                <span className="text-3xl font-bold tracking-tight">Tri-phase Agro</span>
-            </Link>
-            </div>
-            <Card className="rounded-3xl shadow-soft-depth-lg border-white/20 bg-white/70 backdrop-blur-xl">
-            <CardHeader className="space-y-2 text-center p-8">
-                <CardTitle className="text-3xl font-bold tracking-tight">Welcome Back</CardTitle>
-                <CardDescription className="text-muted-foreground pt-1">
-                Enter your credentials to access your farm dashboard.
-                </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6 p-8 pt-0">
-                <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-medium">Email</Label>
-                <Input
-                    id="email"
-                    type="email"
-                    placeholder="manager@farm.com"
-                    required
-                    className="rounded-lg bg-white/50 border-white/50 h-12"
-                    suppressHydrationWarning
-                />
-                </div>
-                <div className="space-y-2">
-                 <Label htmlFor="password" className="text-sm font-medium">Password</Label>
-                <Input 
-                    id="password" 
-                    type="password"
-                    required 
-                    className="rounded-lg bg-white/50 border-white/50 h-12"
-                    suppressHydrationWarning
-                />
-                </div>
-                <div className="space-y-4 pt-4">
-                <Link href="/dashboard" className="w-full" passHref>
-                    <Button 
-                    className="w-full font-semibold text-base h-14 rounded-xl shadow-soft-depth bg-primary/90 text-primary-foreground hover:bg-primary hover:shadow-glow-primary transition-all duration-fast active:translate-y-px"
-                    suppressHydrationWarning
-                    >
-                    Sign In
-                    </Button>
-                </Link>
-                <Button variant="outline" className="w-full h-14 rounded-xl border-primary/30 text-primary bg-white/50 hover:bg-white/80 hover:text-primary hover:border-primary/50">
-                    Sign in with Google
+    <div className="w-full text-foreground space-y-24 md:space-y-32 py-16 md:py-24">
+      {/* Hero Section */}
+      <section className="container mx-auto">
+        <div className="grid md:grid-cols-2 items-center gap-12">
+          <div className="space-y-6 text-left">
+            <h1 className="text-5xl md:text-7xl font-extrabold tracking-tighter">
+              Bring Nature <GlowText>Indoors</GlowText>
+            </h1>
+            <p className="text-lg text-muted-foreground max-w-md">
+              Discover our curated collection of premium houseplants. Elevate your space with a touch of green.
+            </p>
+            <div className="flex items-center gap-4 pt-4">
+              <Link href="/products">
+                <Button size="lg" className="rounded-full h-14 px-8 text-lg font-semibold bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-glow-primary transition-shadow">
+                  Explore Products
+                  <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
+              </Link>
+              <Button variant="ghost" size="lg" className="rounded-full h-14 px-8 text-lg font-semibold">
+                Learn More
+              </Button>
+            </div>
+          </div>
+          <div className="relative h-96 md:h-auto md:aspect-square">
+            <Image
+              src={featuredProduct.images[0]}
+              alt={featuredProduct.name}
+              fill
+              className="object-contain"
+              data-ai-hint="plant transparent background"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Top Selling Section */}
+      <section className="container mx-auto" id="products">
+        <h2 className="text-4xl font-bold mb-12 text-center">
+          Our <GlowText>Top Selling</GlowText> Plants
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {topSelling.map((plant) => (
+            <Card key={plant.id} className="bg-card border-white/10 rounded-2xl overflow-hidden group shadow-soft transition-transform hover:-translate-y-2">
+              <CardContent className="p-0">
+                <Link href={`/products/${plant.id}`}>
+                  <div className="relative aspect-square w-full bg-secondary/50 overflow-hidden cursor-pointer">
+                    <Image
+                      src={plant.images[0]}
+                      alt={plant.name}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      data-ai-hint="plant clean background"
+                    />
+                  </div>
+                </Link>
+                <div className='p-6 space-y-3'>
+                  <Link href={`/products/${plant.id}`}>
+                    <h3 className="font-bold text-2xl cursor-pointer hover:text-primary transition-colors">{plant.name}</h3>
+                  </Link>
+                  <p className="text-sm text-muted-foreground h-10">{plant.shortDescription}</p>
+                  <div className="flex justify-between items-center pt-2">
+                    <p className="text-2xl font-bold text-primary"><GlowText>${plant.price}</GlowText></p>
+                    <Button size="icon" variant="outline" className="rounded-full border-primary/30 text-primary hover:bg-primary/10">
+                      <ShoppingCart className="h-5 w-5" />
+                    </Button>
+                  </div>
                 </div>
-            </CardContent>
+              </CardContent>
             </Card>
-            <div className="mt-8 text-center text-sm text-foreground/60">
-            Don&apos;t have an account?{" "}
-            <Link href="#" className="font-medium text-primary/90 hover:text-primary hover:underline" prefetch={false}>
-                Sign up
+          ))}
+        </div>
+        <div className="text-center mt-12">
+            <Link href="/products">
+                <Button size="lg" variant="outline" className="rounded-full h-14 px-8 text-lg font-semibold border-primary/30 text-primary hover:bg-primary/10">
+                    View All Products
+                </Button>
             </Link>
+        </div>
+      </section>
+
+       {/* Why Choose Us Section */}
+      <section className="container mx-auto" id="about">
+         <h2 className="text-4xl font-bold mb-12 text-center">
+          Why <GlowText>Choose Us?</GlowText>
+        </h2>
+        <div className="grid md:grid-cols-3 gap-8">
+            <div className="bg-card p-8 rounded-2xl text-center shadow-soft border-white/10">
+                <Leaf className="h-12 w-12 text-primary mx-auto mb-4"/>
+                <h3 className="text-xl font-bold mb-2">Expertly Curated</h3>
+                <p className="text-muted-foreground">Every plant is hand-picked by our specialists to ensure the highest quality.</p>
+            </div>
+             <div className="bg-card p-8 rounded-2xl text-center shadow-soft border-white/10">
+                <CheckCircle className="h-12 w-12 text-primary mx-auto mb-4"/>
+                <h3 className="text-xl font-bold mb-2">Health Guarantee</h3>
+                <p className="text-muted-foreground">Your plant arrives happy and healthy, or we'll make it right.</p>
+            </div>
+             <div className="bg-card p-8 rounded-2xl text-center shadow-soft border-white/10">
+                <MessageCircle className="h-12 w-12 text-primary mx-auto mb-4"/>
+                <h3 className="text-xl font-bold mb-2">Lifetime Support</h3>
+                <p className="text-muted-foreground">Our plant experts are here to help you with any questions, anytime.</p>
             </div>
         </div>
+      </section>
+
+      {/* Testimonial Section */}
+      <section className="container mx-auto" id="contact">
+        <div className="bg-card rounded-2xl shadow-soft border-white/10 p-8 md:p-12 text-center max-w-3xl mx-auto">
+            <div className="flex justify-center mb-4">
+                {[...Array(5)].map((_, i) => <Star key={i} className="h-5 w-5 text-yellow-400 fill-yellow-400"/>)}
+            </div>
+            <p className="text-xl md:text-2xl font-medium leading-relaxed mb-6">"I'm in love with my new Monstera from AuraFlora! It arrived in perfect condition and has completely transformed my living room. The quality and customer service are unmatched."</p>
+            <div className="flex items-center justify-center gap-4">
+                <Image src="https://picsum.photos/seed/user-review/48/48" width={48} height={48} alt="Customer photo" className="rounded-full" data-ai-hint="person avatar"/>
+                <div>
+                    <p className="font-bold">Jessica L.</p>
+                    <p className="text-sm text-muted-foreground">Verified Customer</p>
+                </div>
+            </div>
+        </div>
+      </section>
     </div>
   );
 }

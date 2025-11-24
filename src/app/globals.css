@@ -1,87 +1,61 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 210 20% 98%; /* Original light background */
+    /* Base color scheme for light mode (can be refined later) */
+    --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
-
     --card: 0 0% 100%;
     --card-foreground: 240 10% 3.9%;
-
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
-    
-    --primary: 126 42% 70%; /* #A7D1AB - Soft Green */
-    --primary-foreground: 240 10% 3.9%;
-
-    --secondary: 132 24% 90%;
+    --primary: 142 100% 60%;
+    --primary-foreground: 120 14% 6%;
+    --secondary: 240 4.8% 95.9%;
     --secondary-foreground: 240 5.9% 10%;
-
-    --muted: 240 4% 56.1%;
-    --muted-foreground: 240 4% 56.1%;
-
-    --accent: 41 57% 61%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
     --accent-foreground: 240 5.9% 10%;
-
-    --destructive: 2 100% 59%;
+    --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-
-    --success: 142 60% 50%;
-    --warning: 41 57% 61%;
-
-    --border: 126 20% 85%;
-    --input: 126 20% 85%;
-    --ring: 126 42% 70%;
-
-    --radius: 0.5rem;
-    
-    --chart-1: 122 39% 49%;
-    --chart-2: 22 89% 53%;
-    --chart-3: 220 83% 60%;
-    --chart-4: 39 91% 55%;
-    --chart-5: 197 90% 50%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 240 10% 3.9%;
+    --radius: 0.75rem;
   }
 
-  /* Plant Details Dark Theme */
   .dark {
-    --background: 120 14% 6%; /* #0b0f0b */
-    --foreground: 120 10% 90%;
+    --background: 15 11% 10%; /* #2b2220 (Warm Dark Brown) */
+    --foreground: 30 10% 90%;
+    
+    --card: 15 8% 13%; /* #26211F */
+    --card-foreground: 30 10% 90%;
+    
+    --popover: 15 8% 12%;
+    --popover-foreground: 30 10% 90%;
 
-    --card: 120 10% 9%; /* #141A14 */
-    --card-foreground: 120 10% 90%;
-
-    --popover: 120 10% 9%;
-    --popover-foreground: 120 10% 90%;
-
-    --primary: 142 100% 60%; /* #34ff73 - Neon Green */
+    --primary: 142 70% 50%;
     --primary-foreground: 120 14% 6%;
+    
+    --secondary: 15 8% 16%;
+    --secondary-foreground: 30 10% 90%;
+    
+    --muted: 15 8% 16%;
+    --muted-foreground: 30 5% 65%;
 
-    --secondary: 120 10% 12%;
-    --secondary-foreground: 120 10% 90%;
-
-    --muted: 120 10% 12%;
-    --muted-foreground: 120 5% 65%;
-
-    --accent: 142 100% 60%;
+    --accent: 142 70% 50%;
     --accent-foreground: 120 14% 6%;
-
+    
     --destructive: 0 62.8% 45.6%;
     --destructive-foreground: 0 0% 98%;
     
-    --success: 142 70% 45%;
-    --warning: 41 57% 61%;
-
-    --border: 120 10% 15%;
-    --input: 120 10% 15%;
-    --ring: 142 100% 60%;
-
-    --chart-1: 122 39% 49%;
-    --chart-2: 22 89% 53%;
-    --chart-3: 220 83% 60%;
-    --chart-4: 39 91% 55%;
-    --chart-5: 197 90% 50%;
+    --border: 15 8% 18%;
+    --input: 15 8% 18%;
+    --ring: 142 70% 50%;
   }
 }
 
@@ -91,22 +65,11 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-family: "Inter", system-ui, -apple-system, sans-serif;
+     font-feature-settings: "rlig" 1, "calt" 1;
   }
-  .dark body {
-    background-color: hsl(var(--background));
-  }
-  h1 { @apply text-h1; }
-  h2 { @apply text-h2; }
-  p { @apply text-body; }
-  small { @apply text-small; }
-}
-
-@layer components {
-  .bg-background {
-    background-color: #F6F8FA;
-  }
-  .dark .bg-background {
-    background-color: hsl(var(--background));
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 800;
+    letter-spacing: -0.03em;
   }
 }
