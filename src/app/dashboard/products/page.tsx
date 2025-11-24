@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/card";
 import { products } from "@/lib/products";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
+import { cn } from "@/lib/utils";
 
 export default function ProductsPage() {
 
@@ -158,8 +159,4 @@ export default function ProductsPage() {
       </Pagination>
     </div>
   );
-}
-
-function cn(...classes: string[]) {
-  return classes.filter(Boolean).join(' ');
 }
