@@ -1,0 +1,51 @@
+{
+    "plants": [
+      {
+        "id": "monstera-deliciosa",
+        "name": "Monstera Deliciosa",
+        "description": "Famous for its quirky, natural leaf holes, this plant brings a lush, tropical jungle vibe to any room.",
+        "image": "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxtb25zdGVyYSUyMGRlbGljaW9zYSUyMHBsYW50JTIwaXNvbGF0ZWR8ZW58MHx8fHwxNzIyNDk3Mzk0fDA&ixlib=rb-4.1.0&fm=jpg&w=1080&h=1080&fit=crop",
+        "growth": {
+          "total_duration": "6-10 weeks",
+          "stages": [
+            { "name": "Germination", "duration": "1-2 weeks" },
+            { "name": "Seedling", "duration": "2-3 weeks" },
+            { "name": "Vegetative", "duration": "3-4 weeks" },
+            { "name": "Mature", "duration": "Ongoing" }
+          ]
+        },
+        "care": {
+          "water": "Every 1-2 weeks",
+          "sunlight": "Bright, indirect light",
+          "temperature": "18-29°C",
+          "fertilizer": "Monthly during spring/summer"
+        }
+      },
+      {
+        "id": "snake-plant",
+        "name": "Snake Plant",
+        "image": "https://images.unsplash.com/photo-1593971265823-3a5539f345c6?ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzbmFrZSUyMHBsYW50JTIwaXNvbGF0ZWR8ZW58MHx8fHwxNzIyNDk3NDU4fDA&ixlib=rb-4.1.0&fm=jpg&w=1080&h=1080&fit=crop"
+      },
+      {
+        "id": "pothos",
+        "name": "Golden Pothos",
+        "image": "https://images.unsplash.com/photo-1615591304812-64860a440156?ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxwb3Rob3MlMjBwbGFudCUyMGlzb2xhdGVkfGVufDB8fHx8MTcyMjQ5NzQ4MXww&ixlib=rb-4.1.0&fm=jpg&w=1080&h=1080&fit=crop"
+      },
+      {
+        "id": "fiddle-leaf-fig",
+        "name": "Fiddle Leaf Fig",
+        "image": "https://images.unsplash.com/photo-1588697232236-733d67493b8c?ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxmaWRkbGUlMjBsZWFmJTIwZmlnJTIwaXNvbGF0ZWR8ZW58MHx8fHwxNzIyNDk3NTIwfDA&ixlib-rb-4.1.0&fm=jpg&w=1080&h=1080&fit=crop"
+      },
+      {
+        "id": "calathea-orbifolia",
+        "name": "Calathea Orbifolia",
+        "image": "https://images.unsplash.com/photo-1628160133983-40a1d436b7aa?ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjYWxhdGhlYSUyMG9yYmlmb2xpYSUyMGlzb2xhdGVkfGVufDB8fHx8MTcyMjQ5NzU0MHww&ixlib-rb-4.1.0&fm=jpg&w=1080&h=1080&fit=crop"
+      },
+      {
+        "id": "zz-plant",
+        "name": "ZZ Plant",
+        "image": "https://images.unsplash.com/photo-1622326049849-CFab174a77df?ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx6eiUyMHBsYW50JTIwaXNvbGF0ZWR8ZW58MHx8fHwxNzIyNDk3NTAwfDA&ixlib-rb-4.1.0&fm=jpg&w=1080&h=1080&fit=crop"
+      }
+    ]
+  }
+  

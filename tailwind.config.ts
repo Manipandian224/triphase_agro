@@ -57,13 +57,6 @@ export default {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
-      boxShadow: {
-        'soft': '0 10px 30px rgba(0,0,0,0.15)',
-        'glow-primary': '0 0 15px hsl(var(--primary) / 0.4), 0 0 25px hsl(var(--primary) / 0.2)',
-      },
-      fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-      },
       keyframes: {
         "accordion-down": {
           from: { height: "0" },
@@ -78,6 +71,9 @@ export default {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+       boxShadow: {
+        'glow-primary': '0 0 15px hsl(var(--primary) / 0.5), 0 0 25px hsl(var(--primary) / 0.3)',
+      }
     },
   },
   plugins: [require('tailwindcss-animate')],
