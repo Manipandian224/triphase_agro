@@ -9,7 +9,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import { Plus, ChevronRight, Droplets, Sun, Thermometer, Leaf as FertilizerIcon } from 'lucide-react';
+import { Plus, ChevronRight, Droplets, Sun, Thermometer, Leaf as FertilizerIcon, Clock, CloudSun } from 'lucide-react';
 import plantData from '@/lib/plant-data.json';
 import { cn } from '@/lib/utils';
 
@@ -42,9 +42,8 @@ export default function PlantDetailsPage() {
               {heroPlant.description}
             </p>
             <div className="flex items-center gap-6 pt-4">
-              <span className="text-4xl font-bold"><GlowText>${heroPlant.price}</GlowText></span>
               <Button size="lg" className="rounded-full h-14 px-8 text-lg font-semibold bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-[0_0_20px_hsl(var(--primary))] transition-shadow">
-                Explore
+                Explore Details
               </Button>
             </div>
           </div>
@@ -65,11 +64,11 @@ export default function PlantDetailsPage() {
         <h2 className="text-4xl font-bold mb-8">
           Our <GlowText>[Top Selling]</GlowText>
         </h2>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
           {topSelling.map((plant) => (
             <Card key={plant.name} className="bg-card/80 backdrop-blur-sm border-white/10 rounded-2xl overflow-hidden group">
               <CardContent className="p-4 space-y-3 flex flex-col h-full">
-                <div className="relative aspect-square w-full bg-secondary rounded-lg overflow-hidden">
+                <div className="relative aspect-[4/3] w-full bg-secondary rounded-lg overflow-hidden">
                    <Image
                     src={plant.image}
                     alt={plant.name}
@@ -78,15 +77,21 @@ export default function PlantDetailsPage() {
                     data-ai-hint="plant transparent background"
                   />
                 </div>
-                <div className='flex-grow'>
-                    <h3 className="font-bold text-lg">{plant.name}</h3>
+                <div className='flex-grow mt-4'>
+                    <h3 className="font-bold text-xl">{plant.name}</h3>
                     <p className="text-sm text-muted-foreground">{plant.description}</p>
                 </div>
-                <div className="flex items-center justify-between pt-2">
-                  <span className="font-bold text-lg">${plant.price}</span>
-                  <Button size="icon" variant="outline" className="rounded-full border-primary text-primary hover:bg-primary hover:text-primary-foreground">
-                    <Plus className="h-5 w-5" />
-                  </Button>
+                <div className="space-y-3 pt-2 text-sm">
+                   <div className="flex items-center gap-2 text-muted-foreground">
+                       <Clock className="h-4 w-4 text-primary" />
+                       <span className='font-medium text-foreground/80'>Duration:</span>
+                       <span>{plant.duration}</span>
+                   </div>
+                   <div className="flex items-center gap-2 text-muted-foreground">
+                       <CloudSun className="h-4 w-4 text-primary" />
+                       <span className='font-medium text-foreground/80'>Climate:</span>
+                       <span>{plant.climate}</span>
+                   </div>
                 </div>
               </CardContent>
             </Card>

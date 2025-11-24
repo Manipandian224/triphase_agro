@@ -2,44 +2,49 @@
   "heroPlant": {
     "name": "Monstera Deliciosa",
     "description": "A popular and easy-to-care-for houseplant known for its large, glossy, and unique split leaves.",
-    "price": "65.00",
     "image": "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxtb25zdGVyYSUyMGRlbGljaW9zYSUyMHBsYW50JTIwaXNvbGF0ZWR8ZW58MHx8fHwxNzIyNDk3Mzk0fDA&ixlib=rb-4.1.0&q=80&w=1080"
   },
   "topSelling": [
     {
       "name": "Snake Plant",
       "description": "Low maintenance, air purifying",
-      "price": "45.00",
+      "duration": "2-3 Years",
+      "climate": "Warm & Dry",
       "image": "https://images.unsplash.com/photo-1593971265823-3a5539f345c6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzbmFrZSUyMHBsYW50JTIwaXNvbGF0ZWR8ZW58MHx8fHwxNzIyNDk3NDU4fDA&ixlib=rb-4.1.0&q=80&w=1080"
     },
     {
       "name": "Pothos",
       "description": "Trailing vine, very forgiving",
-      "price": "25.00",
+      "duration": "1-2 Years",
+      "climate": "Humid & Indirect Light",
       "image": "https://images.unsplash.com/photo-1615591304812-64860a440156?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxwb3Rob3MlMjBwbGFudCUyMGlzb2xhdGVkfGVufDB8fHx8MTcyMjQ5NzQ4MXww&ixlib=rb-4.1.0&q=80&w=1080"
     },
     {
       "name": "ZZ Plant",
       "description": "Drought tolerant, low light",
-      "price": "50.00",
+      "duration": "3-5 Years",
+      "climate": "Warm & Low Humidity",
       "image": "https://images.unsplash.com/photo-1622326049849-CFab174a77df?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx6eiUyMHBsYW50JTIwaXNvbGF0ZWR8ZW58MHx8fHwxNzIyNDk3NTAwfDA&ixlib=rb-4.1.0&q=80&w=1080"
     },
     {
       "name": "Fiddle Leaf Fig",
       "description": "Statement tree, loves light",
-      "price": "85.00",
+      "duration": "5-10 Years",
+      "climate": "Bright & Humid",
       "image": "https://images.unsplash.com/photo-1588697232236-733d67493b8c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxmaWRkbGUlMjBsZWFmJTIwZmlnJTIwaXNvbGF0ZWR8ZW58MHx8fHwxNzIyNDk3NTIwfDA&ixlib=rb-4.1.0&q=80&w=1080"
     },
     {
       "name": "Calathea Orbifolia",
       "description": "Stunning foliage, needs humidity",
-      "price": "55.00",
+      "duration": "2-4 Years",
+      "climate": "Warm & High Humidity",
       "image": "https://images.unsplash.com/photo-1628160133983-40a1d436b7aa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjYWxhdGhlYSUyMG9yYmlmb2xpYSUyMGlzb2xhdGVkfGVufDB8fHx8MTcyMjQ5NzU0MHww&ixlib=rb-4.1.0&q=80&w=1080"
     },
     {
       "name": "Bird of Paradise",
       "description": "Tropical vibes, large leaves",
-      "price": "75.00",
+      "duration": "3-5 Years",
+      "climate": "Bright & Warm",
       "image": "https://images.unsplash.com/photo-1633394841058-f215b3997f7b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxiaXJkJTIwb2YlMjBwYXJhZGlzZSUyMHBsYW50JTIwaXNvbGF0ZWR8ZW58MHx8fHwxNzIyNDk3NTYyfDA&ixlib=rb-4.1.0&q=80&w=1080"
     }
   ],
