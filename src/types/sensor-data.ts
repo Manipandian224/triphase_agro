@@ -17,9 +17,9 @@ export type SensorHistory = {
 }
 
 export interface IrrigationData {
-  Humidity: number;
-  Temperature: number;
-  SoilMoisture: number;
-  pumpStatus: boolean;
-  LastUpdate: number; // Unix timestamp
+  Humidity?: number;
+  Temperature?: number;
+  SoilMoisture?: number;
+  pumpStatus?: boolean;
+  LastUpdate?: number; // Unix timestamp
 }

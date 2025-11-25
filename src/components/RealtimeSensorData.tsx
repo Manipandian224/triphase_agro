@@ -25,7 +25,6 @@ import {
 } from 'lucide-react';
 import { format } from 'date-fns';
 
-
 // Define the structure for each sensor card
 const sensorCards = [
   {
@@ -65,6 +64,7 @@ export function RealtimeSensorData() {
     setIsUpdating(true);
     try {
       const irrigationRef = ref(rtdb, 'Irrigation');
+      // Set the pumpStatus to the opposite of its current value
       await update(irrigationRef, {
         pumpStatus: !sensorData.pumpStatus,
       });
@@ -94,7 +94,7 @@ export function RealtimeSensorData() {
   }
 
   const isPumpOn = sensorData?.pumpStatus === true;
-  const pumpStatusText = isPumpOn ? 'ON' : 'OFF';
+  const pumpStatusText = isPumpOn ? 'Pump Running' : 'Pump Off';
 
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -108,7 +108,7 @@ export function RealtimeSensorData() {
         </CardHeader>
         <CardContent className="flex-1">
           {loading ? (
-            <Skeleton className="h-8 w-20" />
+            <Skeleton className="h-8 w-28" />
           ) : (
             <>
               {sensorData?.pumpStatus !== undefined ? (
@@ -161,16 +161,19 @@ export function RealtimeSensorData() {
             {loading || !sensorData ? (
               <Skeleton className="h-8 w-24" />
             ) : (
-              <div className="text-3xl font-bold">
-                {(sensorData as any)[dataKey as keyof IrrigationData]?.toFixed(1) || 'N/A'}
-                {unit && <span className="text-xl text-muted-foreground ml-1">{unit}</span>}
-              </div>
-            )}
-            {!loading && sensorData && (sensorData as any)[dataKey as keyof IrrigationData] === undefined && (
-                 <p className="text-xs text-yellow-500 flex items-center mt-1">
-                    <AlertCircle className="h-3 w-3 mr-1" />
-                    No data
-                 </p>
+              <>
+                {sensorData[dataKey as keyof IrrigationData] !== undefined ? (
+                  <div className="text-3xl font-bold">
+                    {(sensorData[dataKey as keyof IrrigationData] as number)?.toFixed(1) || 'N/A'}
+                    {unit && <span className="text-xl text-muted-foreground ml-1">{unit}</span>}
+                  </div>
+                ) : (
+                  <p className="text-xs text-yellow-500 flex items-center mt-1">
+                      <AlertCircle className="h-3 w-3 mr-1" />
+                      No data
+                  </p>
+                )}
+              </>
             )}
           </CardContent>
         </Card>
