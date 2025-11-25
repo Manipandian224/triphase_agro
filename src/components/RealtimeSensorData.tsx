@@ -3,16 +3,10 @@
 
 import { useState, useEffect, FC, ReactNode } from 'react';
 import {
-  LineChart,
-  Line,
-  Area,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
   RadialBarChart,
   RadialBar,
   PolarAngleAxis,
+  ResponsiveContainer,
 } from 'recharts';
 import { cn } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -20,23 +14,11 @@ import { useFirebase } from '@/firebase/client-provider';
 import { ref, onValue } from 'firebase/database';
 import type { IrrigationData } from '@/types/sensor-data';
 
-// == INSTRUCTIONS FOR FIREBASE INTEGRATION ==
-// 1. Ensure you have a `useFirebase` hook that provides the Realtime Database instance (`rtdb`).
-// 2. This component listens to the "Irrigation/" path in your Realtime Database.
-// 3. Data is expected in this structure:
-//    - Irrigation/Temperature: number
-//    - Irrigation/Humidity: number
-//    - Irrigation/SoilMoisture: number
-//    - Irrigation/WaterLevel: number
-
 // == MAIN COMPONENT ==
 export function RealtimeSensorData() {
   const { rtdb } = useFirebase();
   const [data, setData] = useState<Partial<IrrigationData>>({});
   const [loading, setLoading] = useState(true);
-
-  const [temperatureHistory, setTemperatureHistory] = useState<{ time: string; value: number }[]>([]);
-  const [humidityHistory, setHumidityHistory] = useState<{ time: string; value: number }[]>([]);
 
   useEffect(() => {
     if (!rtdb) return;
@@ -48,28 +30,7 @@ export function RealtimeSensorData() {
       irrigationRef,
       (snapshot) => {
         if (snapshot.exists()) {
-          const newData = snapshot.val();
-          setData(newData);
-
-          const now = new Date();
-          const timeLabel = `${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
-          
-          // Update Temperature History
-          if (typeof newData.Temperature === 'number') {
-            setTemperatureHistory(prev => {
-              const newHistory = [...prev, { time: timeLabel, value: newData.Temperature }];
-              return newHistory.slice(-15); // Keep last 15 data points
-            });
-          }
-          
-          // Update Humidity History
-          if (typeof newData.Humidity === 'number') {
-            setHumidityHistory(prev => {
-              const newHistory = [...prev, { time: timeLabel, value: newData.Humidity }];
-              return newHistory.slice(-15); // Keep last 15 data points
-            });
-          }
-
+          setData(snapshot.val());
         } else {
           setData({});
         }
@@ -82,7 +43,6 @@ export function RealtimeSensorData() {
       }
     );
 
-    // Clean up listener on component unmount
     return () => unsubscribe();
   }, [rtdb]);
 
@@ -90,36 +50,51 @@ export function RealtimeSensorData() {
     return <DashboardLoadingSkeleton />;
   }
 
+  // Convert temperature to a percentage of a 0-50°C range for the progress bar
+  const tempPercentage = data.Temperature ? (data.Temperature / 50) * 100 : 0;
   const isTempPositive = (data.Temperature || 0) >= 20;
+
+  // Humidity is already a percentage
+  const humidityPercentage = data.Humidity || 0;
   const isHumidityPositive = (data.Humidity || 0) <= 60;
+  
+  const isSoilMoisturePositive = (data.SoilMoisture || 0) > 40;
+  const isWaterLevelPositive = (data.WaterLevel || 0) > 50;
+
 
   return (
     <div className="grid gap-6 md:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4">
-      <LineChartCard
+      <CircularProgressCard
         title="Temperature"
         value={data.Temperature}
-        unit="°C"
-        chartData={temperatureHistory}
+        displayValue={`${(data.Temperature ?? 0).toFixed(1)}°C`}
+        percentage={tempPercentage}
         color="cyan"
         isPositive={isTempPositive}
       />
-      <LineChartCard
+      <CircularProgressCard
         title="Humidity"
         value={data.Humidity}
-        unit="%"
-        chartData={humidityHistory}
+        displayValue={`${(data.Humidity ?? 0).toFixed(0)}%`}
+        percentage={humidityPercentage}
         color="pink"
         isPositive={isHumidityPositive}
       />
       <CircularProgressCard
         title="Soil Moisture"
         value={data.SoilMoisture}
+        displayValue={`${(data.SoilMoisture ?? 0).toFixed(0)}%`}
+        percentage={data.SoilMoisture}
         color="teal"
+        isPositive={isSoilMoisturePositive}
       />
       <CircularProgressCard
         title="Water Level"
         value={data.WaterLevel}
+        displayValue={`${(data.WaterLevel ?? 0).toFixed(0)}%`}
+        percentage={data.WaterLevel}
         color="indigo"
+        isPositive={isWaterLevelPositive}
       />
     </div>
   );
@@ -139,7 +114,7 @@ const CardWrapper = ({ children, className }: { children: ReactNode, className?:
 const CornerTriangle = ({ isPositive, className }: { isPositive: boolean; className?: string }) => (
   <div
     className={cn(
-      'absolute w-0 h-0 border-solid border-t-0 border-r-0',
+      'absolute w-0 h-0 border-solid border-t-0',
       isPositive ? 'border-b-[30px] border-l-[30px] border-b-emerald-500/80' : 'border-b-[30px] border-l-[30px] border-b-red-500/80',
       'border-l-transparent',
       className
@@ -147,87 +122,30 @@ const CornerTriangle = ({ isPositive, className }: { isPositive: boolean; classN
   />
 );
 
-interface LineChartCardProps {
-  title: string;
-  value?: number;
-  unit: string;
-  chartData: { time: string; value: number }[];
-  color: 'cyan' | 'pink';
-  isPositive: boolean;
-}
-
-const LineChartCard: FC<LineChartCardProps> = ({ title, value, unit, chartData, color, isPositive }) => {
-  const gradientId = `gradient-${color}`;
-  const strokeColor = color === 'cyan' ? '#22d3ee' : '#ec4899';
-  const stopColor = color === 'cyan' ? '#06b6d4' : '#d946ef';
-
-  return (
-    <CardWrapper className="flex-col">
-       <CornerTriangle isPositive={isPositive} className="top-0 right-0 transform rotate-90" />
-      <div className="flex justify-between items-start mb-2">
-        <h3 className="text-lg font-medium text-slate-300">{title}</h3>
-        <div className='text-right'>
-           {value !== undefined ? (
-            <p className="text-3xl font-bold text-white">
-              {value.toFixed(1)}
-              <span className="text-xl text-slate-400 ml-1">{unit}</span>
-            </p>
-          ) : (
-            <p className="text-lg text-slate-500">No data</p>
-          )}
-        </div>
-      </div>
-      <div className="flex-grow -ml-6 -mr-2 -mb-4">
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={chartData}>
-            <defs>
-              <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor={stopColor} stopOpacity={0.3} />
-                <stop offset="95%" stopColor={stopColor} stopOpacity={0} />
-              </linearGradient>
-            </defs>
-            <Tooltip
-              contentStyle={{
-                backgroundColor: 'rgba(15, 23, 42, 0.8)',
-                borderColor: 'rgba(255,255,255,0.2)',
-                borderRadius: '0.75rem',
-              }}
-              labelStyle={{ fontWeight: 'bold' }}
-              itemStyle={{ color: strokeColor }}
-            />
-            <XAxis dataKey="time" hide />
-            <YAxis domain={['dataMin - 5', 'dataMax + 5']} hide />
-            <Line
-              type="monotone"
-              dataKey="value"
-              stroke={strokeColor}
-              strokeWidth={2}
-              dot={false}
-              activeDot={{ r: 6, fill: '#fff', stroke: strokeColor }}
-            />
-            <Area type="monotone" dataKey="value" stroke={false} fill={`url(#${gradientId})`} />
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
-    </CardWrapper>
-  );
-};
-
-
 interface CircularProgressCardProps {
   title: string;
   value?: number;
-  color: 'teal' | 'indigo';
+  displayValue: string;
+  percentage?: number;
+  color: 'teal' | 'indigo' | 'cyan' | 'pink';
+  isPositive: boolean;
 }
 
-const CircularProgressCard: FC<CircularProgressCardProps> = ({ title, value = 0, color }) => {
+const CircularProgressCard: FC<CircularProgressCardProps> = ({ title, value, displayValue, percentage = 0, color, isPositive }) => {
   const gradientId = `gradient-${color}`;
-  const fromColor = color === 'teal' ? 'from-teal-400' : 'from-sky-400';
-  const toColor = color === 'indigo' ? 'to-indigo-500' : 'to-green-500';
+  
+  const colorStops = {
+    teal: { from: 'from-teal-400', to: 'to-green-500' },
+    indigo: { from: 'from-sky-400', to: 'to-indigo-500' },
+    cyan: { from: 'from-cyan-400', to: 'to-blue-500' },
+    pink: { from: 'from-purple-400', to: 'to-pink-500' },
+  };
+
+  const { from: fromColor, to: toColor } = colorStops[color];
 
   return (
     <CardWrapper className="items-center justify-between">
-      <CornerTriangle isPositive={value > 50} className="bottom-0 left-0 transform -rotate-90" />
+      <CornerTriangle isPositive={isPositive} className="top-0 right-0 transform rotate-90" />
       <h3 className="text-lg font-medium text-slate-300 w-full text-left">{title}</h3>
       <div className="relative w-40 h-40 my-4">
         <ResponsiveContainer width="100%" height="100%">
@@ -237,7 +155,7 @@ const CircularProgressCard: FC<CircularProgressCardProps> = ({ title, value = 0,
             innerRadius="80%"
             outerRadius="100%"
             barSize={12}
-            data={[{ value: value, fill: `url(#${gradientId})` }]}
+            data={[{ value: percentage, fill: `url(#${gradientId})` }]}
             startAngle={90}
             endAngle={-270}
           >
@@ -258,7 +176,7 @@ const CircularProgressCard: FC<CircularProgressCardProps> = ({ title, value = 0,
         </ResponsiveContainer>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           {value !== undefined ? (
-            <span className="text-4xl font-bold text-white">{value.toFixed(0)}%</span>
+            <span className="text-4xl font-bold text-white">{displayValue}</span>
           ) : (
             <span className="text-lg text-slate-500">No data</span>
           )}
