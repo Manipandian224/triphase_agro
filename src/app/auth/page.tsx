@@ -157,13 +157,17 @@ export default function AuthPage() {
             </div>
 
             <p className="mt-8 text-center text-sm text-slate-400">
-              {isSignUp ? 'Already have an account? ' : "Don't have an account? "}
-              <button
-                onClick={() => setIsSignUp(!isSignUp)}
-                className="font-semibold text-primary hover:underline"
-              >
-                {isSignUp ? 'Log In' : 'Sign Up'}
-              </button>
+              {isClient && (
+                <>
+                  {isSignUp ? 'Already have an account? ' : "Don't have an account? "}
+                  <button
+                    onClick={() => setIsSignUp(!isSignUp)}
+                    className="font-semibold text-primary hover:underline"
+                  >
+                    {isSignUp ? 'Log In' : 'Sign Up'}
+                  </button>
+                </>
+              )}
             </p>
           </div>
         </div>
