@@ -1,14 +1,16 @@
 
 'use client';
-import { useMemo } from 'react';
-import { ref } from 'firebase/database';
+import { useMemo, useState } from 'react';
+import { ref, update } from 'firebase/database';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
+  CardFooter,
 } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Button } from '@/components/ui/button';
 import { useFirebase } from '@/firebase/client-provider';
 import { useRtdbValue } from '@/hooks/use-rtdb-value';
 import type { IrrigationData } from '@/types/sensor-data';
@@ -41,6 +43,7 @@ const sensorCards = [
  */
 export function RealtimeSensorData() {
   const { rtdb } = useFirebase();
+  const [isUpdating, setIsUpdating] = useState(false);
 
   // Define the query to get the irrigation data.
   const sensorQuery = useMemo(() => rtdb ? ref(rtdb, 'Irrigation') : null, [rtdb]);
@@ -56,6 +59,22 @@ export function RealtimeSensorData() {
     // Assuming LastUpdate is a Unix timestamp in seconds
     return format(new Date(sensorData.LastUpdate * 1000), 'MMM d, yyyy, h:mm:ss a');
   }, [sensorData?.LastUpdate]);
+
+  const handleTogglePump = async () => {
+    if (!rtdb || sensorData?.pumpStatus === undefined) return;
+    setIsUpdating(true);
+    try {
+      const irrigationRef = ref(rtdb, 'Irrigation');
+      await update(irrigationRef, {
+        pumpStatus: !sensorData.pumpStatus,
+      });
+    } catch (err) {
+      console.error("Failed to update pump status:", err);
+      // Optionally, show a toast notification on error
+    } finally {
+      setIsUpdating(false);
+    }
+  };
 
 
   if (error) {
@@ -80,14 +99,14 @@ export function RealtimeSensorData() {
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {/* Pump Status Card */}
-      <Card className="bg-card shadow-soft-sm border-white/10">
+      <Card className="bg-card shadow-soft-sm border-white/10 flex flex-col">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium text-muted-foreground">
             Pump Status
           </CardTitle>
           {loading ? <Activity className="h-5 w-5 text-muted-foreground" /> : <Power className={`h-5 w-5 ${isPumpOn ? 'text-green-400' : 'text-destructive'}`} />}
         </CardHeader>
-        <CardContent>
+        <CardContent className="flex-1">
           {loading ? (
             <Skeleton className="h-8 w-20" />
           ) : (
@@ -97,6 +116,16 @@ export function RealtimeSensorData() {
             </>
           )}
         </CardContent>
+        <CardFooter>
+          <Button 
+            variant="outline" 
+            className="w-full"
+            onClick={handleTogglePump}
+            disabled={loading || isUpdating || sensorData?.pumpStatus === undefined}
+          >
+            {isUpdating ? 'Updating...' : `Turn ${isPumpOn ? 'OFF' : 'ON'}`}
+          </Button>
+        </CardFooter>
       </Card>
       
        {/* Last Updated Card */}
