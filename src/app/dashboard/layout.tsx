@@ -89,7 +89,7 @@ function SidebarContent({ onLinkClick }: { onLinkClick?: () => void }) {
       <div className="flex h-20 items-center justify-center border-b">
         <Link href="/" className="flex items-center gap-2 font-bold text-xl">
           <Leaf className="h-7 w-7 text-primary" />
-          <span>AuraFlora</span>
+          <span>Triphase Agro</span>
         </Link>
       </div>
       <nav className="flex-1 space-y-2 p-4">

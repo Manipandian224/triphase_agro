@@ -8,8 +8,8 @@ import { FirebaseProvider } from "@/firebase/client-provider";
 const inter = Inter({ subsets: ["latin"], variable: '--font-inter' });
 
 export const metadata: Metadata = {
-  title: "AuraFlora",
-  description: "Advanced Plant Care Dashboard",
+  title: "Triphase Agro",
+  description: "Advanced Agriculture Monitoring",
 };
 
 export default function RootLayout({
