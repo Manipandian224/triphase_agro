@@ -16,19 +16,11 @@ export type SensorHistory = {
   [key: string]: SensorData;
 }
 
-interface SensorReading {
-  current: number;
-  change: number;
-  history: Record<string, { value: number }>;
-}
-
 export interface IrrigationData {
-  Humidity?: SensorReading;
-  Temperature?: SensorReading;
+  Temperature?: number;
+  Humidity?: number;
   SoilMoisture?: number;
   WaterLevel?: number;
   PumpStatus?: boolean;
-  LastUpdate?: number; // Unix timestamp
+  LastUpdate?: number;
 }
-
-    

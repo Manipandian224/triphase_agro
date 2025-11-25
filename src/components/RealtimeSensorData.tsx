@@ -1,32 +1,19 @@
-/**
- * == FIREBASE REALTIME DATABASE INTEGRATION ==
- * This component is now wired to your Firebase Realtime Database.
- * It listens for changes at the "Irrigation/" path and updates the UI in real-time.
- * - Temperature History -> Irrigation/Temperature/history
- * - Humidity History    -> Irrigation/Humidity/history
- * - Soil Moisture       -> Irrigation/SoilMoisture
- * - Water Level         -> Irrigation/WaterLevel
- */
+
 'use client';
+
 import { useState, useEffect, FC, ReactNode } from 'react';
 import {
-  LineChart,
-  Line,
-  Area,
-  XAxis,
-  Tooltip,
-  ResponsiveContainer,
   RadialBarChart,
   RadialBar,
   PolarAngleAxis,
+  ResponsiveContainer,
 } from 'recharts';
 import { cn } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
-import { TrendingUp, TrendingDown, Droplets, Waves } from 'lucide-react';
+import { Thermometer, Droplets, Waves, Wind } from 'lucide-react';
 import { useFirebase } from '@/firebase/client-provider';
 import { ref, onValue } from 'firebase/database';
-import { IrrigationData } from '@/types/sensor-data';
-
+import type { IrrigationData } from '@/types/sensor-data';
 
 // == MAIN COMPONENT ==
 export function RealtimeSensorData() {
@@ -34,12 +21,12 @@ export function RealtimeSensorData() {
   const [data, setData] = useState<Partial<IrrigationData>>({});
   const [loading, setLoading] = useState(true);
 
-  // == FIREBASE DATA FETCHING ==
   useEffect(() => {
     if (!rtdb) return;
 
     const irrigationRef = ref(rtdb, 'Irrigation/');
-    
+    setLoading(true);
+
     const unsubscribe = onValue(irrigationRef, (snapshot) => {
       if (snapshot.exists()) {
         setData(snapshot.val());
@@ -49,6 +36,7 @@ export function RealtimeSensorData() {
       setLoading(false);
     }, (error) => {
       console.error("Firebase read failed: " + error.message);
+      setData({});
       setLoading(false);
     });
 
@@ -56,56 +44,38 @@ export function RealtimeSensorData() {
     return () => unsubscribe();
   }, [rtdb]);
 
-  const formatHistory = (historyObj: Record<string, {value: number}> | undefined) => {
-    if (!historyObj) return [];
-    // Slice to get the last 10 readings for the chart
-    return Object.entries(historyObj).slice(-10).map(([key, reading], index) => ({
-      time: `-${10 - index}m`,
-      value: reading.value,
-    }));
-  };
-
-  const temperatureHistory = formatHistory(data?.Temperature?.history);
-  const humidityHistory = formatHistory(data?.Humidity?.history);
-
   if (loading) {
     return <DashboardLoadingSkeleton />;
   }
 
   return (
     <div className="grid gap-6 md:gap-8 sm:grid-cols-2 xl:grid-cols-4">
-      <LineChartCard
+      <SingleValueCard
         title="Temperature"
-        currentValue={data.Temperature?.current ?? 0}
+        value={data.Temperature}
         unit="°C"
-        change={data.Temperature?.change ?? 0}
-        data={temperatureHistory}
-        dataKey="value"
+        icon={Thermometer}
         gradientFrom="from-cyan-400"
         gradientTo="to-blue-500"
-        gradientId="tempGradient"
       />
-      <LineChartCard
+      <SingleValueCard
         title="Humidity"
-        currentValue={data.Humidity?.current ?? 0}
+        value={data.Humidity}
         unit="%"
-        change={data.Humidity?.change ?? 0}
-        data={humidityHistory}
-        dataKey="value"
+        icon={Wind}
         gradientFrom="from-purple-400"
         gradientTo="to-pink-500"
-        gradientId="humidityGradient"
       />
       <CircularProgressCard
         title="Soil Moisture"
-        value={data.SoilMoisture ?? 0}
+        value={data.SoilMoisture}
         icon={Droplets}
         gradientFrom="from-teal-400"
         gradientTo="to-green-500"
       />
       <CircularProgressCard
         title="Water Level"
-        value={data.WaterLevel ?? 0}
+        value={data.WaterLevel}
         icon={Waves}
         gradientFrom="from-sky-400"
         gradientTo="to-indigo-500"
@@ -135,112 +105,43 @@ const CardWrapper: FC<CardWrapperProps> = ({ children, className }) => (
   </div>
 );
 
-
-interface LineChartCardProps {
+interface SingleValueCardProps {
   title: string;
-  currentValue: number;
+  value?: number;
   unit: string;
-  change: number;
-  data: any[];
-  dataKey: string;
-  gradientFrom: string;
-  gradientTo: string;
-  gradientId: string;
-}
-
-const LineChartCard: FC<LineChartCardProps> = ({
-  title,
-  currentValue,
-  unit,
-  change,
-  data,
-  dataKey,
-  gradientFrom,
-  gradientTo,
-  gradientId,
-}) => {
-  const isPositive = change >= 0;
-  const ChangeIcon = isPositive ? TrendingUp : TrendingDown;
-
-  return (
-    <CardWrapper>
-      <div className="flex justify-between items-start mb-4">
-        <h3 className="text-lg font-medium text-slate-300">{title}</h3>
-        <div
-          className={cn(
-            'flex items-center text-sm font-semibold',
-            isPositive ? 'text-green-400' : 'text-red-400'
-          )}
-        >
-          <ChangeIcon className="w-4 h-4 mr-1" />
-          {isPositive ? '+' : ''}
-          {change}%
-        </div>
-      </div>
-       <div className="mb-4">
-          <p className="text-4xl font-bold text-white">
-            {currentValue.toFixed(1)}
-            <span className="text-2xl text-slate-400 ml-1">{unit}</span>
-          </p>
-      </div>
-      <div className="flex-grow h-40 -ml-6 -mr-6 -mb-6">
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={data} margin={{ top: 5, right: 20, left: 20, bottom: 5 }}>
-            <defs>
-              <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" className={cn('stop-color', gradientFrom)} stopOpacity={0.3} />
-                <stop offset="95%" className={cn('stop-color', gradientTo)} stopOpacity={0} />
-              </linearGradient>
-            </defs>
-            <XAxis
-              dataKey="time"
-              axisLine={false}
-              tickLine={false}
-              tick={{ fill: 'hsl(220 10% 40%)', fontSize: 12 }}
-              interval="preserveStartEnd"
-            />
-            <Tooltip
-              contentStyle={{
-                backgroundColor: 'rgba(5, 15, 35, 0.8)',
-                borderColor: 'hsl(220 10% 30%)',
-                borderRadius: '0.5rem',
-                color: '#fff',
-              }}
-              cursor={{ stroke: 'hsl(220 10% 50%)', strokeWidth: 1, strokeDasharray: '3 3' }}
-            />
-            <Area
-              type="monotone"
-              dataKey={dataKey}
-              stroke="none"
-              fill={`url(#${gradientId})`}
-            />
-            <Line
-              type="monotone"
-              dataKey={dataKey}
-              strokeWidth={3}
-              className={cn('stroke-color', gradientTo)}
-              dot={false}
-              stroke={`url(#${gradientId})`}
-              style={{ filter: `drop-shadow(0 4px 8px hsl(var(--primary) / 0.5))` }}
-              animationDuration={1500}
-            />
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
-    </CardWrapper>
-  );
-};
-
-
-interface CircularProgressCardProps {
-  title: string;
-  value: number;
   icon: React.ElementType;
   gradientFrom: string;
   gradientTo: string;
 }
 
-const CircularProgressCard: FC<CircularProgressCardProps> = ({ title, value, icon: Icon, gradientFrom, gradientTo }) => {
+const SingleValueCard: FC<SingleValueCardProps> = ({ title, value, unit, icon: Icon, gradientFrom }) => {
+    return (
+        <CardWrapper className="items-center justify-center">
+             <h3 className="text-lg font-medium text-slate-300 absolute top-6 left-6">{title}</h3>
+            <div className="flex flex-col items-center justify-center text-center">
+                 <Icon className={cn('w-16 h-16 mb-4 text-color', gradientFrom)} />
+                {value !== undefined ? (
+                    <p className="text-6xl font-bold text-white">
+                        {value.toFixed(1)}
+                        <span className="text-4xl text-slate-400 ml-2">{unit}</span>
+                    </p>
+                ) : (
+                    <p className="text-2xl text-slate-500">No data</p>
+                )}
+            </div>
+        </CardWrapper>
+    )
+}
+
+interface CircularProgressCardProps {
+  title: string;
+  value?: number;
+  icon: React.ElementType;
+  gradientFrom: string;
+  gradientTo: string;
+}
+
+const CircularProgressCard: FC<CircularProgressCardProps> = ({ title, value = 0, icon: Icon, gradientFrom, gradientTo }) => {
   return (
     <CardWrapper className="items-center justify-center">
       <h3 className="text-lg font-medium text-slate-300 absolute top-6 left-6">{title}</h3>
@@ -273,7 +174,11 @@ const CircularProgressCard: FC<CircularProgressCardProps> = ({ title, value, ico
         </ResponsiveContainer>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
            <Icon className={cn('w-8 h-8 mb-2 text-color', gradientFrom)} />
-          <span className="text-5xl font-bold text-white">{value}%</span>
+           {value !== undefined ? (
+             <span className="text-5xl font-bold text-white">{value}%</span>
+           ) : (
+            <span className="text-2xl text-slate-500">No data</span>
+           )}
         </div>
       </div>
     </CardWrapper>
