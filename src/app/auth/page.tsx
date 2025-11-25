@@ -78,7 +78,7 @@ export default function AuthPage() {
             <Image
               src="https://images.unsplash.com/photo-1593011033489-38501174693a?w=800"
               alt="Artistic representation of agriculture technology"
-              layout="fill"
+              fill
               objectFit="cover"
               className="rounded-l-3xl"
               data-ai-hint="futuristic agriculture"
@@ -90,7 +90,7 @@ export default function AuthPage() {
           <div className="flex flex-col justify-center p-8 sm:p-12 text-slate-100">
             <div className="mb-8 text-center">
               <Leaf className="mx-auto mb-3 h-10 w-10 text-primary" />
-              <h1 className="text-3xl font-extrabold tracking-tighter">
+              <h1 className="text-3xl font-extrabold tracking-tighter text-foreground">
                 Welcome to Triphase Agro
               </h1>
               <p className="text-slate-300">
@@ -170,7 +170,7 @@ const AuthInput = ({ icon: Icon, ...props }: { icon: React.ElementType } & React
         <Icon className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
         <Input 
             {...props} 
-            className="h-12 pl-12 bg-slate-800/50 border-slate-700 focus:border-primary focus:ring-primary/50 text-base"
+            className="h-12 pl-12 bg-slate-800/50 border-slate-700 focus:border-primary focus:ring-primary/50 text-base text-slate-100"
         />
     </div>
 );
@@ -187,3 +187,5 @@ const SocialButton = ({ provider }: { provider: 'Google' | 'Facebook' }) => {
     </Button>
   );
 };
+
+    

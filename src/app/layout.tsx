@@ -40,7 +40,7 @@ export default function RootLayout({
         inter.className,
         "text-foreground transition-colors duration-500",
         isAuthPage 
-          ? 'bg-gradient-to-br from-pink-500/10 via-purple-500/10 to-violet-500/20'
+          ? 'bg-gradient-to-br from-[#0B0F0B] via-[#163832] to-[#0B0F0B]'
           : 'bg-gradient-to-br from-[#EAEF9D] via-[#B7D67A] to-[#336A29]'
       )}>
         <FirebaseProvider>
@@ -51,3 +51,5 @@ export default function RootLayout({
     </html>
   );
 }
+
+    
