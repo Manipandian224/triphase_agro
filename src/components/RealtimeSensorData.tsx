@@ -11,8 +11,10 @@ import {
 import { cn } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useFirebase } from '@/firebase/client-provider';
-import { ref, onValue } from 'firebase/database';
+import { ref, onValue, set, update } from 'firebase/database';
 import type { IrrigationData } from '@/types/sensor-data';
+import { Button } from './ui/button';
+import { Power } from 'lucide-react';
 
 // == MAIN COMPONENT ==
 export function RealtimeSensorData() {
@@ -59,7 +61,17 @@ export function RealtimeSensorData() {
   const isHumidityPositive = (data.Humidity || 0) <= 60;
   
   const isSoilMoisturePositive = (data.SoilMoisture || 0) > 40;
-  const isWaterLevelPositive = (data.WaterLevel || 0) > 50;
+
+  const handleTogglePump = async () => {
+    if (!rtdb) return;
+    const irrigationRef = ref(rtdb, 'Irrigation');
+    const newStatus = !data.PumpStatus;
+    try {
+      await update(irrigationRef, { PumpStatus: newStatus });
+    } catch (error) {
+      console.error('Failed to update pump status:', error);
+    }
+  };
 
 
   return (
@@ -88,13 +100,9 @@ export function RealtimeSensorData() {
         color="teal"
         isPositive={isSoilMoisturePositive}
       />
-      <CircularProgressCard
-        title="Water Level"
-        value={data.WaterLevel}
-        displayValue={`${(data.WaterLevel ?? 0).toFixed(0)}%`}
-        percentage={data.WaterLevel}
-        color="indigo"
-        isPositive={isWaterLevelPositive}
+      <PumpStatusCard 
+        pumpStatus={data.PumpStatus}
+        onToggle={handleTogglePump}
       />
     </div>
   );
@@ -183,6 +191,48 @@ const CircularProgressCard: FC<CircularProgressCardProps> = ({ title, value, dis
         </div>
       </div>
        <p className='text-transparent text-sm'>hidden</p>
+    </CardWrapper>
+  );
+};
+
+
+interface PumpStatusCardProps {
+  pumpStatus?: boolean;
+  onToggle: () => void;
+}
+
+const PumpStatusCard: FC<PumpStatusCardProps> = ({ pumpStatus, onToggle }) => {
+  const isOnline = pumpStatus !== undefined;
+  const isOn = pumpStatus === true;
+
+  return (
+     <CardWrapper className="items-center justify-between">
+      <CornerTriangle isPositive={isOnline} className="top-0 right-0 transform rotate-90" />
+      <h3 className="text-lg font-medium text-slate-300 w-full text-left">Pump Status</h3>
+      <div className="flex flex-col items-center justify-center my-4 flex-1">
+        {isOnline ? (
+          <>
+            <Power className={cn("h-20 w-20 mb-4", isOn ? "text-green-500" : "text-red-500")} />
+            <p className={cn("text-4xl font-bold", isOn ? "text-green-400" : "text-red-400")}>
+              {isOn ? 'ON' : 'OFF'}
+            </p>
+          </>
+        ) : (
+          <p className="text-lg text-slate-500">No data</p>
+        )}
+      </div>
+      <Button 
+        onClick={onToggle} 
+        disabled={!isOnline}
+        className={cn(
+          "w-full font-bold",
+           isOn 
+             ? "bg-red-600/80 hover:bg-red-600 text-white" 
+             : "bg-green-600/80 hover:bg-green-600 text-white"
+        )}
+      >
+        {isOn ? 'Turn OFF' : 'Turn ON'}
+      </Button>
     </CardWrapper>
   );
 };
