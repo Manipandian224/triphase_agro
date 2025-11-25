@@ -68,7 +68,7 @@ export default function DashboardLayout({
           className="absolute top-0 left-0 w-full h-full"
           style={{
             background:
-              'radial-gradient(circle at 30% 30%, hsl(var(--primary) / 0.1), transparent 40%)',
+              'radial-gradient(circle at 30% 30%, #EAEF9D20, transparent 40%)',
           }}
         />
         <div className={`flex-1 overflow-y-auto ${isMobile ? 'pt-16' : ''} relative z-10`}>
