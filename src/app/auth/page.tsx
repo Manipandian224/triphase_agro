@@ -1,6 +1,6 @@
 
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useFirebase } from '@/firebase/client-provider';
@@ -13,7 +13,7 @@ import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
 import { Leaf, Lock, Mail, User } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 export default function AuthPage() {
   const [isSignUp, setIsSignUp] = useState(true);
@@ -27,6 +27,11 @@ export default function AuthPage() {
   const [password, setPassword] = useState('');
   const [agreed, setAgreed] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -68,6 +73,8 @@ export default function AuthPage() {
       setIsLoading(false);
     }
   };
+  
+  const heroImage = PlaceHolderImages.find(img => img.id === 'crop-leaf');
 
   return (
     <div className="flex min-h-screen items-center justify-center p-4">
@@ -76,12 +83,12 @@ export default function AuthPage() {
           {/* Left Panel: Image */}
           <div className="relative hidden h-full min-h-[600px] rounded-l-3xl md:block">
             <Image
-              src="https://images.unsplash.com/photo-1593011033489-38501174693a?w=800"
+              src={heroImage?.imageUrl || "https://images.unsplash.com/photo-1593011033489-38501174693a?w=800"}
               alt="Artistic representation of agriculture technology"
-              fill
+              layout="fill"
               objectFit="cover"
               className="rounded-l-3xl"
-              data-ai-hint="futuristic agriculture"
+              data-ai-hint={heroImage?.imageHint || 'futuristic agriculture'}
             />
             <div className="absolute inset-0 rounded-l-3xl bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
           </div>
@@ -110,12 +117,12 @@ export default function AuthPage() {
 
               {isSignUp && (
                 <div className="flex items-center space-x-2">
-                  <Checkbox
+                  {isClient && <Checkbox
                     id="terms"
                     checked={agreed}
                     onCheckedChange={(checked: boolean) => setAgreed(checked)}
                     className="border-slate-500 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
-                  />
+                  />}
                   <label htmlFor="terms" className="text-sm text-slate-400">
                     I agree to the{' '}
                     <a href="#" className="text-primary hover:underline">
@@ -187,5 +194,4 @@ const SocialButton = ({ provider }: { provider: 'Google' | 'Facebook' }) => {
     </Button>
   );
 };
-
     
