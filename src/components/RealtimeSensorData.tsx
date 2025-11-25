@@ -31,20 +31,24 @@ import { IrrigationData } from '@/types/sensor-data';
 // == MAIN COMPONENT ==
 export function RealtimeSensorData() {
   const { rtdb } = useFirebase();
-  const [data, setData] = useState<Partial<IrrigationData> | null>(null);
+  const [data, setData] = useState<Partial<IrrigationData>>({});
   const [loading, setLoading] = useState(true);
 
   // == FIREBASE DATA FETCHING ==
   useEffect(() => {
     if (!rtdb) return;
-    setLoading(true);
+
     const irrigationRef = ref(rtdb, 'Irrigation/');
+    
     const unsubscribe = onValue(irrigationRef, (snapshot) => {
       if (snapshot.exists()) {
         setData(snapshot.val());
       } else {
-        setData(null);
+        setData({});
       }
+      setLoading(false);
+    }, (error) => {
+      console.error("Firebase read failed: " + error.message);
       setLoading(false);
     });
 
@@ -54,10 +58,11 @@ export function RealtimeSensorData() {
 
   const formatHistory = (historyObj: Record<string, {value: number}> | undefined) => {
     if (!historyObj) return [];
-    return Object.entries(historyObj).map(([key, reading], index) => ({
-      time: `-${Object.keys(historyObj).length - index}m`,
+    // Slice to get the last 10 readings for the chart
+    return Object.entries(historyObj).slice(-10).map(([key, reading], index) => ({
+      time: `-${10 - index}m`,
       value: reading.value,
-    })).slice(-10); // get last 10 readings
+    }));
   };
 
   const temperatureHistory = formatHistory(data?.Temperature?.history);
@@ -65,10 +70,6 @@ export function RealtimeSensorData() {
 
   if (loading) {
     return <DashboardLoadingSkeleton />;
-  }
-  
-  if (!data) {
-     return <div className="text-center text-white/50 py-20">No sensor data available. Check your database connection and path.</div>
   }
 
   return (
@@ -287,5 +288,3 @@ const DashboardLoadingSkeleton = () => (
       <Skeleton className="h-[260px] bg-slate-900/80 rounded-2xl" />
     </div>
 );
-
-    
