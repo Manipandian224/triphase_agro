@@ -24,10 +24,6 @@
           "description": "The connectivity status of the system (e.g., 'Online', 'Offline').",
           "enum": ["Online", "Offline"]
         },
-        "cropHealth": {
-          "type": "number",
-          "description": "The overall crop health score (0-100)."
-        },
         "soilMoisture": {
           "type": "number",
           "description": "The soil moisture level as a percentage."
@@ -40,6 +36,14 @@
           "type": "number",
           "description": "The relative humidity as a percentage."
         },
+        "waterLevel": {
+          "type": "number",
+          "description": "The water level in meters."
+        },
+        "phValue": {
+          "type": "number",
+          "description": "The pH value of the water."
+        },
         "waterFlow": {
           "type": "number",
           "description": "The water flow rate in Liters per minute."
@@ -50,11 +54,12 @@
         "pumpStatus",
         "threePhasePower",
         "connectivity",
-        "cropHealth",
         "soilMoisture",
         "airTemp",
         "humidity",
-        "waterFlow"
+        "waterFlow",
+        "waterLevel",
+        "phValue"
       ]
     },
     "SensorHistory": {
