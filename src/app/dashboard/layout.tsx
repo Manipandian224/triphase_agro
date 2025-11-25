@@ -1,9 +1,9 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetTrigger, SheetContent } from '@/components/ui/sheet';
 import {
@@ -12,9 +12,11 @@ import {
   HeartPulse,
   Leaf,
   User,
+  Loader,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { AiChatBot } from '@/components/ai-chat-bot';
+import { useUser } from '@/firebase/auth/use-user';
 
 const navLinks = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutGrid },
@@ -28,6 +30,23 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const { user, isLoading } = useUser();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isLoading && !user) {
+      router.push('/auth');
+    }
+  }, [user, isLoading, router]);
+
+  if (isLoading || !user) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center bg-background">
+        <Loader className="h-12 w-12 animate-spin text-primary" />
+      </div>
+    );
+  }
+
   return (
     <div className="flex min-h-screen w-full flex-col bg-transparent">
        <TopNavBar />
@@ -73,7 +92,7 @@ function TopNavBar() {
               'bg-white/20 border-white/30 text-white font-semibold shadow-glow-sm'
                : ''
             )}
-            style={{ animationDelay: `${150 * index}ms`, animationFillMode: 'forwards' }}
+            style={{ animation: 'fade-in 0.5s ease-out forwards', animationDelay: `${150 * index}ms`, opacity: 0 }}
           >
             <link.icon className="mr-2 h-4 w-4" />
             {link.label}
@@ -132,4 +151,3 @@ function SidebarContent({ onLinkClick }: { onLinkClick?: () => void }) {
     </div>
   );
 }
-

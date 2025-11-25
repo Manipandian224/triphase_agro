@@ -1,3 +1,4 @@
+
 'use client';
 import { Auth, getAuth } from 'firebase/auth';
 import { Firestore, getFirestore } from 'firebase/firestore';
@@ -5,6 +6,7 @@ import { Functions, getFunctions } from 'firebase/functions';
 import { FirebaseStorage, getStorage } from 'firebase/storage';
 import { Database, getDatabase } from 'firebase/database';
 import firebaseApp from './config';
+import { useUser } from './auth/use-user';
 
 type FirebaseServices = {
   auth: Auth;
@@ -44,3 +46,6 @@ export const initializeFirebase = () => {
   services = { auth, db, rtdb, functions, storage };
   return services;
 };
+
+export { useUser };
+
