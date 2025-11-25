@@ -74,6 +74,9 @@ export function RealtimeSensorData() {
     );
   }
 
+  const pumpStatusText = sensorData?.pumpStatus === true ? 'ON' : 'OFF';
+  const isPumpOn = sensorData?.pumpStatus === true;
+
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {/* Pump Status Card */}
@@ -82,15 +85,15 @@ export function RealtimeSensorData() {
           <CardTitle className="text-sm font-medium text-muted-foreground">
             Pump Status
           </CardTitle>
-          {loading ? <Activity className="h-5 w-5 text-muted-foreground" /> : <Power className={`h-5 w-5 ${sensorData?.pumpStatus === 'ON' ? 'text-green-400' : 'text-yellow-400'}`} />}
+          {loading ? <Activity className="h-5 w-5 text-muted-foreground" /> : <Power className={`h-5 w-5 ${isPumpOn ? 'text-green-400' : 'text-destructive'}`} />}
         </CardHeader>
         <CardContent>
           {loading ? (
             <Skeleton className="h-8 w-20" />
           ) : (
             <>
-              <div className="text-3xl font-bold">{sensorData?.pumpStatus || 'N/A'}</div>
-              {!sensorData?.pumpStatus && <p className="text-xs text-yellow-500 flex items-center mt-1"><AlertCircle className="h-3 w-3 mr-1" />No data</p>}
+              <div className="text-3xl font-bold">{pumpStatusText}</div>
+              {sensorData?.pumpStatus === undefined && <p className="text-xs text-yellow-500 flex items-center mt-1"><AlertCircle className="h-3 w-3 mr-1" />No data</p>}
             </>
           )}
         </CardContent>
