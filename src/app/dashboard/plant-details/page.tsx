@@ -1,3 +1,4 @@
+
 'use client';
 import Image from 'next/image';
 import {
@@ -27,8 +28,8 @@ const GlowText = ({ children }: { children: React.ReactNode }) => (
 );
 
 export default function PlantDetailsPage() {
-  const featuredPlant = plantData.find(p => p.id === 'monstera-deliciosa');
-  const popularPlants = plantData.filter(p => p.id !== 'monstera-deliciosa').slice(0, 6);
+  const featuredPlant = plantData.plants.find(p => p.id === 'monstera-deliciosa');
+  const popularPlants = plantData.plants.filter(p => p.id !== 'monstera-deliciosa').slice(0, 6);
 
   if (!featuredPlant) return null;
 
