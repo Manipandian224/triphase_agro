@@ -54,6 +54,15 @@ export default function AuthPage() {
           setIsLoading(false);
           return;
         }
+        if (password.length < 6) {
+          toast({
+            variant: 'destructive',
+            title: 'Password is too weak.',
+            description: 'Password should be at least 6 characters long.',
+          });
+          setIsLoading(false);
+          return;
+        }
         await createUserWithEmailAndPassword(auth, email, password);
         toast({ title: 'Account created successfully!' });
         router.push('/dashboard');
