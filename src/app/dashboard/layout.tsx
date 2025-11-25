@@ -82,7 +82,7 @@ export default function DashboardLayout({
 
 function Sidebar() {
   return (
-    <div className="w-72 border-r border-white/20 bg-black/10 z-20">
+    <div className="w-72 border-r border-white/20 bg-transparent z-20">
       <SidebarContent />
     </div>
   );
@@ -93,8 +93,8 @@ function SidebarContent({ onLinkClick }: { onLinkClick?: () => void }) {
   return (
     <div className="flex h-full flex-col">
       <div className="flex h-20 items-center justify-center border-b border-white/20">
-        <Link href="/" className="flex items-center gap-2 font-bold text-xl text-white">
-          <Leaf className="h-7 w-7 text-white" />
+        <Link href="/" className="flex items-center gap-2 font-bold text-xl text-foreground">
+          <Leaf className="h-7 w-7 text-foreground" />
           <span>Triphase Agro</span>
         </Link>
       </div>
@@ -105,7 +105,7 @@ function SidebarContent({ onLinkClick }: { onLinkClick?: () => void }) {
             href={link.href}
             onClick={onLinkClick}
             className={cn(
-              'flex items-center gap-3 rounded-lg px-4 py-3 text-lg font-medium transition-all text-white/70 hover:bg-white/10 hover:text-white',
+              'flex items-center gap-3 rounded-lg px-4 py-3 text-lg font-medium transition-all text-foreground/70 hover:bg-white/10 hover:text-foreground',
               pathname === link.href
                 ? 'bg-[#336A29] text-white shadow-lg'
                 : ''

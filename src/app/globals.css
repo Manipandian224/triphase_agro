@@ -33,19 +33,19 @@
     --foreground: 170 45% 15%; /* #163832 */
     
     --card: 150 10% 8%; /* #141A14 */
-    --card-foreground: 150 10% 90%;
+    --card-foreground: 170 45% 15%;
     
     --popover: 150 10% 7%;
-    --popover-foreground: 150 10% 90%;
+    --popover-foreground: 170 45% 15%;
 
     --primary: 142 90% 60%; /* #34ff73 */
     --primary-foreground: 120 14% 6%;
     
     --secondary: 150 10% 12%;
-    --secondary-foreground: 150 10% 90%;
+    --secondary-foreground: 170 45% 15%;
     
     --muted: 150 10% 12%;
-    --muted-foreground: 150 5% 65%;
+    --muted-foreground: 170 45% 35%;
 
     --accent: 142 90% 60%;
     --accent-foreground: 120 14% 6%;

@@ -140,7 +140,7 @@ const CircularProgressCard: FC<CircularProgressCardProps> = ({ title, value, dis
   return (
     <CardWrapper className="items-center justify-between">
       <CornerTriangle isPositive={isPositive} className="top-0 right-0 transform rotate-90" />
-      <h3 className="text-lg font-medium text-slate-300 w-full text-left">{title}</h3>
+      <h3 className="text-lg font-medium text-muted-foreground w-full text-left">{title}</h3>
       <div className="relative w-40 h-40 my-4">
         <ResponsiveContainer width="100%" height="100%">
           <RadialBarChart
@@ -164,9 +164,9 @@ const CircularProgressCard: FC<CircularProgressCardProps> = ({ title, value, dis
         </ResponsiveContainer>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           {value !== undefined ? (
-            <span className="text-4xl font-bold text-white">{displayValue}</span>
+            <span className="text-4xl font-bold text-foreground">{displayValue}</span>
           ) : (
-            <span className="text-lg text-slate-500">No data</span>
+            <span className="text-lg text-muted-foreground">No data</span>
           )}
         </div>
       </div>
@@ -188,7 +188,7 @@ const PumpStatusCard: FC<PumpStatusCardProps> = ({ pumpStatus, onToggle }) => {
   return (
      <CardWrapper className="items-center justify-between">
       <CornerTriangle isPositive={isOnline} className="top-0 right-0 transform rotate-90" />
-      <h3 className="text-lg font-medium text-slate-300 w-full text-left">Pump Status</h3>
+      <h3 className="text-lg font-medium text-muted-foreground w-full text-left">Pump Status</h3>
       <div className="flex flex-col items-center justify-center my-4 flex-1">
         {isOnline ? (
           <>
@@ -198,7 +198,7 @@ const PumpStatusCard: FC<PumpStatusCardProps> = ({ pumpStatus, onToggle }) => {
             </p>
           </>
         ) : (
-          <p className="text-lg text-slate-500">No data</p>
+          <p className="text-lg text-muted-foreground">No data</p>
         )}
       </div>
       <Button 
@@ -220,7 +220,7 @@ const PumpStatusCard: FC<PumpStatusCardProps> = ({ pumpStatus, onToggle }) => {
 const DashboardLoadingSkeleton = () => (
   <div className="grid gap-6 md:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4">
     <Skeleton className="h-[220px] bg-slate-900/80 rounded-2xl" />
-    <Skeleton className="h-[220px] bg-slate-900/80 rounded-2xl" />
+    <Skeleton className="h-[22-px] bg-slate-900/80 rounded-2xl" />
     <Skeleton className="h-[220px] bg-slate-900/80 rounded-2xl" />
     <Skeleton className="h-[220px] bg-slate-900/80 rounded-2xl" />
   </div>
