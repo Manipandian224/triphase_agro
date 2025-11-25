@@ -38,18 +38,20 @@ export default function RootLayout({
       </head>
       <body className={cn(
         inter.className,
-        "text-foreground transition-colors duration-500",
-        isAuthPage 
-          ? 'bg-gradient-to-br from-[#0B0F0B] via-[#163832] to-[#0B0F0B]'
-          : 'bg-gradient-to-br from-[#EAEF9D] via-[#B7D67A] to-[#336A29]'
+        "text-foreground transition-colors duration-500"
       )}>
-        <FirebaseProvider>
-          {children}
-        </FirebaseProvider>
-        <Toaster />
+        <div className={cn(
+          "min-h-screen w-full",
+          isAuthPage 
+            ? 'bg-gradient-to-br from-[#0B0F0B] via-[#163832] to-[#0B0F0B]'
+            : 'bg-gradient-to-br from-[#EAEF9D] via-[#B7D67A] to-[#336A29]'
+        )}>
+          <FirebaseProvider>
+            {children}
+          </FirebaseProvider>
+          <Toaster />
+        </div>
       </body>
     </html>
   );
 }
-
-    
