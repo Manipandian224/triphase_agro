@@ -1,25 +1,30 @@
 
+'use client';
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { FirebaseProvider } from "@/firebase/client-provider";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 const inter = Inter({ subsets: ["latin"], variable: '--font-inter' });
 
-export const metadata: Metadata = {
-  title: "Triphase Agro",
-  description: "Advanced Agriculture Monitoring",
-};
+// We can't use Metadata here because this is a client component.
+// We can add it to a parent layout if we need it.
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pathname = usePathname();
+  const isAuthPage = pathname === '/auth';
+
   return (
     <html lang="en" className="dark">
       <head>
+        <title>Triphase Agro</title>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
@@ -31,7 +36,13 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className={`${inter.className} bg-gradient-to-br from-[#EAEF9D] via-[#B7D67A] to-[#336A29] text-foreground`}>
+      <body className={cn(
+        inter.className,
+        "text-foreground transition-colors duration-500",
+        isAuthPage 
+          ? 'bg-gradient-to-br from-pink-500/10 via-purple-500/10 to-violet-500/20'
+          : 'bg-gradient-to-br from-[#EAEF9D] via-[#B7D67A] to-[#336A29]'
+      )}>
         <FirebaseProvider>
           {children}
         </FirebaseProvider>
