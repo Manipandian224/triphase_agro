@@ -107,7 +107,7 @@ function SidebarContent({ onLinkClick }: { onLinkClick?: () => void }) {
             className={cn(
               'flex items-center gap-3 rounded-lg px-4 py-3 text-lg font-medium transition-all',
               pathname === link.href
-                ? 'bg-primary text-primary-foreground shadow-lg'
+                ? 'bg-[#336A29] text-white shadow-lg'
                 : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
             )}
           >
