@@ -21,6 +21,6 @@ export interface IrrigationData {
   Humidity: number;
   Temperature: number;
   SoilMoisture: number;
-  PumpStatus: 'ON' | 'OFF';
+  pumpStatus: 'ON' | 'OFF';
   LastUpdate: number; // Unix timestamp
 }
