@@ -30,7 +30,7 @@
 
   .dark {
     --background: 150 14% 5%; /* #0b0f0b */
-    --foreground: 150 10% 90%;
+    --foreground: 170 45% 15%; /* #163832 */
     
     --card: 150 10% 8%; /* #141A14 */
     --card-foreground: 150 10% 90%;
