@@ -1,5 +1,4 @@
 
-
 export interface SensorData {
   timestamp: number;
   pumpStatus: 'ON' | 'OFF';
