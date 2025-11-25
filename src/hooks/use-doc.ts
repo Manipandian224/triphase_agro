@@ -59,7 +59,7 @@ export function useDoc<T>(ref: DocumentReference<T> | null) {
         unsubscribeRef.current();
       }
     };
-  }, [ref?.path]); // Depend on the path to re-subscribe if the document changes
+  }, [ref]); // Depend on the ref object itself
 
   return { data, loading, error };
 }

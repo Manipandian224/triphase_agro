@@ -98,7 +98,7 @@ function LiveDashboardContent() {
     { title: 'Soil Moisture', icon: Droplets, dataKey: 'soilMoisture', color: 'hsl(var(--primary))' },
     { title: 'Air Temperature', icon: Thermometer, dataKey: 'airTemp', color: 'hsl(20, 80%, 60%)' },
     { title: 'Humidity', icon: Wind, dataKey: 'humidity', color: 'hsl(200, 80%, 60%)' },
-    { title: 'Water Flow', icon: Zap, dataKey: 'waterFlow', color: 'hsl(180, 80%, 60%)' },
+    { title: 'Water Flow', icon: Zap, dataKey: 'waterFlow', color: 'hsl(50, 80%, 60%)' },
   ];
 
   return (

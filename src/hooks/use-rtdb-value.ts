@@ -9,14 +9,8 @@ export function useRtdbValue<T>(ref: DatabaseReference | Query | null) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
-  // Use a ref to store the reference object to avoid re-running the effect
-  // if a new but identical reference object is passed.
-  const refRef = useRef(ref);
-  refRef.current = ref;
-
   useEffect(() => {
-    const currentRef = refRef.current;
-    if (!currentRef) {
+    if (!ref) {
       setLoading(false);
       setData(null);
       return;
@@ -25,7 +19,7 @@ export function useRtdbValue<T>(ref: DatabaseReference | Query | null) {
     setLoading(true);
 
     const callback = onValue(
-      currentRef,
+      ref,
       (snapshot) => {
         if (snapshot.exists()) {
           setData(snapshot.val() as T);
@@ -46,11 +40,9 @@ export function useRtdbValue<T>(ref: DatabaseReference | Query | null) {
     // Cleanup function to remove the listener when the component unmounts
     // or the reference changes.
     return () => {
-      off(currentRef, 'value', callback);
+      off(ref, 'value', callback);
     };
-  }, [ref?.key]); // Rerun only if the key of the reference changes
+  }, [ref]); // Rerun if the reference object itself changes
 
   return { data, loading, error };
 }
-
-    
