@@ -1,6 +1,7 @@
 
 'use client';
 
+import { useState, useEffect } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,9 +9,18 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
-import { User, Bell, Palette, Shield } from 'lucide-react';
+import { User, Bell, Palette } from 'lucide-react';
 
 export default function UserProfilePage() {
+  const [isClient, setIsClient] = useState(false);
+  const [emailNotifications, setEmailNotifications] = useState(true);
+  const [pushNotifications, setPushNotifications] = useState(false);
+  const [darkMode, setDarkMode] = useState(true);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   return (
     <div className="container mx-auto p-4 md:p-8">
       <header className="mb-12 text-center">
@@ -72,11 +82,11 @@ export default function UserProfilePage() {
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <Label htmlFor="email-notifications">Email Notifications</Label>
-                    <Switch id="email-notifications" defaultChecked />
+                    {isClient && <Switch id="email-notifications" checked={emailNotifications} onCheckedChange={setEmailNotifications} />}
                   </div>
                   <div className="flex items-center justify-between">
                     <Label htmlFor="push-notifications">Push Notifications</Label>
-                    <Switch id="push-notifications" />
+                    {isClient && <Switch id="push-notifications" checked={pushNotifications} onCheckedChange={setPushNotifications}/>}
                   </div>
                 </div>
               </div>
@@ -90,7 +100,7 @@ export default function UserProfilePage() {
                 </h3>
                 <div className="flex items-center justify-between">
                     <Label htmlFor="dark-mode">Dark Mode</Label>
-                    <Switch id="dark-mode" defaultChecked disabled />
+                    {isClient && <Switch id="dark-mode" checked={darkMode} onCheckedChange={setDarkMode} disabled />}
                   </div>
               </div>
 
