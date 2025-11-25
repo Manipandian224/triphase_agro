@@ -31,7 +31,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className={`${inter.className} bg-background text-foreground`}>
+      <body className={`${inter.className} bg-gradient-to-br from-[#EAEF9D] via-[#B7D67A] to-[#336A29] text-foreground`}>
         <FirebaseProvider>
           {children}
         </FirebaseProvider>
@@ -40,5 +40,3 @@ export default function RootLayout({
     </html>
   );
 }
-
-    

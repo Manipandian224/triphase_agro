@@ -50,7 +50,7 @@ export default function DashboardLayout({
               <span className="sr-only">Toggle Menu</span>
             </Button>
           </SheetTrigger>
-          <SheetContent side="left" className="w-72 p-0">
+          <SheetContent side="left" className="w-72 p-0 bg-transparent border-r border-white/10">
              <SheetHeader className="sr-only">
               <SheetTitle>Navigation Menu</SheetTitle>
               <SheetDescription>
@@ -63,7 +63,7 @@ export default function DashboardLayout({
       ) : (
         <Sidebar />
       )}
-      <main className="flex-1 flex flex-col bg-background relative">
+      <main className="flex-1 flex flex-col bg-transparent relative">
          <div
           className="absolute top-0 left-0 w-full h-full"
           style={{
@@ -82,7 +82,7 @@ export default function DashboardLayout({
 
 function Sidebar() {
   return (
-    <div className="w-72 border-r bg-card text-card-foreground z-20">
+    <div className="w-72 border-r border-white/20 bg-black/10 z-20">
       <SidebarContent />
     </div>
   );
@@ -92,9 +92,9 @@ function SidebarContent({ onLinkClick }: { onLinkClick?: () => void }) {
   const pathname = usePathname();
   return (
     <div className="flex h-full flex-col">
-      <div className="flex h-20 items-center justify-center border-b">
-        <Link href="/" className="flex items-center gap-2 font-bold text-xl">
-          <Leaf className="h-7 w-7 text-primary" />
+      <div className="flex h-20 items-center justify-center border-b border-white/20">
+        <Link href="/" className="flex items-center gap-2 font-bold text-xl text-white">
+          <Leaf className="h-7 w-7 text-white" />
           <span>Triphase Agro</span>
         </Link>
       </div>
@@ -105,10 +105,10 @@ function SidebarContent({ onLinkClick }: { onLinkClick?: () => void }) {
             href={link.href}
             onClick={onLinkClick}
             className={cn(
-              'flex items-center gap-3 rounded-lg px-4 py-3 text-lg font-medium transition-all',
+              'flex items-center gap-3 rounded-lg px-4 py-3 text-lg font-medium transition-all text-white/70 hover:bg-white/10 hover:text-white',
               pathname === link.href
                 ? 'bg-[#336A29] text-white shadow-lg'
-                : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
+                : ''
             )}
           >
             <link.icon className="h-5 w-5" />
