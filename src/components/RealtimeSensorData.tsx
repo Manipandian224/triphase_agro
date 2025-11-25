@@ -60,13 +60,13 @@ export function RealtimeSensorData() {
   }, [sensorData?.LastUpdate]);
 
   const handleTogglePump = async () => {
-    if (!rtdb || sensorData?.pumpStatus === undefined) return;
+    if (!rtdb || sensorData?.PumpStatus === undefined) return;
     setIsUpdating(true);
     try {
       const irrigationRef = ref(rtdb, 'Irrigation');
-      // Set the pumpStatus to the opposite of its current value
+      // Set the PumpStatus to the opposite of its current value
       await update(irrigationRef, {
-        pumpStatus: !sensorData.pumpStatus,
+        PumpStatus: !sensorData.PumpStatus,
       });
     } catch (err) {
       console.error("Failed to update pump status:", err);
@@ -93,7 +93,7 @@ export function RealtimeSensorData() {
     );
   }
 
-  const isPumpOn = sensorData?.pumpStatus === true;
+  const isPumpOn = sensorData?.PumpStatus === true;
   const pumpStatusText = isPumpOn ? 'Pump Running' : 'Pump Off';
 
   return (
@@ -111,10 +111,10 @@ export function RealtimeSensorData() {
             <Skeleton className="h-8 w-28" />
           ) : (
             <>
-              {sensorData?.pumpStatus !== undefined ? (
+              {sensorData?.PumpStatus !== undefined ? (
                  <div className="text-3xl font-bold">{pumpStatusText}</div>
               ) : (
-                <p className="text-xs text-yellow-500 flex items-center mt-1"><AlertCircle className="h-3 w-3 mr-1" />No data</p>
+                <p className="text-yellow-500 flex items-center mt-1 text-sm"><AlertCircle className="h-4 w-4 mr-1" />No data</p>
               )}
             </>
           )}
@@ -124,7 +124,7 @@ export function RealtimeSensorData() {
             variant="outline" 
             className="w-full"
             onClick={handleTogglePump}
-            disabled={loading || isUpdating || sensorData?.pumpStatus === undefined}
+            disabled={loading || isUpdating || sensorData?.PumpStatus === undefined}
           >
             {isUpdating ? 'Updating...' : `Turn ${isPumpOn ? 'OFF' : 'ON'}`}
           </Button>
@@ -168,8 +168,8 @@ export function RealtimeSensorData() {
                     {unit && <span className="text-xl text-muted-foreground ml-1">{unit}</span>}
                   </div>
                 ) : (
-                  <p className="text-xs text-yellow-500 flex items-center mt-1">
-                      <AlertCircle className="h-3 w-3 mr-1" />
+                  <p className="text-yellow-500 flex items-center mt-1 text-sm">
+                      <AlertCircle className="h-4 w-4 mr-1" />
                       No data
                   </p>
                 )}

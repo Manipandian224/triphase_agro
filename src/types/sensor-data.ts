@@ -1,4 +1,5 @@
 
+
 export interface SensorData {
   timestamp: number;
   pumpStatus: 'ON' | 'OFF';
@@ -20,6 +21,6 @@ export interface IrrigationData {
   Humidity?: number;
   Temperature?: number;
   SoilMoisture?: number;
-  pumpStatus?: boolean;
+  PumpStatus?: boolean;
   LastUpdate?: number; // Unix timestamp
 }
