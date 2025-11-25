@@ -24,7 +24,7 @@ import { cn } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
 import { TrendingUp, TrendingDown, Droplets, Waves } from 'lucide-react';
 import { useFirebase } from '@/firebase/client-provider';
-import { ref, onValue, Database } from 'firebase/database';
+import { ref, onValue } from 'firebase/database';
 import { IrrigationData } from '@/types/sensor-data';
 
 
@@ -37,7 +37,7 @@ export function RealtimeSensorData() {
   // == FIREBASE DATA FETCHING ==
   useEffect(() => {
     if (!rtdb) return;
-
+    setLoading(true);
     const irrigationRef = ref(rtdb, 'Irrigation/');
     const unsubscribe = onValue(irrigationRef, (snapshot) => {
       if (snapshot.exists()) {
@@ -68,7 +68,7 @@ export function RealtimeSensorData() {
   }
   
   if (!data) {
-     return <div className="text-center text-slate-400 py-20">No sensor data available.</div>
+     return <div className="text-center text-white/50 py-20">No sensor data available. Check your database connection and path.</div>
   }
 
   return (
@@ -287,3 +287,5 @@ const DashboardLoadingSkeleton = () => (
       <Skeleton className="h-[260px] bg-slate-900/80 rounded-2xl" />
     </div>
 );
+
+    
