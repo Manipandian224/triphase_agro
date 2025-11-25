@@ -9,11 +9,10 @@ import { Sheet, SheetTrigger, SheetContent } from '@/components/ui/sheet';
 import {
   Menu,
   LayoutGrid,
-  Sprout,
+  HeartPulse,
+  Leaf,
   BarChart,
   Settings,
-  Leaf,
-  HeartPulse,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -62,8 +61,15 @@ export default function DashboardLayout({
       ) : (
         <Sidebar />
       )}
-      <main className="flex-1 flex flex-col bg-background">
-        <div className={`flex-1 overflow-y-auto ${isMobile ? 'pt-16' : ''}`}>
+      <main className="flex-1 flex flex-col bg-background relative">
+         <div
+          className="absolute top-0 left-0 w-full h-full"
+          style={{
+            background:
+              'radial-gradient(circle at 30% 30%, hsl(var(--primary) / 0.1), transparent 40%)',
+          }}
+        />
+        <div className={`flex-1 overflow-y-auto ${isMobile ? 'pt-16' : ''} relative z-10`}>
             {children}
         </div>
       </main>
@@ -74,7 +80,7 @@ export default function DashboardLayout({
 
 function Sidebar() {
   return (
-    <div className="w-72 border-r bg-card text-card-foreground">
+    <div className="w-72 border-r bg-card text-card-foreground z-20">
       <SidebarContent />
     </div>
   );

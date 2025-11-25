@@ -1,17 +1,29 @@
+
 'use client';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { Skeleton } from '@/components/ui/skeleton';
 
-import { RealtimeSensorData } from '@/components/RealtimeSensorData';
+export default function HomePage() {
+  const router = useRouter();
 
-export default function DashboardPage() {
+  useEffect(() => {
+    router.replace('/dashboard');
+  }, [router]);
+
   return (
-    <div className="flex-1 space-y-8 p-4 md:p-8 pt-6">
-      <div className="flex items-center justify-between space-y-2">
-        <h2 className="text-4xl font-bold tracking-tighter">
-          Live Field Dashboard
-        </h2>
+     <div className="flex min-h-screen w-full items-center justify-center bg-background p-8">
+      <div className="w-full max-w-4xl space-y-8">
+        <Skeleton className="h-12 w-1/2" />
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <Skeleton className="h-32 w-full" />
+          <Skeleton className="h-32 w-full" />
+          <Skeleton className="h-32 w-full" />
+          <Skeleton className="h-32 w-full" />
+           <Skeleton className="h-32 w-full" />
+          <Skeleton className="h-32 w-full" />
+        </div>
       </div>
-
-      <RealtimeSensorData />
     </div>
   );
 }
