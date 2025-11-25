@@ -11,7 +11,7 @@ import {
 import { cn } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useFirebase } from '@/firebase/client-provider';
-import { ref, onValue, set, update } from 'firebase/database';
+import { ref, onValue, update } from 'firebase/database';
 import type { IrrigationData } from '@/types/sensor-data';
 import { Button } from './ui/button';
 import { Power } from 'lucide-react';
@@ -81,7 +81,6 @@ export function RealtimeSensorData() {
         value={data.Temperature}
         displayValue={`${(data.Temperature ?? 0).toFixed(1)}°C`}
         percentage={tempPercentage}
-        color="cyan"
         isPositive={isTempPositive}
       />
       <CircularProgressCard
@@ -89,7 +88,6 @@ export function RealtimeSensorData() {
         value={data.Humidity}
         displayValue={`${(data.Humidity ?? 0).toFixed(0)}%`}
         percentage={humidityPercentage}
-        color="pink"
         isPositive={isHumidityPositive}
       />
       <CircularProgressCard
@@ -97,7 +95,6 @@ export function RealtimeSensorData() {
         value={data.SoilMoisture}
         displayValue={`${(data.SoilMoisture ?? 0).toFixed(0)}%`}
         percentage={data.SoilMoisture}
-        color="teal"
         isPositive={isSoilMoisturePositive}
       />
       <PumpStatusCard 
@@ -135,21 +132,10 @@ interface CircularProgressCardProps {
   value?: number;
   displayValue: string;
   percentage?: number;
-  color: 'teal' | 'indigo' | 'cyan' | 'pink';
   isPositive: boolean;
 }
 
-const CircularProgressCard: FC<CircularProgressCardProps> = ({ title, value, displayValue, percentage = 0, color, isPositive }) => {
-  const gradientId = `gradient-${color}`;
-  
-  const colorStops = {
-    teal: { from: 'from-teal-400', to: 'to-green-500' },
-    indigo: { from: 'from-sky-400', to: 'to-indigo-500' },
-    cyan: { from: 'from-cyan-400', to: 'to-blue-500' },
-    pink: { from: 'from-purple-400', to: 'to-pink-500' },
-  };
-
-  const { from: fromColor, to: toColor } = colorStops[color];
+const CircularProgressCard: FC<CircularProgressCardProps> = ({ title, value, displayValue, percentage = 0, isPositive }) => {
 
   return (
     <CardWrapper className="items-center justify-between">
@@ -163,19 +149,13 @@ const CircularProgressCard: FC<CircularProgressCardProps> = ({ title, value, dis
             innerRadius="80%"
             outerRadius="100%"
             barSize={12}
-            data={[{ value: percentage, fill: `url(#${gradientId})` }]}
+            data={[{ value: percentage, fill: 'hsl(var(--primary))' }]}
             startAngle={90}
             endAngle={-270}
           >
-            <defs>
-              <linearGradient id={gradientId}>
-                <stop offset="0%" className={cn('stop-color', fromColor)} />
-                <stop offset="100%" className={cn('stop-color', toColor)} />
-              </linearGradient>
-            </defs>
             <PolarAngleAxis type="number" domain={[0, 100]} angleAxisId={0} tick={false} />
             <RadialBar
-              background={{ fill: 'hsl(220 20% 15%)' }}
+              background={{ fill: 'hsl(var(--muted))' }}
               dataKey="value"
               cornerRadius={10}
               animationDuration={1500}
