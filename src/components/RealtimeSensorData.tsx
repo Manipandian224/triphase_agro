@@ -1,6 +1,7 @@
+
 'use client';
 import { useMemo } from 'react';
-import { ref, query, limitToLast } from 'firebase/database';
+import { ref } from 'firebase/database';
 import {
   Card,
   CardContent,
@@ -11,30 +12,29 @@ import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useFirebase } from '@/firebase/client-provider';
 import { useRtdbValue } from '@/hooks/use-rtdb-value';
-import type { SensorData } from '@/types/sensor-data';
+import type { IrrigationData } from '@/types/sensor-data';
 import {
   Thermometer,
   Droplets,
   Wind,
-  Layers,
-  FlaskConical,
   Power,
   Activity,
   AlertCircle,
+  Clock,
 } from 'lucide-react';
+import { format } from 'date-fns';
+
 
 // Define the structure for each sensor card
 const sensorCards = [
   {
     title: 'Soil Moisture',
-    dataKey: 'soilMoisture',
+    dataKey: 'SoilMoisture',
     unit: '%',
     icon: Droplets,
   },
-  { title: 'Temperature', dataKey: 'airTemp', unit: '°C', icon: Thermometer },
-  { title: 'Humidity', dataKey: 'humidity', unit: '%', icon: Wind },
-  { title: 'Water Level', dataKey: 'waterLevel', unit: 'm', icon: Layers },
-  { title: 'pH Value', dataKey: 'phValue', unit: '', icon: FlaskConical },
+  { title: 'Temperature', dataKey: 'Temperature', unit: '°C', icon: Thermometer },
+  { title: 'Humidity', dataKey: 'Humidity', unit: '%', icon: Wind },
 ];
 
 /**
@@ -43,25 +43,21 @@ const sensorCards = [
 export function RealtimeSensorData() {
   const { rtdb } = useFirebase();
 
-  // Define the query to get the single most recent sensor reading.
-  const sensorQuery = rtdb
-    ? query(ref(rtdb, 'sensors/main-field-sensor'), limitToLast(1))
-    : null;
+  // Define the query to get the irrigation data.
+  const sensorQuery = rtdb ? ref(rtdb, 'Irrigation') : null;
 
-  // Use the custom hook to get live data. The data is expected to be an object
-  // with a single key-value pair, e.g., { "reading_123": { ...sensorData } }
   const {
-    data: latestReadingObj,
+    data: sensorData,
     loading,
     error,
-  } = useRtdbValue<{ [key: string]: SensorData }>(sensorQuery);
+  } = useRtdbValue<IrrigationData>(sensorQuery);
+  
+  const lastUpdateFormatted = useMemo(() => {
+    if (!sensorData?.LastUpdate) return null;
+    // Assuming LastUpdate is a Unix timestamp in seconds
+    return format(new Date(sensorData.LastUpdate * 1000), 'MMM d, yyyy, h:mm:ss a');
+  }, [sensorData?.LastUpdate]);
 
-  // Extract the actual sensor data object from the parent object.
-  const sensorData = useMemo(() => {
-    if (!latestReadingObj) return null;
-    const readingKey = Object.keys(latestReadingObj)[0];
-    return latestReadingObj[readingKey];
-  }, [latestReadingObj]);
 
   if (error) {
     return (
@@ -82,36 +78,41 @@ export function RealtimeSensorData() {
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {/* Pump Status Card */}
-      <Card className="bg-card shadow-soft-sm border-white/10 lg:col-span-1">
+      <Card className="bg-card shadow-soft-sm border-white/10">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium text-muted-foreground">
             Pump Status
           </CardTitle>
-          {loading ? <Activity className="h-5 w-5 text-muted-foreground" /> : <Power className={`h-5 w-5 ${sensorData?.pumpStatus === 'ON' ? 'text-green-400' : 'text-yellow-400'}`} />}
+          {loading ? <Activity className="h-5 w-5 text-muted-foreground" /> : <Power className={`h-5 w-5 ${sensorData?.PumpStatus === 'ON' ? 'text-green-400' : 'text-yellow-400'}`} />}
         </CardHeader>
         <CardContent>
           {loading ? (
-            <>
-              <Skeleton className="h-8 w-20" />
-              <Skeleton className="h-5 w-16 mt-2" />
-            </>
+            <Skeleton className="h-8 w-20" />
           ) : (
             <>
-              <div className="text-3xl font-bold">{sensorData?.pumpStatus}</div>
-              <Badge
-                variant={'outline'}
-                className={`mt-2 text-xs font-medium border-current ${sensorData?.pumpStatus === 'ON' ? 'text-green-400' : 'text-yellow-400'}`}
-              >
-                {sensorData?.pumpStatus === 'ON' ? 'Active' : 'Idle'}
-              </Badge>
+              <div className="text-3xl font-bold">{sensorData?.PumpStatus || 'N/A'}</div>
+              {!sensorData?.PumpStatus && <p className="text-xs text-yellow-500 flex items-center mt-1"><AlertCircle className="h-3 w-3 mr-1" />No data</p>}
             </>
           )}
         </CardContent>
       </Card>
-
-      {/* Spacer div to align grid */}
-      <div className="hidden lg:block lg:col-span-2"></div>
-
+      
+       {/* Last Updated Card */}
+      <Card className="bg-card shadow-soft-sm border-white/10 lg:col-span-2">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-sm font-medium text-muted-foreground">
+            Last Update
+          </CardTitle>
+          <Clock className="h-5 w-5 text-muted-foreground" />
+        </CardHeader>
+        <CardContent>
+          {loading ? (
+            <Skeleton className="h-8 w-48" />
+          ) : (
+            <div className="text-3xl font-bold">{lastUpdateFormatted || 'N/A'}</div>
+          )}
+        </CardContent>
+      </Card>
 
       {/* Dynamic Sensor Cards */}
       {sensorCards.map(({ title, dataKey, unit, icon: Icon }) => (
@@ -127,11 +128,11 @@ export function RealtimeSensorData() {
               <Skeleton className="h-8 w-24" />
             ) : (
               <div className="text-3xl font-bold">
-                {(sensorData as any)[dataKey as keyof SensorData]?.toFixed(1) || 'N/A'}
+                {(sensorData as any)[dataKey as keyof IrrigationData]?.toFixed(1) || 'N/A'}
                 {unit && <span className="text-xl text-muted-foreground ml-1">{unit}</span>}
               </div>
             )}
-            {!loading && !(sensorData as any)?.[dataKey as keyof SensorData] && (
+            {!loading && sensorData && (sensorData as any)[dataKey as keyof IrrigationData] === undefined && (
                  <p className="text-xs text-yellow-500 flex items-center mt-1">
                     <AlertCircle className="h-3 w-3 mr-1" />
                     No data
