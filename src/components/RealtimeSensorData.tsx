@@ -8,7 +8,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useFirebase } from '@/firebase/client-provider';
 import { useRtdbValue } from '@/hooks/use-rtdb-value';
@@ -44,7 +43,7 @@ export function RealtimeSensorData() {
   const { rtdb } = useFirebase();
 
   // Define the query to get the irrigation data.
-  const sensorQuery = rtdb ? ref(rtdb, 'Irrigation') : null;
+  const sensorQuery = useMemo(() => rtdb ? ref(rtdb, 'Irrigation') : null, [rtdb]);
 
   const {
     data: sensorData,
