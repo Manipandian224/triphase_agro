@@ -94,7 +94,7 @@ export function RealtimeSensorData() {
   }
 
   const isPumpOn = sensorData?.PumpStatus === true;
-  const pumpStatusText = isPumpOn ? 'Pump Running' : 'Pump Off';
+  const pumpStatusText = isPumpOn ? 'ON' : 'OFF';
 
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
