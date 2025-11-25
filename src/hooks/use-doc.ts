@@ -63,5 +63,3 @@ export function useDoc<T>(ref: DocumentReference<T> | null) {
 
   return { data, loading, error };
 }
-
-    

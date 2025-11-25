@@ -78,7 +78,7 @@ const FilterDropdown = ({ title, items }: { title: string, items: string[] }) =>
                 <ChevronDown className="ml-2 h-4 w-4" />
             </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="bg-popover border-border">
+        <DropdownMenuContent className="bg-popover border-border w-56">
             <DropdownMenuLabel>{title}</DropdownMenuLabel>
             <DropdownMenuSeparator />
             {items.map(item => (
