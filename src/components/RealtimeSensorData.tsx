@@ -140,7 +140,7 @@ const CircularProgressCard: FC<CircularProgressCardProps> = ({ title, value, dis
   return (
     <CardWrapper className="items-center justify-between">
       <CornerTriangle isPositive={isPositive} className="top-0 right-0 transform rotate-90" />
-      <h3 className="text-lg font-medium text-muted-foreground w-full text-left">{title}</h3>
+      <h3 className="text-lg font-medium text-slate-300 w-full text-left">{title}</h3>
       <div className="relative w-40 h-40 my-4">
         <ResponsiveContainer width="100%" height="100%">
           <RadialBarChart
@@ -164,9 +164,9 @@ const CircularProgressCard: FC<CircularProgressCardProps> = ({ title, value, dis
         </ResponsiveContainer>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           {value !== undefined ? (
-            <span className="text-4xl font-bold text-foreground">{displayValue}</span>
+            <span className="text-4xl font-bold text-slate-100">{displayValue}</span>
           ) : (
-            <span className="text-lg text-muted-foreground">No data</span>
+            <span className="text-lg text-slate-400">No data</span>
           )}
         </div>
       </div>
@@ -188,7 +188,7 @@ const PumpStatusCard: FC<PumpStatusCardProps> = ({ pumpStatus, onToggle }) => {
   return (
      <CardWrapper className="items-center justify-between">
       <CornerTriangle isPositive={isOnline} className="top-0 right-0 transform rotate-90" />
-      <h3 className="text-lg font-medium text-muted-foreground w-full text-left">Pump Status</h3>
+      <h3 className="text-lg font-medium text-slate-300 w-full text-left">Pump Status</h3>
       <div className="flex flex-col items-center justify-center my-4 flex-1">
         {isOnline ? (
           <>
@@ -198,7 +198,7 @@ const PumpStatusCard: FC<PumpStatusCardProps> = ({ pumpStatus, onToggle }) => {
             </p>
           </>
         ) : (
-          <p className="text-lg text-muted-foreground">No data</p>
+          <p className="text-lg text-slate-400">No data</p>
         )}
       </div>
       <Button 
