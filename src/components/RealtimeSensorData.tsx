@@ -93,8 +93,8 @@ export function RealtimeSensorData() {
     );
   }
 
-  const pumpStatusText = sensorData?.pumpStatus === true ? 'ON' : 'OFF';
   const isPumpOn = sensorData?.pumpStatus === true;
+  const pumpStatusText = isPumpOn ? 'ON' : 'OFF';
 
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -111,8 +111,11 @@ export function RealtimeSensorData() {
             <Skeleton className="h-8 w-20" />
           ) : (
             <>
-              <div className="text-3xl font-bold">{pumpStatusText}</div>
-              {sensorData?.pumpStatus === undefined && <p className="text-xs text-yellow-500 flex items-center mt-1"><AlertCircle className="h-3 w-3 mr-1" />No data</p>}
+              {sensorData?.pumpStatus !== undefined ? (
+                 <div className="text-3xl font-bold">{pumpStatusText}</div>
+              ) : (
+                <p className="text-xs text-yellow-500 flex items-center mt-1"><AlertCircle className="h-3 w-3 mr-1" />No data</p>
+              )}
             </>
           )}
         </CardContent>
