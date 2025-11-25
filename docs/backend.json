@@ -5,6 +5,10 @@
       "description": "A collection of sensor readings at a specific point in time.",
       "type": "object",
       "properties": {
+        "timestamp": {
+            "type": "number",
+            "description": "The epoch timestamp when the reading was taken."
+        },
         "pumpStatus": {
           "type": "string",
           "description": "The status of the pump (e.g., 'ON', 'OFF').",
@@ -42,6 +46,7 @@
         }
       },
       "required": [
+        "timestamp",
         "pumpStatus",
         "threePhasePower",
         "connectivity",
@@ -51,6 +56,14 @@
         "humidity",
         "waterFlow"
       ]
+    },
+    "SensorHistory": {
+        "title": "Sensor History",
+        "description": "A map of historical sensor readings, where the key is a unique ID.",
+        "type": "object",
+        "additionalProperties": {
+            "$ref": "#/entities/SensorData"
+        }
     }
   },
   "auth": {
@@ -61,7 +74,13 @@
       "schema": {
         "$ref": "#/entities/SensorData"
       },
-      "description": "Stores live and historical sensor data for different devices."
+      "description": "Stores the latest sensor data for a device."
+    },
+    "/sensors/{sensorId}/history/{readingId}": {
+      "schema": {
+        "$ref": "#/entities/SensorData"
+      },
+      "description": "Stores a time-series of historical sensor readings."
     }
   }
 }

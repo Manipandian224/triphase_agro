@@ -1,4 +1,3 @@
-
 'use client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -27,26 +26,35 @@ import Link from 'next/link';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useRtdbValue } from '@/hooks/use-rtdb-value';
 import { useFirebase } from '@/firebase/client-provider';
-import { ref } from 'firebase/database';
-import { SensorData } from '@/types/sensor-data';
+import { ref, query, orderByChild, limitToLast } from 'firebase/database';
+import { SensorData, SensorHistory } from '@/types/sensor-data';
 import { Button } from '@/components/ui/button';
-
-
-const cropHealthChartData = [
-  { date: 'May 1', health: 85 },
-  { date: 'May 8', health: 88 },
-  { date: 'May 15', health: 87 },
-  { date: 'May 22', health: 92 },
-  { date: 'May 29', health: 91 },
-  { date: 'Jun 5', health: 93 },
-];
+import { useMemo } from 'react';
+import { format } from 'date-fns';
 
 function LiveDashboardContent() {
   const { rtdb } = useFirebase();
 
-  // NOTE: This assumes a single sensor document with a known ID.
-  const sensorRef = rtdb ? ref(rtdb, 'sensors/main-field-sensor') : null;
-  const { data: liveSensorData, loading } = useRtdbValue<SensorData>(sensorRef);
+  // Fetch the single most recent sensor reading
+  const latestSensorQuery = rtdb ? query(ref(rtdb, 'sensors/main-field-sensor/history'), limitToLast(1)) : null;
+  const { data: latestSensorDataObj, loading: loadingLatest } = useRtdbValue<{[key: string]: SensorData}>(latestSensorQuery);
+  
+  // Fetch the last 24 hours of data (approx 288 readings if every 5 mins)
+  const historyQuery = rtdb ? query(ref(rtdb, 'sensors/main-field-sensor/history'), limitToLast(288)) : null;
+  const { data: sensorHistoryObj, loading: loadingHistory } = useRtdbValue<SensorHistory>(historyQuery);
+
+  const liveSensorData = useMemo(() => {
+    if (!latestSensorDataObj) return null;
+    const key = Object.keys(latestSensorDataObj)[0];
+    return latestSensorDataObj[key];
+  }, [latestSensorDataObj]);
+
+  const chartData = useMemo(() => {
+    if (!sensorHistoryObj) return [];
+    return Object.values(sensorHistoryObj).sort((a, b) => a.timestamp - b.timestamp);
+  }, [sensorHistoryObj]);
+
+  const loading = loadingLatest || loadingHistory;
 
   const getStatusCard = (title: string) => {
     if (loading || !liveSensorData) {
@@ -71,7 +79,7 @@ function LiveDashboardContent() {
   };
 
   const getSensorReading = (title: string) => {
-    if (loading || !liveSensorData) return { value: <Skeleton className="h-8 w-24" />, change: <Skeleton className="h-4 w-32" /> };
+    if (loading || !liveSensorData) return { value: <Skeleton className="h-8 w-24" />, change: <div className="h-4 w-32 mt-1"><Skeleton className="h-full w-full" /></div> };
     switch (title) {
       case 'Soil Moisture':
         return { value: `${liveSensorData.soilMoisture.toFixed(1)}%`, change: "+1.2% vs last hr" };
@@ -86,19 +94,17 @@ function LiveDashboardContent() {
     }
   };
 
-  const statusCards = ['Pump Status', '3-Phase Power', 'Connectivity', 'Crop Health'];
   const sensorReadings = [
-    { title: 'Soil Moisture', icon: Droplets, chartData: [{ time: '00:00', value: 65 }, { time: '04:00', value: 68 }, { time: '08:00', value: 62 }, { time: '12:00', value: 70 }, { time: '16:00', value: 68 }, { time: '20:00', value: 66 }], color: 'hsl(var(--primary))' },
-    { title: 'Air Temperature', icon: Thermometer, chartData: [{ time: '00:00', value: 22 }, { time: '04:00', value: 21 }, { time: '08:00', value: 23 }, { time: '12:00', value: 26 }, { time: '16:00', value: 25 }, { time: '20:00', value: 23 }], color: 'hsl(20, 80%, 60%)' },
-    { title: 'Humidity', icon: Wind, chartData: [{ time: '00:00', value: 58 }, { time: '04:00', value: 60 }, { time: '08:00', value: 55 }, { time: '12:00', value: 50 }, { time: '16:00', value: 52 }, { time: '20:00', value: 54 }], color: 'hsl(200, 80%, 60%)' },
-    { title: 'Water Flow', icon: Zap, chartData: [{ time: '00:00', value: 10 }, { time: '04:00', value: 12 }, { time: '08:00', value: 11 }, { time: '12:00', value: 15 }, { time: '16:00', value: 14 }, { time: '20:00', value: 12 }], color: 'hsl(180, 80%, 60%)' },
+    { title: 'Soil Moisture', icon: Droplets, dataKey: 'soilMoisture', color: 'hsl(var(--primary))' },
+    { title: 'Air Temperature', icon: Thermometer, dataKey: 'airTemp', color: 'hsl(20, 80%, 60%)' },
+    { title: 'Humidity', icon: Wind, dataKey: 'humidity', color: 'hsl(200, 80%, 60%)' },
+    { title: 'Water Flow', icon: Zap, dataKey: 'waterFlow', color: 'hsl(180, 80%, 60%)' },
   ];
-
 
   return (
     <>
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        {statusCards.map(title => {
+        {['Pump Status', '3-Phase Power', 'Connectivity', 'Crop Health'].map(title => {
           const { value, badge, icon: Icon, color } = getStatusCard(title);
           return (
             <Card key={title} className="bg-card shadow-soft-sm border-white/10">
@@ -133,7 +139,7 @@ function LiveDashboardContent() {
                 </div>
                 <div className="h-[80px] -ml-6 mt-4">
                   <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={sensor.chartData}>
+                    <LineChart data={chartData}>
                       <Tooltip 
                         contentStyle={{
                           backgroundColor: "hsl(var(--popover))",
@@ -141,8 +147,10 @@ function LiveDashboardContent() {
                           color: "hsl(var(--popover-foreground))"
                         }}
                         cursor={{fill: 'hsl(var(--secondary))'}}
+                        formatter={(value: number) => value.toFixed(1)}
+                        labelFormatter={(label: number) => format(new Date(label), 'HH:mm')}
                       />
-                      <Line type="monotone" dataKey="value" stroke={sensor.color} strokeWidth={2} dot={false} />
+                      <Line type="monotone" dataKey={sensor.dataKey} name={sensor.title} stroke={sensor.color} strokeWidth={2} dot={false} />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
@@ -151,21 +159,7 @@ function LiveDashboardContent() {
           )
         })}
       </div>
-    </>
-  )
 
-}
-
-
-export default function DashboardPage() {
-  return (
-    <div className="flex-1 space-y-8 p-4 md:p-8 pt-6">
-      <div className="flex items-center justify-between space-y-2">
-        <h2 className="text-4xl font-bold tracking-tighter">Live Field Dashboard</h2>
-      </div>
-
-      <LiveDashboardContent />
-      
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
         <Card className="col-span-4 bg-card shadow-soft-lg border-white/10">
           <CardHeader>
@@ -174,18 +168,26 @@ export default function DashboardPage() {
           <CardContent className="pl-2">
             <div className="h-[350px]">
               <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={cropHealthChartData}>
+                  <LineChart data={chartData}>
                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border) / 0.5)" />
-                    <XAxis dataKey="date" stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} />
+                    <XAxis 
+                      dataKey="timestamp" 
+                      stroke="hsl(var(--muted-foreground))" 
+                      fontSize={12} 
+                      tickLine={false} 
+                      axisLine={false}
+                      tickFormatter={(timestamp) => format(new Date(timestamp), 'MMM d, HH:mm')}
+                      />
                     <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} unit="%"/>
                     <Tooltip 
                       contentStyle={{
                         backgroundColor: "hsl(var(--popover))",
                         borderColor: "hsl(var(--border))",
                       }}
+                      labelFormatter={(label) => format(new Date(label), 'eeee, MMM d, yyyy HH:mm')}
                     />
                     <Legend wrapperStyle={{fontSize: "0.875rem"}}/>
-                    <Line type="monotone" dataKey="health" name="Health Score" stroke="hsl(var(--primary))" strokeWidth={3} dot={{r: 4, fill: "hsl(var(--primary))"}} activeDot={{ r: 8, strokeWidth: 2, stroke: 'hsl(var(--background))' }}/>
+                    <Line type="monotone" dataKey="cropHealth" name="Health Score" stroke="hsl(var(--primary))" strokeWidth={3} dot={{r: 4, fill: "hsl(var(--primary))"}} activeDot={{ r: 8, strokeWidth: 2, stroke: 'hsl(var(--background))' }}/>
                   </LineChart>
               </ResponsiveContainer>
             </div>
@@ -210,6 +212,21 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
       </div>
+    </>
+  )
+
+}
+
+
+export default function DashboardPage() {
+  return (
+    <div className="flex-1 space-y-8 p-4 md:p-8 pt-6">
+      <div className="flex items-center justify-between space-y-2">
+        <h2 className="text-4xl font-bold tracking-tighter">Live Field Dashboard</h2>
+      </div>
+
+      <LiveDashboardContent />
+      
     </div>
   );
 }

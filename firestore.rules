@@ -8,6 +8,10 @@ service cloud.firestore {
     match /sensors/{sensorId} {
       allow read: if request.auth != null;
       allow write: if false; // Protect against unauthorized writes for now
+
+      match /history/{readingId} {
+        allow read, write: if request.auth != null;
+      }
     }
   }
 }
