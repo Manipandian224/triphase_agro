@@ -6,11 +6,13 @@ import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Bot, X, Send, User, Mic, Image as ImageIcon } from 'lucide-react';
+import { Bot, X, Send, User, Mic, Image as ImageIcon, MessagesSquare } from 'lucide-react';
 import { askCropExpert, ChatMessage } from '@/ai/flows/ask-crop-expert';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { translateText } from '@/ai/flows/translate-text';
+import { useIsMobile } from '@/hooks/use-mobile';
+
 
 export function AiChatBot() {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,6 +20,8 @@ export function AiChatBot() {
   const [input, setInput] = useState('');
   const [isThinking, setIsThinking] = useState(false);
   const [language, setLanguage] = useState('en'); 
+  const isMobile = useIsMobile();
+
 
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -105,18 +109,32 @@ export function AiChatBot() {
 
 
   if (!isOpen) {
+    const buttonClass = isMobile
+      ? "absolute -top-16 right-4 h-14 w-14 rounded-full shadow-lg z-50 bg-primary text-primary-foreground"
+      : "fixed bottom-6 right-6 h-16 w-16 rounded-full shadow-lg z-50";
+
+    const Icon = isMobile ? MessagesSquare : Bot;
+    
     return (
       <Button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 h-16 w-16 rounded-full shadow-lg z-50"
+        className={cn(buttonClass, 'hover:bg-primary/90')}
       >
-        <Bot className="h-8 w-8" />
+        <Icon className={isMobile ? "h-7 w-7" : "h-8 w-8"} />
       </Button>
     );
   }
 
+  const cardPosition = isMobile 
+    ? "fixed inset-0 z-50"
+    : "fixed bottom-6 right-6 w-96 h-[600px] z-50";
+
   return (
-    <Card className="fixed bottom-6 right-6 w-96 h-[600px] z-50 flex flex-col shadow-2xl rounded-2xl">
+    <Card className={cn(
+      "flex flex-col shadow-2xl", 
+      isMobile ? "rounded-none" : "rounded-2xl",
+      cardPosition
+      )}>
       <CardHeader className="flex flex-row items-center justify-between">
         <div className="flex items-center gap-3">
           <Avatar>

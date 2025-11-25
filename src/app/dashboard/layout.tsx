@@ -18,8 +18,8 @@ import { AiChatBot } from '@/components/ai-chat-bot';
 
 const navLinks = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutGrid },
-  { href: '/dashboard/health-analysis', label: 'Health Analysis', icon: HeartPulse },
-  { href: '/dashboard/plant-details', label: 'Plant Details', icon: Leaf },
+  { href: '/dashboard/health-analysis', label: 'Analysis', icon: HeartPulse },
+  { href: '/dashboard/plant-details', label: 'Plants', icon: Leaf },
 ];
 
 export default function DashboardLayout({
@@ -28,41 +28,14 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const isMobile = useIsMobile();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   if (isMobile === undefined) {
     return null; // or a loading skeleton
   }
 
-  const closeMenu = () => setMobileMenuOpen(false);
-
   return (
     <div className="flex min-h-screen w-full">
-      {isMobile ? (
-        <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-          <SheetTrigger asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="fixed top-4 left-4 z-50"
-            >
-              <Menu className="h-6 w-6" />
-              <span className="sr-only">Toggle Menu</span>
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="left" className="w-72 p-0 bg-transparent border-r border-white/10">
-             <SheetHeader className="sr-only">
-              <SheetTitle>Navigation Menu</SheetTitle>
-              <SheetDescription>
-                Main navigation links for the Triphase Agro dashboard.
-              </SheetDescription>
-            </SheetHeader>
-            <SidebarContent onLinkClick={closeMenu} />
-          </SheetContent>
-        </Sheet>
-      ) : (
-        <Sidebar />
-      )}
+      {!isMobile && <Sidebar />}
       <main className="flex-1 flex flex-col bg-transparent relative">
          <div
           className="absolute top-0 left-0 w-full h-full"
@@ -71,11 +44,11 @@ export default function DashboardLayout({
               'radial-gradient(circle at 30% 30%, #EAEF9D20, transparent 40%)',
           }}
         />
-        <div className={`flex-1 overflow-y-auto ${isMobile ? 'pt-16' : ''} relative z-10`}>
+        <div className={`flex-1 overflow-y-auto ${isMobile ? 'pb-24' : ''} relative z-10`}>
             {children}
         </div>
       </main>
-      <AiChatBot />
+      {isMobile ? <BottomNavBar /> : <AiChatBot />}
     </div>
   );
 }
@@ -115,6 +88,42 @@ function SidebarContent({ onLinkClick }: { onLinkClick?: () => void }) {
             {link.label}
           </Link>
         ))}
+      </nav>
+       <div className="p-4 mt-auto">
+          <AiChatBot />
+      </div>
+    </div>
+  );
+}
+
+
+function BottomNavBar() {
+  const pathname = usePathname();
+
+  return (
+    <div className="fixed bottom-0 left-0 right-0 z-50 p-2">
+       <div className="relative">
+         <AiChatBot />
+       </div>
+      <nav className="mx-auto max-w-sm rounded-full border border-white/20 bg-card/80 backdrop-blur-lg p-2">
+        <div className="flex justify-around items-center">
+          {navLinks.map(link => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={cn(
+                'flex flex-col items-center justify-center gap-1 w-20 h-14 rounded-full transition-all text-foreground/60',
+                pathname === link.href ? 'text-primary' : 'hover:bg-white/10'
+              )}
+            >
+              <link.icon className="h-6 w-6" />
+              <span className="text-xs font-medium">{link.label}</span>
+               {pathname === link.href && (
+                <div className="w-1/2 h-0.5 bg-primary rounded-full mt-1"></div>
+              )}
+            </Link>
+          ))}
+        </div>
       </nav>
     </div>
   );
