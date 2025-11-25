@@ -140,7 +140,7 @@ const CircularProgressCard: FC<CircularProgressCardProps> = ({ title, value, dis
   return (
     <CardWrapper className="items-center justify-between">
       <CornerTriangle isPositive={isPositive} className="top-0 right-0 transform rotate-90" />
-      <h3 className="text-lg font-medium text-slate-300 w-full text-left">{title}</h3>
+      <h3 className="text-lg font-medium text-slate-200 w-full text-left">{title}</h3>
       <div className="relative w-40 h-40 my-4">
         <ResponsiveContainer width="100%" height="100%">
           <RadialBarChart
@@ -155,7 +155,7 @@ const CircularProgressCard: FC<CircularProgressCardProps> = ({ title, value, dis
           >
             <PolarAngleAxis type="number" domain={[0, 100]} angleAxisId={0} tick={false} />
             <RadialBar
-              background={{ fill: 'hsl(var(--muted))' }}
+              background={{ fill: 'hsl(var(--muted) / 0.3)' }}
               dataKey="value"
               cornerRadius={10}
               animationDuration={1500}
@@ -188,7 +188,7 @@ const PumpStatusCard: FC<PumpStatusCardProps> = ({ pumpStatus, onToggle }) => {
   return (
      <CardWrapper className="items-center justify-between">
       <CornerTriangle isPositive={isOnline} className="top-0 right-0 transform rotate-90" />
-      <h3 className="text-lg font-medium text-slate-300 w-full text-left">Pump Status</h3>
+      <h3 className="text-lg font-medium text-slate-200 w-full text-left">Pump Status</h3>
       <div className="flex flex-col items-center justify-center my-4 flex-1">
         {isOnline ? (
           <>

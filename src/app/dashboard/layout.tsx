@@ -53,24 +53,29 @@ function TopNavBar() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
   return (
-     <header className="sticky top-0 z-30 flex h-20 items-center justify-between border-b border-white/20 bg-background/80 px-4 backdrop-blur-lg md:px-6">
+     <header className="sticky top-0 z-30 flex h-20 items-center justify-between border-b border-white/10 bg-black/20 px-4 backdrop-blur-lg md:px-6 shadow-lg">
       <Link href="/" className="flex items-center gap-2 font-bold text-xl text-foreground">
         <Leaf className="h-7 w-7 text-primary" />
-        <span>Triphase Agro</span>
+        <span className='text-slate-100'>Triphase Agro</span>
       </Link>
       
       {/* Desktop Navigation */}
-      <nav className="hidden md:flex gap-6 text-lg font-medium">
+      <nav className="hidden md:flex gap-2 text-base font-medium">
         {navLinks.map((link, index) => (
           <Link
             key={link.href}
             href={link.href}
             className={cn(
-              'transition-colors hover:text-primary animate-fade-in opacity-0',
-              pathname === link.href ? 'text-primary' : 'text-foreground/70'
+              'flex items-center justify-center px-4 py-2 rounded-full transition-all duration-300',
+              'bg-white/10 backdrop-blur-sm border border-white/20 shadow-inner-soft',
+              'text-slate-300 hover:bg-white/20 hover:text-white',
+              pathname === link.href ? 
+              'bg-white/20 border-white/30 text-white font-semibold shadow-glow-sm'
+               : ''
             )}
             style={{ animationDelay: `${150 * index}ms`, animationFillMode: 'forwards' }}
           >
+            <link.icon className="mr-2 h-4 w-4" />
             {link.label}
           </Link>
         ))}
@@ -80,12 +85,12 @@ function TopNavBar() {
       <div className="md:hidden">
         <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
           <SheetTrigger asChild>
-            <Button variant="ghost" size="icon">
+            <Button variant="ghost" size="icon" className='text-slate-100'>
               <Menu className="h-6 w-6" />
               <span className="sr-only">Toggle navigation menu</span>
             </Button>
           </SheetTrigger>
-          <SheetContent side="left" className="bg-background/95">
+          <SheetContent side="left" className="bg-black/40 backdrop-blur-xl border-r-white/10 p-0">
              <SidebarContent onLinkClick={() => setIsSheetOpen(false)} />
           </SheetContent>
         </Sheet>
@@ -99,10 +104,10 @@ function SidebarContent({ onLinkClick }: { onLinkClick?: () => void }) {
   const pathname = usePathname();
   return (
     <div className="flex h-full flex-col">
-      <div className="flex h-20 items-center justify-center border-b border-white/20">
+      <div className="flex h-20 items-center justify-center border-b border-white/10">
         <Link href="/" className="flex items-center gap-2 font-bold text-xl text-foreground">
           <Leaf className="h-7 w-7 text-primary" />
-          <span>Triphase Agro</span>
+          <span className='text-slate-100'>Triphase Agro</span>
         </Link>
       </div>
       <nav className="flex-1 space-y-2 p-4">
@@ -112,10 +117,11 @@ function SidebarContent({ onLinkClick }: { onLinkClick?: () => void }) {
             href={link.href}
             onClick={onLinkClick}
             className={cn(
-              'flex items-center gap-3 rounded-lg px-4 py-3 text-lg font-medium transition-all text-foreground/70 hover:bg-white/10 hover:text-foreground',
-              pathname === link.href
-                ? 'bg-[#336A29] text-white shadow-lg'
-                : ''
+              'flex items-center gap-3 rounded-full px-4 py-3 text-lg font-medium transition-all',
+              'text-slate-300 hover:bg-white/20 hover:text-white',
+               pathname === link.href
+                ? 'bg-white/20 text-white shadow-lg'
+                : 'bg-white/10'
             )}
           >
             <link.icon className="h-5 w-5" />
