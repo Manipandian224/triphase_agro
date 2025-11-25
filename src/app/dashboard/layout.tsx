@@ -5,7 +5,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetTrigger, SheetContent } from '@/components/ui/sheet';
+import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet';
 import {
   Menu,
   LayoutGrid,
@@ -51,6 +51,12 @@ export default function DashboardLayout({
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="w-72 p-0">
+             <SheetHeader className="sr-only">
+              <SheetTitle>Navigation Menu</SheetTitle>
+              <SheetDescription>
+                Main navigation links for the Triphase Agro dashboard.
+              </SheetDescription>
+            </SheetHeader>
             <SidebarContent onLinkClick={closeMenu} />
           </SheetContent>
         </Sheet>
