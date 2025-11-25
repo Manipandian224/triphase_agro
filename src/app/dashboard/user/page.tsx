@@ -1,0 +1,107 @@
+
+'use client';
+
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
+import { Switch } from '@/components/ui/switch';
+import { User, Bell, Palette, Shield } from 'lucide-react';
+
+export default function UserProfilePage() {
+  return (
+    <div className="container mx-auto p-4 md:p-8">
+      <header className="mb-12 text-center">
+        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tighter">
+          User Profile
+        </h1>
+        <p className="text-lg text-muted-foreground max-w-2xl mx-auto mt-2">
+          Manage your account settings and preferences.
+        </p>
+      </header>
+
+      <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+        {/* Left Column: User Info */}
+        <div className="md:col-span-1 flex flex-col items-center text-center">
+          <Avatar className="w-32 h-32 mb-4 border-4 border-primary/50">
+            <AvatarImage src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fDE?w=200" />
+            <AvatarFallback>
+              <User className="w-16 h-16" />
+            </AvatarFallback>
+          </Avatar>
+          <h2 className="text-2xl font-bold">Alex Doe</h2>
+          <p className="text-muted-foreground">alex.doe@example.com</p>
+          <Button variant="outline" className="mt-4">
+            Edit Profile
+          </Button>
+        </div>
+
+        {/* Right Column: Settings */}
+        <div className="md:col-span-2">
+          <Card className="shadow-lg bg-card/50">
+            <CardHeader>
+              <CardTitle>Account Settings</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-8">
+              {/* General Settings */}
+              <div className="space-y-4">
+                <h3 className="font-semibold text-lg flex items-center">
+                  <User className="mr-3 h-5 w-5 text-primary" /> General
+                </h3>
+                <div className="grid gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="name">Full Name</Label>
+                    <Input id="name" defaultValue="Alex Doe" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email Address</Label>
+                    <Input id="email" type="email" defaultValue="alex.doe@example.com" />
+                  </div>
+                </div>
+              </div>
+
+              <Separator />
+
+              {/* Notification Settings */}
+              <div className="space-y-4">
+                <h3 className="font-semibold text-lg flex items-center">
+                  <Bell className="mr-3 h-5 w-5 text-primary" /> Notifications
+                </h3>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="email-notifications">Email Notifications</Label>
+                    <Switch id="email-notifications" defaultChecked />
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="push-notifications">Push Notifications</Label>
+                    <Switch id="push-notifications" />
+                  </div>
+                </div>
+              </div>
+              
+               <Separator />
+
+              {/* Theme Settings */}
+              <div className="space-y-4">
+                <h3 className="font-semibold text-lg flex items-center">
+                  <Palette className="mr-3 h-5 w-5 text-primary" /> Appearance
+                </h3>
+                <div className="flex items-center justify-between">
+                    <Label htmlFor="dark-mode">Dark Mode</Label>
+                    <Switch id="dark-mode" defaultChecked disabled />
+                  </div>
+              </div>
+
+
+              <div className="pt-4 text-right">
+                <Button>Save Changes</Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -11,6 +11,7 @@ import {
   LayoutGrid,
   HeartPulse,
   Leaf,
+  User,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { AiChatBot } from '@/components/ai-chat-bot';
@@ -19,6 +20,7 @@ const navLinks = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutGrid },
   { href: '/dashboard/health-analysis', label: 'Analysis', icon: HeartPulse },
   { href: '/dashboard/plant-details', label: 'Plants', icon: Leaf },
+  { href: '/dashboard/user', label: 'User', icon: User },
 ];
 
 export default function DashboardLayout({
@@ -59,14 +61,15 @@ function TopNavBar() {
       
       {/* Desktop Navigation */}
       <nav className="hidden md:flex gap-6 text-lg font-medium">
-        {navLinks.map(link => (
+        {navLinks.map((link, index) => (
           <Link
             key={link.href}
             href={link.href}
             className={cn(
-              'transition-colors hover:text-primary',
+              'transition-colors hover:text-primary animate-fade-in opacity-0',
               pathname === link.href ? 'text-primary' : 'text-foreground/70'
             )}
+            style={{ animationDelay: `${150 * index}ms`, animationFillMode: 'forwards' }}
           >
             {link.label}
           </Link>
@@ -123,3 +126,4 @@ function SidebarContent({ onLinkClick }: { onLinkClick?: () => void }) {
     </div>
   );
 }
+
