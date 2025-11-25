@@ -1,183 +1,361 @@
+/**
+ * == INSTRUCTIONS FOR FIREBASE REALTIME DATABASE INTEGRATION ==
+ *
+ * 1. Import Firebase dependencies:
+ *    - In this file, uncomment the line: `// import { ref, onValue } from 'firebase/database';`
+ *    - You will also need your `db` instance from your firebase config, e.g. `// import { db } from '@/firebase';`
+ *
+ * 2. Connect to Firebase paths in the `useEffect` hook within `RealtimeSensorData` component:
+ *    - Temperature History -> `Irrigation/Temperature/history` (assuming you store history)
+ *    - Humidity History    -> `Irrigation/Humidity/history`
+ *    - Soil Moisture       -> `Irrigation/SoilMoisture` (for the current value)
+ *    - Water Level         -> `Irrigation/WaterLevel` (for the current value)
+ *
+ * 3. Update state with real data:
+ *    - Inside the `onValue` callback, use the state setters (e.g., `setTemperature`, `setSoilMoisture`) 
+ *      to update the component with live data from Firebase.
+ *
+ * 4. Recommended Gradient Colors:
+ *    - Temperature: `from-cyan-400 to-blue-500`
+ *    - Humidity: `from-purple-400 to-pink-500`
+ *    - Soil Moisture: `from-teal-400 to-green-500`
+ *    - Water Level: `from-sky-400 to-indigo-500`
+ */
 
 'use client';
-import { useMemo, useState } from 'react';
-import { ref, update } from 'firebase/database';
+import { useState, useEffect, useMemo, FC, ReactNode } from 'react';
 import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardFooter,
-} from '@/components/ui/card';
+  LineChart,
+  Line,
+  Area,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  RadialBarChart,
+  RadialBar,
+  PolarAngleAxis,
+} from 'recharts';
+import { cn } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Button } from '@/components/ui/button';
-import { useFirebase } from '@/firebase/client-provider';
-import { useRtdbValue } from '@/hooks/use-rtdb-value';
-import type { IrrigationData } from '@/types/sensor-data';
-import {
-  Thermometer,
-  Droplets,
-  Wind,
-  Power,
-  Activity,
-  AlertCircle,
-  Clock,
-} from 'lucide-react';
-import { format } from 'date-fns';
+import { TrendingUp, TrendingDown, Droplets, Waves } from 'lucide-react';
 
-// Define the structure for each sensor card
-const sensorCards = [
-  {
-    title: 'Soil Moisture',
-    dataKey: 'SoilMoisture',
-    unit: '%',
-    icon: Droplets,
-  },
-  { title: 'Temperature', dataKey: 'Temperature', unit: '°C', icon: Thermometer },
-  { title: 'Humidity', dataKey: 'Humidity', unit: '%', icon: Wind },
-];
+// == MOCK DATA (replace with Firebase data) ==
+const generateMockHistory = (points = 10, min = 20, max = 30) => {
+  return Array.from({ length: points }, (_, i) => ({
+    time: `-${points - i}m`,
+    value: parseFloat((Math.random() * (max - min) + min).toFixed(1)),
+  }));
+};
 
-/**
- * A component to display real-time sensor data from Firebase RTDB.
- */
+const mockTemperatureHistory = generateMockHistory(10, 18, 25);
+const mockHumidityHistory = generateMockHistory(10, 40, 60);
+
+// == MAIN COMPONENT ==
 export function RealtimeSensorData() {
-  const { rtdb } = useFirebase();
-  const [isUpdating, setIsUpdating] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  // Define the query to get the irrigation data.
-  const sensorQuery = useMemo(() => rtdb ? ref(rtdb, 'Irrigation') : null, [rtdb]);
+  // == STATE FOR SENSOR VALUES ==
+  // Replace initial values with data from Firebase
+  const [temperature, setTemperature] = useState({
+    current: 22.5,
+    change: 1.2, // Positive or negative change
+    history: mockTemperatureHistory,
+  });
 
-  const {
-    data: sensorData,
-    loading,
-    error,
-  } = useRtdbValue<IrrigationData>(sensorQuery);
-  
-  const lastUpdateFormatted = useMemo(() => {
-    if (!sensorData?.LastUpdate) return null;
-    // Assuming LastUpdate is a Unix timestamp in seconds
-    return format(new Date(sensorData.LastUpdate * 1000), 'MMM d, yyyy, h:mm:ss a');
-  }, [sensorData?.LastUpdate]);
+  const [humidity, setHumidity] = useState({
+    current: 55,
+    change: -2.5,
+    history: mockHumidityHistory,
+  });
 
-  const handleTogglePump = async () => {
-    if (!rtdb || sensorData?.PumpStatus === undefined) return;
-    setIsUpdating(true);
-    try {
-      const irrigationRef = ref(rtdb, 'Irrigation');
-      // Set the PumpStatus to the opposite of its current value
-      await update(irrigationRef, {
-        PumpStatus: !sensorData.PumpStatus,
-      });
-    } catch (err) {
-      console.error("Failed to update pump status:", err);
-      // Optionally, show a toast notification on error
-    } finally {
-      setIsUpdating(false);
-    }
-  };
+  const [soilMoisture, setSoilMoisture] = useState(68);
+  const [waterLevel, setWaterLevel] = useState(82);
 
+  // == FIREBASE DATA FETCHING ==
+  useEffect(() => {
+    // This is where you'll fetch data from Firebase Realtime Database.
+    // The timeout simulates a loading state. Remove it in production.
+    const timer = setTimeout(() => setLoading(false), 1500);
 
-  if (error) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-destructive">Error</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p>Could not fetch sensor data. Please try again later.</p>
-          <p className="text-xs text-muted-foreground mt-2">
-            {error.message}
-          </p>
-        </CardContent>
-      </Card>
-    );
+    /*
+    // --- UNCOMMENT AND MODIFY FOR FIREBASE INTEGRATION ---
+    // import { ref, onValue } from 'firebase/database';
+    // import { db } from '@/firebase'; // Adjust this import to your Firebase config file
+
+    if (!db) return;
+
+    // Example for Soil Moisture (current value)
+    const soilMoistureRef = ref(db, 'Irrigation/SoilMoisture');
+    const unsubscribeSoil = onValue(soilMoistureRef, (snapshot) => {
+      if (snapshot.exists()) {
+        setSoilMoisture(snapshot.val());
+      }
+    });
+
+    // Example for Water Level (current value)
+    const waterLevelRef = ref(db, 'Irrigation/WaterLevel');
+    const unsubscribeWater = onValue(waterLevelRef, (snapshot) => {
+      if (snapshot.exists()) {
+        setWaterLevel(snapshot.val());
+      }
+    });
+
+    // Example for Temperature (history)
+    const tempHistoryRef = ref(db, 'Irrigation/Temperature'); // Adjust path if you have a history sub-node
+    const unsubscribeTemp = onValue(tempHistoryRef, (snapshot) => {
+        if (snapshot.exists()) {
+            const data = snapshot.val();
+            // Assuming data is an object like { current: 22.5, change: 1.2, history: [...] }
+            // You may need to format the history array to match what the chart expects.
+            setTemperature(data);
+        }
+    });
+    
+    // Example for Humidity (history)
+     const humidityHistoryRef = ref(db, 'Irrigation/Humidity');
+     const unsubscribeHumidity = onValue(humidityHistoryRef, (snapshot) => {
+        if(snapshot.exists()) {
+            setHumidity(snapshot.val());
+        }
+     });
+
+    // Clean up listeners on component unmount
+    return () => {
+      unsubscribeSoil();
+      unsubscribeWater();
+      unsubscribeTemp();
+      unsubscribeHumidity();
+    };
+    */
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return <DashboardLoadingSkeleton />;
   }
 
-  const isPumpOn = sensorData?.PumpStatus === true;
-  const pumpStatusText = isPumpOn ? 'ON' : 'OFF';
-
   return (
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      {/* Pump Status Card */}
-      <Card className="bg-card shadow-soft-sm border-white/10 flex flex-col">
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium text-muted-foreground">
-            Pump Status
-          </CardTitle>
-          {loading ? <Activity className="h-5 w-5 text-muted-foreground" /> : <Power className={`h-5 w-5 ${isPumpOn ? 'text-green-400' : 'text-destructive'}`} />}
-        </CardHeader>
-        <CardContent className="flex-1">
-          {loading ? (
-            <Skeleton className="h-8 w-28" />
-          ) : (
-            <>
-              {sensorData?.PumpStatus !== undefined ? (
-                 <div className="text-3xl font-bold">{pumpStatusText}</div>
-              ) : (
-                <p className="text-yellow-500 flex items-center mt-1 text-sm"><AlertCircle className="h-4 w-4 mr-1" />No data</p>
-              )}
-            </>
-          )}
-        </CardContent>
-        <CardFooter>
-          <Button 
-            variant="outline" 
-            className="w-full"
-            onClick={handleTogglePump}
-            disabled={loading || isUpdating || sensorData?.PumpStatus === undefined}
-          >
-            {isUpdating ? 'Updating...' : `Turn ${isPumpOn ? 'OFF' : 'ON'}`}
-          </Button>
-        </CardFooter>
-      </Card>
-      
-       {/* Last Updated Card */}
-      <Card className="bg-card shadow-soft-sm border-white/10 lg:col-span-2">
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium text-muted-foreground">
-            Last Update
-          </CardTitle>
-          <Clock className="h-5 w-5 text-muted-foreground" />
-        </CardHeader>
-        <CardContent>
-          {loading ? (
-            <Skeleton className="h-8 w-48" />
-          ) : (
-            <div className="text-3xl font-bold">{lastUpdateFormatted || 'N/A'}</div>
-          )}
-        </CardContent>
-      </Card>
-
-      {/* Dynamic Sensor Cards */}
-      {sensorCards.map(({ title, dataKey, unit, icon: Icon }) => (
-        <Card key={title} className="bg-card shadow-soft-sm border-white/10">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              {title}
-            </CardTitle>
-            <Icon className="h-5 w-5 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            {loading || !sensorData ? (
-              <Skeleton className="h-8 w-24" />
-            ) : (
-              <>
-                {sensorData[dataKey as keyof IrrigationData] !== undefined ? (
-                  <div className="text-3xl font-bold">
-                    {(sensorData[dataKey as keyof IrrigationData] as number)?.toFixed(1) || 'N/A'}
-                    {unit && <span className="text-xl text-muted-foreground ml-1">{unit}</span>}
-                  </div>
-                ) : (
-                  <p className="text-yellow-500 flex items-center mt-1 text-sm">
-                      <AlertCircle className="h-4 w-4 mr-1" />
-                      No data
-                  </p>
-                )}
-              </>
-            )}
-          </CardContent>
-        </Card>
-      ))}
+    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <LineChartCard
+        title="Temperature"
+        currentValue={temperature.current}
+        unit="°C"
+        change={temperature.change}
+        data={temperature.history}
+        dataKey="value"
+        gradientFrom="from-cyan-400"
+        gradientTo="to-blue-500"
+        gradientId="tempGradient"
+      />
+      <LineChartCard
+        title="Humidity"
+        currentValue={humidity.current}
+        unit="%"
+        change={humidity.change}
+        data={humidity.history}
+        dataKey="value"
+        gradientFrom="from-purple-400"
+        gradientTo="to-pink-500"
+        gradientId="humidityGradient"
+      />
+      <CircularProgressCard
+        title="Soil Moisture"
+        value={soilMoisture}
+        icon={Droplets}
+        gradientFrom="from-teal-400"
+        gradientTo="to-green-500"
+      />
+      <CircularProgressCard
+        title="Water Level"
+        value={waterLevel}
+        icon={Waves}
+        gradientFrom="from-sky-400"
+        gradientTo="to-indigo-500"
+      />
     </div>
   );
 }
+
+// == SUBCOMPONENTS ==
+
+interface CardWrapperProps {
+  children: ReactNode;
+  className?: string;
+  isPositive?: boolean;
+}
+
+const CardWrapper: FC<CardWrapperProps> = ({ children, className, isPositive }) => (
+  <div
+    className={cn(
+      'relative p-5 bg-slate-900 rounded-xl shadow-lg border border-slate-800 overflow-hidden',
+      className
+    )}
+  >
+    {isPositive !== undefined && (
+      <div
+        className={cn(
+          'absolute w-0 h-0 border-l-[60px] border-b-[60px] border-l-transparent -bottom-1 -left-1',
+          isPositive ? 'border-b-green-500/30' : 'border-b-red-500/30'
+        )}
+        style={{
+          filter: 'blur(5px)',
+        }}
+      />
+    )}
+    {children}
+  </div>
+);
+
+interface LineChartCardProps {
+  title: string;
+  currentValue: number;
+  unit: string;
+  change: number;
+  data: any[];
+  dataKey: string;
+  gradientFrom: string;
+  gradientTo: string;
+  gradientId: string;
+}
+
+const LineChartCard: FC<LineChartCardProps> = ({
+  title,
+  currentValue,
+  unit,
+  change,
+  data,
+  dataKey,
+  gradientFrom,
+  gradientTo,
+  gradientId,
+}) => {
+  const isPositive = change >= 0;
+  const ChangeIcon = isPositive ? TrendingUp : TrendingDown;
+
+  return (
+    <CardWrapper isPositive={isPositive} className="col-span-1 sm:col-span-2">
+      <div className="flex justify-between items-start mb-2">
+        <h3 className="text-lg font-medium text-slate-300">{title}</h3>
+        <div className="text-right">
+          <p className="text-3xl font-bold text-white">
+            {currentValue}
+            <span className="text-xl text-slate-400 ml-1">{unit}</span>
+          </p>
+          <div
+            className={cn(
+              'flex items-center justify-end text-sm font-semibold',
+              isPositive ? 'text-green-400' : 'text-red-400'
+            )}
+          >
+            <ChangeIcon className="w-4 h-4 mr-1" />
+            {isPositive ? '+' : ''}
+            {change}%
+          </div>
+        </div>
+      </div>
+      <div className="h-40 -ml-5 -mr-2">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={data} margin={{ top: 20, right: 10, left: 10, bottom: 0 }}>
+            <defs>
+              <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" className={cn('stop-color', gradientFrom)} stopOpacity={0.3} />
+                <stop offset="95%" className={cn('stop-color', gradientTo)} stopOpacity={0} />
+              </linearGradient>
+            </defs>
+            <XAxis
+              dataKey="time"
+              axisLine={false}
+              tickLine={false}
+              tick={{ fill: 'hsl(220 10% 40%)', fontSize: 12 }}
+              interval="preserveStartEnd"
+              padding={{ left: 20, right: 20 }}
+            />
+            <Tooltip
+              contentStyle={{
+                backgroundColor: 'rgba(5, 15, 35, 0.8)',
+                borderColor: 'hsl(220 10% 30%)',
+                borderRadius: '0.5rem',
+                color: '#fff',
+              }}
+              cursor={{ stroke: 'hsl(220 10% 50%)', strokeWidth: 1, strokeDasharray: '3 3' }}
+            />
+            <Area
+              type="monotone"
+              dataKey={dataKey}
+              stroke="none"
+              fill={`url(#${gradientId})`}
+            />
+            <Line
+              type="monotone"
+              dataKey={dataKey}
+              strokeWidth={3}
+              className={cn('stroke-color', gradientTo)}
+              dot={false}
+              style={{ filter: `drop-shadow(0 2px 4px hsl(var(--primary) / 0.5))` }}
+              animationDuration={1500}
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+    </CardWrapper>
+  );
+};
+
+
+interface CircularProgressCardProps {
+  title: string;
+  value: number;
+  icon: React.ElementType;
+  gradientFrom: string;
+  gradientTo: string;
+}
+
+const CircularProgressCard: FC<CircularProgressCardProps> = ({ title, value, icon: Icon, gradientFrom, gradientTo }) => {
+  return (
+    <CardWrapper isPositive={value > 50} className="flex flex-col items-center justify-center">
+      <h3 className="text-lg font-medium text-slate-300 absolute top-5 left-5">{title}</h3>
+      <div className="relative w-40 h-40">
+        <ResponsiveContainer width="100%" height="100%">
+          <RadialBarChart
+            cx="50%"
+            cy="50%"
+            innerRadius="80%"
+            outerRadius="100%"
+            barSize={12}
+            data={[{ value: value, fill: 'url(#progressGradient)' }]}
+            startAngle={90}
+            endAngle={-270}
+          >
+            <defs>
+              <linearGradient id="progressGradient">
+                  <stop offset="0%" className={cn('stop-color', gradientFrom)} />
+                  <stop offset="100%" className={cn('stop-color', gradientTo)} />
+              </linearGradient>
+            </defs>
+            <PolarAngleAxis type="number" domain={[0, 100]} angleAxisId={0} tick={false} />
+            <RadialBar
+              background={{ fill: 'hsl(220 20% 15%)' }}
+              dataKey="value"
+              cornerRadius={10}
+              animationDuration={1500}
+            />
+          </RadialBarChart>
+        </ResponsiveContainer>
+        <div className="absolute inset-0 flex flex-col items-center justify-center">
+           <Icon className={cn('w-6 h-6 mb-1 text-color', gradientFrom)} />
+          <span className="text-4xl font-bold text-white">{value}%</span>
+        </div>
+      </div>
+    </CardWrapper>
+  );
+};
+
+const DashboardLoadingSkeleton = () => (
+    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <Skeleton className="h-[236px] col-span-1 sm:col-span-2 bg-slate-900/80" />
+      <Skeleton className="h-[236px] col-span-1 sm:col-span-2 bg-slate-900/80" />
+      <Skeleton className="h-[236px] col-span-1 sm:col-span-1 bg-slate-900/80" />
+      <Skeleton className="h-[236px] col-span-1 sm:col-span-1 bg-slate-900/80" />
+    </div>
+);

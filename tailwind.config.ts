@@ -51,6 +51,16 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        'stop-color': {
+          'from-cyan-400': '#22d3ee',
+          'to-blue-500': '#3b82f6',
+          'from-purple-400': '#c084fc',
+          'to-pink-500': '#ec4899',
+          'from-teal-400': '#2dd4bf',
+          'to-green-500': '#22c55e',
+          'from-sky-400': '#38bdf8',
+          'to-indigo-500': '#6366f1',
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -80,5 +90,3 @@ export default {
   },
   plugins: [require('tailwindcss-animate')],
 } satisfies Config;
-
-    
