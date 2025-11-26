@@ -10,6 +10,8 @@ import { Menu, Leaf, Loader } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { AiChatBot } from '@/components/ai-chat-bot';
 import { useUser } from '@/firebase/auth/use-user';
+import { LanguageProvider } from '@/context/language-context';
+import { LanguageSelector } from '@/components/language-selector';
 
 const navLinks = [
   { href: '/dashboard', label: 'Dashboard' },
@@ -50,16 +52,18 @@ export default function DashboardLayout({
   }
 
   return (
-    <div className="flex min-h-screen w-full flex-col">
-       <div
+    <LanguageProvider>
+      <div className="flex min-h-screen w-full flex-col">
+        <div
           className="absolute top-0 left-0 w-full h-full -z-10 bg-gradient-to-br from-theme-start to-theme-end"
         />
-      <TopNavBar />
-      <main className="flex-1 overflow-y-auto">
-        {children}
-      </main>
-      <AiChatBot />
-    </div>
+        <TopNavBar />
+        <main className="flex-1 overflow-y-auto">
+          {children}
+        </main>
+        <AiChatBot />
+      </div>
+    </LanguageProvider>
   );
 }
 
@@ -100,19 +104,22 @@ function TopNavBar() {
           })}
         </nav>
 
-        {/* Mobile Navigation */}
-        <div className="md:hidden">
-          <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className='text-slate-100'>
-                <Menu className="h-6 w-6" />
-                <span className="sr-only">Toggle navigation menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="left" className="bg-black/60 backdrop-blur-xl border-r-white/10 p-0">
-               <SidebarContent onLinkClick={() => setIsSheetOpen(false)} />
-            </SheetContent>
-          </Sheet>
+        <div className='flex items-center gap-2'>
+           <LanguageSelector />
+            {/* Mobile Navigation */}
+            <div className="md:hidden">
+              <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+                <SheetTrigger asChild>
+                  <Button variant="ghost" size="icon" className='text-slate-100'>
+                    <Menu className="h-6 w-6" />
+                    <span className="sr-only">Toggle navigation menu</span>
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="left" className="bg-black/60 backdrop-blur-xl border-r-white/10 p-0">
+                   <SidebarContent onLinkClick={() => setIsSheetOpen(false)} />
+                </SheetContent>
+              </Sheet>
+            </div>
         </div>
       </div>
     </header>

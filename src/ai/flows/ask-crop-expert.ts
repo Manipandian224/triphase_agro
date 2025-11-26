@@ -79,9 +79,26 @@ const askCropExpertFlow = ai.defineFlow(
   async (input) => {
     const { history, question, photoDataUri, targetLanguage } = input;
 
+    // Translate user history to English for the model
+    const translatedHistory = await Promise.all(
+        history.map(async (message) => {
+            if (message.role === 'user' && message.content[0]?.text) {
+                 const translatedText = await ai.generate({
+                    prompt: `Translate the following text to English: "${message.content[0].text}"`,
+                    model: 'googleai/gemini-2.5-flash',
+                });
+                return {
+                    ...message,
+                    content: [{ text: translatedText.text }],
+                };
+            }
+            return message;
+        })
+    );
+
     const { output } = await cropExpertPrompt(
       { question, photoDataUri, targetLanguage },
-      { history }
+      { history: translatedHistory }
     );
     return output!;
   }

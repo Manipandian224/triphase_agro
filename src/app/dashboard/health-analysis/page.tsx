@@ -34,6 +34,8 @@ import { useFirebase } from '@/firebase/client-provider';
 import { useRtdbValue } from '@/hooks/use-rtdb-value';
 import { ref } from 'firebase/database';
 import { analyzeCropHealthFromImageUrl } from '@/ai/flows/analyze-crop-health-from-image-url';
+import { useLanguage } from '@/context/language-context';
+import { useTranslation } from '@/hooks/use-translation';
 
 
 export default function HealthAnalysisPage() {
@@ -49,6 +51,9 @@ export default function HealthAnalysisPage() {
   const { rtdb } = useFirebase();
   const dbRef = rtdb ? ref(rtdb, 'SmartFarm/cropImageURL') : null;
   const { data: firebaseImageUrl } = useRtdbValue<string>(dbRef);
+
+  const { language } = useLanguage();
+  const { translate, translatedTexts } = useTranslation();
 
   const displayImage = selectedImage || firebaseImageUrl;
 
@@ -84,46 +89,62 @@ export default function HealthAnalysisPage() {
     let imageToAnalyze = selectedImage || firebaseImageUrl;
     
     if (!imageToAnalyze) {
-      setError('Please select, capture, or ensure an image is available from the database.');
-      return;
+        setError('Please select an image to analyze.');
+        return;
     }
     
     setIsLoading(true);
     setError(null);
+    setAnalysisResult(null);
     
     try {
-      let result;
-      // If the image is a URL (from Firebase), use the server-side flow.
-      if (imageToAnalyze.startsWith('http')) {
-        result = await analyzeCropHealthFromImageUrl({ photoUrl: imageToAnalyze });
-      } else {
-        // If it's a data URI (from upload/camera), use the direct flow.
-        result = await analyzeCropHealthFromImage({ photoDataUri: imageToAnalyze });
-      }
-      setAnalysisResult(result);
+        let result;
+        if (imageToAnalyze.startsWith('http')) {
+            result = await analyzeCropHealthFromImageUrl({ photoUrl: imageToAnalyze });
+        } else {
+            result = await analyzeCropHealthFromImage({ photoDataUri: imageToAnalyze });
+        }
+
+        // Translate the results
+        const [translatedLabel, translatedProblems, translatedSolutions] = await Promise.all([
+            translate(result.label, language),
+            Promise.all(result.problems.map(p => translate(p, language))),
+            Promise.all(result.solutions.map(s => translate(s, language)))
+        ]);
+        
+        setAnalysisResult({
+            ...result,
+            label: translatedLabel,
+            problems: translatedProblems,
+            solutions: translatedSolutions
+        });
 
     } catch (err: any) {
       console.error(err);
-      setError(err.message || 'An error occurred during analysis. Please try again.');
+      const translatedError = await translate('An error occurred during analysis. Please try again.', language);
+      setError(translatedError);
     } finally {
       setIsLoading(false);
     }
   };
+
 
   const videoConstraints = {
     width: 1280,
     height: 720,
     facingMode: "environment"
   };
+  
+  const t = (key: string, defaultText: string) => translatedTexts[key] || defaultText;
 
   return (
     <div className="container mx-auto p-4 md:p-8 space-y-8">
       <header className="text-center">
         <h1 className="text-4xl md:text-5xl font-extrabold tracking-tighter">
-          AI Crop Health Analysis
+          {t('title', 'AI Crop Health Analysis')}
         </h1>
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto mt-2">
-          Use your camera, upload an image, or view the live feed to get an instant health diagnosis.
+           {t('subtitle', 'Use your camera, upload an image, or view the live feed to get an instant health diagnosis.')}
         </p>
       </header>
 
@@ -131,9 +152,9 @@ export default function HealthAnalysisPage() {
         {/* Left Column: Image Source */}
         <Card className="shadow-lg">
           <CardHeader>
-            <CardTitle>Image Source</CardTitle>
+            <CardTitle>{t('imageSourceTitle', 'Image Source')}</CardTitle>
             <CardDescription>
-              The latest image from your smart farm is shown. You can also upload or capture a new one.
+              {t('imageSourceDesc', 'The latest image from your smart farm is shown. You can also upload or capture a new one.')}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -149,8 +170,8 @@ export default function HealthAnalysisPage() {
                         />
                     </div>
                     <div className='flex gap-2'>
-                        <Button onClick={() => setShowCamera(false)} variant='outline' className='flex-1'>Cancel</Button>
-                        <Button onClick={capture} className='flex-1'><Camera className='mr-2 h-4 w-4'/>Capture</Button>
+                        <Button onClick={() => setShowCamera(false)} variant='outline' className='flex-1'>{t('cancel', 'Cancel')}</Button>
+                        <Button onClick={capture} className='flex-1'><Camera className='mr-2 h-4 w-4'/>{t('capture', 'Capture')}</Button>
                     </div>
                  </div>
             ) : (
@@ -183,11 +204,11 @@ export default function HealthAnalysisPage() {
                             variant="outline"
                         >
                             <Upload className="mr-2 h-4 w-4" />
-                            Upload File
+                            {t('uploadFile', 'Upload File')}
                         </Button>
                         <Button onClick={() => setShowCamera(true)} className="flex-1" variant="outline">
                             <Camera className="mr-2 h-4 w-4" />
-                            Use Camera
+                             {t('useCamera', 'Use Camera')}
                         </Button>
                         <Input
                             type="file"
@@ -206,11 +227,11 @@ export default function HealthAnalysisPage() {
                 className="w-full h-12 text-lg"
               >
                 {isLoading ? (
-                  'Analyzing...'
+                  t('analyzing', 'Analyzing...')
                 ) : (
                   <>
                     <HeartPulse className="mr-2 h-5 w-5" />
-                    Analyze Image
+                    {t('analyzeImage', 'Analyze Image')}
                   </>
                 )}
               </Button>
@@ -220,9 +241,9 @@ export default function HealthAnalysisPage() {
         {/* Right Column: Analysis Results */}
         <Card className="shadow-lg min-h-[500px]">
           <CardHeader>
-            <CardTitle>Analysis Report</CardTitle>
+            <CardTitle>{t('reportTitle', 'Analysis Report')}</CardTitle>
             <CardDescription>
-              Review the diagnosis and recommended actions below.
+              {t('reportDesc', 'Review the diagnosis and recommended actions below.')}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -231,7 +252,7 @@ export default function HealthAnalysisPage() {
             {!isLoading && !analysisResult && (
               <div className="text-center text-muted-foreground py-12">
                 <Info className="mx-auto h-12 w-12 mb-4" />
-                <p>Your analysis report will appear here.</p>
+                <p>{t('reportPlaceholder', 'Your analysis report will appear here.')}</p>
               </div>
             )}
             {analysisResult && <AnalysisResultView result={analysisResult} />}
@@ -245,6 +266,8 @@ export default function HealthAnalysisPage() {
 function AnalysisResultView({ result }: { result: AnalyzeCropHealthFromImageOutput }) {
   const isHealthy = result.label.toLowerCase().includes('healthy');
   const confidencePercent = Math.round(result.confidence * 100);
+   const { translatedTexts } = useTranslation();
+   const t = (key: string, defaultText: string) => translatedTexts[key] || defaultText;
 
   return (
     <div className="space-y-6">
@@ -256,7 +279,7 @@ function AnalysisResultView({ result }: { result: AnalyzeCropHealthFromImageOutp
             ) : (
               <AlertCircle className="mr-2 h-6 w-6 text-yellow-500" />
             )}
-            Diagnosis: {result.label}
+            {t('diagnosisLabel', 'Diagnosis')}: {result.label}
           </h3>
            <span
               className={`font-bold text-lg ${
@@ -267,13 +290,13 @@ function AnalysisResultView({ result }: { result: AnalyzeCropHealthFromImageOutp
             </span>
         </div>
         <Progress value={confidencePercent} className="h-2" indicatorClassName={confidencePercent < 80 ? "bg-yellow-500" : ""} />
-        <p className="text-xs text-muted-foreground mt-1">AI Confidence Score</p>
+        <p className="text-xs text-muted-foreground mt-1">{t('confidenceScore', 'AI Confidence Score')}</p>
       </div>
 
       {!isHealthy && (
         <div>
           <h4 className="font-bold text-lg mb-2 flex items-center">
-            <AlertCircle className="mr-2 h-5 w-5 text-destructive" /> Identified Problems
+            <AlertCircle className="mr-2 h-5 w-5 text-destructive" /> {t('problemsTitle', 'Identified Problems')}
           </h4>
           <ul className="list-disc pl-5 space-y-1 text-muted-foreground">
             {result.problems.map((problem, index) => (
@@ -285,7 +308,7 @@ function AnalysisResultView({ result }: { result: AnalyzeCropHealthFromImageOutp
 
       <div>
         <h4 className="font-bold text-lg mb-2 flex items-center">
-          <Lightbulb className="mr-2 h-5 w-5 text-primary" /> Recommended Solutions
+          <Lightbulb className="mr-2 h-5 w-5 text-primary" /> {t('solutionsTitle', 'Recommended Solutions')}
         </h4>
         <ul className="list-disc pl-5 space-y-1 text-muted-foreground">
           {result.solutions.map((solution, index) => (
@@ -296,7 +319,7 @@ function AnalysisResultView({ result }: { result: AnalyzeCropHealthFromImageOutp
 
        <div className="text-right mt-4">
             <Button variant="link" className="text-primary">
-                Learn More <ChevronRight className="ml-1 h-4 w-4" />
+                {t('learnMore', 'Learn More')} <ChevronRight className="ml-1 h-4 w-4" />
             </Button>
         </div>
     </div>
