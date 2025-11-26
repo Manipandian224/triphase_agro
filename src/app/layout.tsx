@@ -42,9 +42,7 @@ export default function RootLayout({
       )}>
         <div className={cn(
           "min-h-screen w-full",
-          isAuthPage 
-            ? 'bg-gradient-to-br from-[#0B0F0B] via-[#163832] to-[#0B0F0B]'
-            : 'bg-gradient-to-br from-[#EAEF9D] via-[#B7D67A] to-[#336A29]'
+           'bg-gradient-to-br from-theme-start to-theme-end'
         )}>
           <FirebaseProvider>
             {children}
