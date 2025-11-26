@@ -6,23 +6,17 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetTrigger, SheetContent } from '@/components/ui/sheet';
-import {
-  Menu,
-  LayoutGrid,
-  HeartPulse,
-  Leaf,
-  User,
-  Loader,
-} from 'lucide-react';
+import { Menu, Leaf, Loader } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { AiChatBot } from '@/components/ai-chat-bot';
 import { useUser } from '@/firebase/auth/use-user';
 
 const navLinks = [
-  { href: '/dashboard', label: 'Dashboard', icon: LayoutGrid },
-  { href: '/dashboard/health-analysis', label: 'Analysis', icon: HeartPulse },
-  { href: '/dashboard/plant-details', label: 'Plants', icon: Leaf },
-  { href: '/dashboard/user', label: 'User', icon: User },
+  { href: '/dashboard', label: 'HOME' },
+  { href: '/dashboard/about', label: 'ABOUT US' },
+  { href: '/dashboard/portfolio', label: 'PORTFOLIO' },
+  { href: '/dashboard/services', label: 'SERVICES' },
+  { href: '/dashboard/contact', label: 'CONTACT US' },
 ];
 
 export default function DashboardLayout({
@@ -53,16 +47,16 @@ export default function DashboardLayout({
   }
 
   return (
-    <div className="flex min-h-screen w-full flex-col bg-transparent">
-       <div
-        className="absolute top-0 left-0 w-full h-full -z-10"
-        style={{
-          background:
-            'radial-gradient(circle at 30% 30%, #EAEF9D20, transparent 40%)',
-        }}
-      />
+    <div className="flex min-h-screen w-full flex-col bg-background">
       <TopNavBar />
       <main className="flex-1">
+        <div
+          className="absolute top-0 left-0 w-full h-full -z-10"
+          style={{
+            background:
+              'radial-gradient(circle at 30% 30%, #EAEF9D20, transparent 40%)',
+          }}
+        />
         {children}
       </main>
       <AiChatBot />
@@ -75,47 +69,52 @@ function TopNavBar() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
   return (
-     <header className="sticky top-0 z-30 flex h-20 items-center justify-between border-b border-white/10 bg-black/20 px-4 backdrop-blur-lg md:px-6 shadow-lg">
-      <Link href="/" className="flex items-center gap-2 font-bold text-xl text-foreground">
-        <Leaf className="h-7 w-7 text-primary" />
-        <span className='text-slate-100'>Triphase Agro</span>
-      </Link>
-      
-      {/* Desktop Navigation */}
-      <nav className="hidden md:flex gap-2 text-base font-medium">
-        {navLinks.map((link, index) => (
-          <Link
-            key={link.href}
-            href={link.href}
-            className={cn(
-              'flex items-center justify-center px-4 py-2 rounded-full transition-all duration-300',
-              'bg-white/10 backdrop-blur-sm border border-white/20 shadow-inner-soft',
-              'text-slate-300 hover:bg-white/20 hover:text-white',
-              pathname === link.href ? 
-              'bg-white/20 border-white/30 text-white font-semibold shadow-glow-sm'
-               : ''
-            )}
-            style={{ animation: 'fade-in 0.5s ease-out forwards', animationDelay: `${150 * index}ms`, opacity: 0 }}
-          >
-            <link.icon className="mr-2 h-4 w-4" />
-            {link.label}
-          </Link>
-        ))}
-      </nav>
+    <header className="sticky top-0 z-30 flex h-24 items-center justify-center px-4 md:px-6">
+      <div className="flex items-center justify-between w-full max-w-7xl h-16 px-4 bg-black/30 backdrop-blur-lg rounded-full border border-white/10 shadow-lg">
+        <Link href="/" className="flex items-center gap-2 font-bold text-xl text-foreground">
+          <Leaf className="h-7 w-7 text-primary" />
+          <span className="text-slate-100">Triphase Agro</span>
+        </Link>
+        
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex items-center gap-2 text-sm font-medium bg-black/20 p-1 rounded-full border border-white/10">
+          {navLinks.map((link) => {
+            const isActive = pathname === link.href;
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={cn(
+                  'relative px-5 py-2 rounded-full transition-colors duration-300 text-slate-300 hover:text-white',
+                  isActive ? 'text-white' : ''
+                )}
+              >
+                <span className="relative z-10 tracking-wider">{link.label}</span>
+                {isActive && (
+                   <span 
+                    className="absolute bottom-1 left-1/2 -translate-x-1/2 w-2/3 h-0.5 bg-blue-400 rounded-full"
+                    style={{boxShadow: '0 0 8px rgba(59, 130, 246, 0.8)'}}
+                  ></span>
+                )}
+              </Link>
+            );
+          })}
+        </nav>
 
-      {/* Mobile Navigation */}
-      <div className="md:hidden">
-        <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-          <SheetTrigger asChild>
-            <Button variant="ghost" size="icon" className='text-slate-100'>
-              <Menu className="h-6 w-6" />
-              <span className="sr-only">Toggle navigation menu</span>
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="left" className="bg-black/40 backdrop-blur-xl border-r-white/10 p-0">
-             <SidebarContent onLinkClick={() => setIsSheetOpen(false)} />
-          </SheetContent>
-        </Sheet>
+        {/* Mobile Navigation */}
+        <div className="md:hidden">
+          <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className='text-slate-100'>
+                <Menu className="h-6 w-6" />
+                <span className="sr-only">Toggle navigation menu</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="bg-black/60 backdrop-blur-xl border-r-white/10 p-0">
+               <SidebarContent onLinkClick={() => setIsSheetOpen(false)} />
+            </SheetContent>
+          </Sheet>
+        </div>
       </div>
     </header>
   );
@@ -139,14 +138,13 @@ function SidebarContent({ onLinkClick }: { onLinkClick?: () => void }) {
             href={link.href}
             onClick={onLinkClick}
             className={cn(
-              'flex items-center gap-3 rounded-full px-4 py-3 text-lg font-medium transition-all',
+              'flex items-center justify-center gap-3 rounded-full px-4 py-3 text-lg font-medium transition-all',
               'text-slate-300 hover:bg-white/20 hover:text-white',
                pathname === link.href
                 ? 'bg-white/20 text-white shadow-lg'
                 : 'bg-white/10'
             )}
           >
-            <link.icon className="h-5 w-5" />
             {link.label}
           </Link>
         ))}
