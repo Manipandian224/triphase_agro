@@ -27,7 +27,6 @@ import {
   analyzeCropHealthFromImage,
   AnalyzeCropHealthFromImageOutput,
 } from '@/ai/flows/analyze-crop-health-from-image';
-import { analyzeCropHealthFromImageUrl } from '@/ai/flows/analyze-crop-health-from-image-url';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Progress } from '@/components/ui/progress';
@@ -35,6 +34,8 @@ import Webcam from 'react-webcam';
 import { useFirebase } from '@/firebase/client-provider';
 import { useRtdbValue } from '@/hooks/use-rtdb-value';
 import { ref } from 'firebase/database';
+import { analyzeCropHealthFromImageUrl } from '@/ai/flows/analyze-crop-health-from-image-url';
+
 
 export default function HealthAnalysisPage() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -81,16 +82,19 @@ export default function HealthAnalysisPage() {
   }, [webcamRef]);
 
   const handleAnalyzeClick = async () => {
-    const imageToAnalyze = selectedImage || firebaseImageUrl;
+    let imageToAnalyze = selectedImage || firebaseImageUrl;
+    
     if (!imageToAnalyze) {
       setError('Please select, capture, or ensure an image is available from the database.');
       return;
     }
+    
     setIsLoading(true);
     setError(null);
+    
     try {
       let result;
-      // If it's a URL (from Firebase), use the server-side flow to avoid CORS.
+      // If the image is a URL (from Firebase), use the server-side flow.
       if (imageToAnalyze.startsWith('http')) {
         result = await analyzeCropHealthFromImageUrl({ photoUrl: imageToAnalyze });
       } else {
@@ -154,11 +158,14 @@ export default function HealthAnalysisPage() {
                 <div className='space-y-4'>
                     <div className="relative aspect-video w-full bg-secondary rounded-lg overflow-hidden border">
                         <Image
+                            id="analysis-image"
                             src={displayImage || takePhotoImage?.imageUrl || ''}
                             alt="Selected or placeholder crop"
                             fill
                             className="object-cover"
                             data-ai-hint={takePhotoImage?.imageHint || 'take photo illustration'}
+                            // This is important for cross-origin canvas manipulation
+                            crossOrigin="anonymous" 
                         />
                         {selectedImage && (
                              <Button 
@@ -326,3 +333,5 @@ function AnalysisLoadingSkeleton() {
     </div>
   );
 }
+
+    
