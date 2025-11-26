@@ -72,12 +72,27 @@ export default function AuthPage() {
         router.push('/dashboard');
       }
     } catch (error: any) {
-      console.error(error);
-      toast({
-        variant: 'destructive',
-        title: 'Authentication Failed',
-        description: error.message,
-      });
+        let title = 'Authentication Failed';
+        let description = 'An unexpected error occurred. Please try again.';
+
+        if (error.code === 'auth/email-already-in-use') {
+            title = 'Email Already in Use';
+            description = 'This email is already registered. Please log in instead.';
+        } else if (error.code === 'auth/wrong-password') {
+            title = 'Incorrect Password';
+            description = 'The password you entered is incorrect. Please try again.';
+        } else if (error.code === 'auth/user-not-found') {
+            title = 'User Not Found';
+            description = 'No account found with this email. Please sign up first.';
+        } else if (error.message) {
+            description = error.message;
+        }
+        
+        toast({
+            variant: 'destructive',
+            title: title,
+            description: description,
+        });
     } finally {
       setIsLoading(false);
     }
@@ -207,4 +222,6 @@ const SocialButton = ({ provider }: { provider: 'Google' | 'Facebook' }) => {
     </Button>
   );
 };
+    
+
     
