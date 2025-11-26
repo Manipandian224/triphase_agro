@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useRef, useCallback } from 'react';
@@ -164,6 +163,7 @@ export default function HealthAnalysisPage() {
                             fill
                             className="object-cover"
                             data-ai-hint={takePhotoImage?.imageHint || 'take photo illustration'}
+                            crossOrigin='anonymous'
                         />
                         {selectedImage && (
                              <Button 
@@ -331,5 +331,3 @@ function AnalysisLoadingSkeleton() {
     </div>
   );
 }
-
-    
