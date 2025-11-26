@@ -27,6 +27,7 @@ import {
   analyzeCropHealthFromImage,
   AnalyzeCropHealthFromImageOutput,
 } from '@/ai/flows/analyze-crop-health-from-image';
+import { analyzeCropHealthFromImageUrl } from '@/ai/flows/analyze-crop-health-from-image-url';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Progress } from '@/components/ui/progress';
@@ -49,7 +50,7 @@ export default function HealthAnalysisPage() {
   const dbRef = rtdb ? ref(rtdb, 'SmartFarm/cropImageURL') : null;
   const { data: firebaseImageUrl } = useRtdbValue<string>(dbRef);
 
-  const displayImage = firebaseImageUrl || selectedImage;
+  const displayImage = selectedImage || firebaseImageUrl;
 
   const defaultImage = PlaceHolderImages.find(img => img.id === 'crop-leaf');
   const takePhotoImage = PlaceHolderImages.find(img => img.id === 'take-photo');
@@ -80,7 +81,7 @@ export default function HealthAnalysisPage() {
   }, [webcamRef]);
 
   const handleAnalyzeClick = async () => {
-    const imageToAnalyze = firebaseImageUrl || selectedImage;
+    const imageToAnalyze = selectedImage || firebaseImageUrl;
     if (!imageToAnalyze) {
       setError('Please select, capture, or ensure an image is available from the database.');
       return;
@@ -88,23 +89,21 @@ export default function HealthAnalysisPage() {
     setIsLoading(true);
     setError(null);
     try {
-      // If the image is a standard URL (from Firebase RTDB), we need to fetch it and convert to data URI
-      let photoDataUri = imageToAnalyze;
-      if (imageToAnalyze.startsWith('http')) {
-        const response = await fetch(imageToAnalyze);
-        const blob = await response.blob();
-        photoDataUri = await new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.onloadend = () => resolve(reader.result as string);
-            reader.readAsDataURL(blob);
-        });
+      let result;
+      // If the image is a data URI (from upload or camera), use the original flow.
+      if (imageToAnalyze.startsWith('data:')) {
+        result = await analyzeCropHealthFromImage({ photoDataUri: imageToAnalyze });
+      } 
+      // If it's a URL (from Firebase), use the new flow that handles fetching on the server.
+      else if (imageToAnalyze.startsWith('http')) {
+        result = await analyzeCropHealthFromImageUrl({ photoUrl: imageToAnalyze });
+      } else {
+        throw new Error('Invalid image source.');
       }
-      
-      const result = await analyzeCropHealthFromImage({ photoDataUri });
       setAnalysisResult(result);
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      setError('An error occurred during analysis. Please try again.');
+      setError(err.message || 'An error occurred during analysis. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -329,5 +328,3 @@ function AnalysisLoadingSkeleton() {
     </div>
   );
 }
-
-    
