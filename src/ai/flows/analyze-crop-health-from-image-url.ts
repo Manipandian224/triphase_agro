@@ -14,7 +14,7 @@ import { z } from 'genkit';
 import {
   AnalyzeCropHealthFromImageOutput,
   AnalyzeCropHealthFromImageOutputSchema,
-} from './analyze-crop-health-from-image';
+} from '@/ai/schemas/crop-health-analysis';
 
 const AnalyzeCropHealthFromImageUrlInputSchema = z.object({
   photoUrl: z.string().url().describe('A URL of a photo of a crop.'),
