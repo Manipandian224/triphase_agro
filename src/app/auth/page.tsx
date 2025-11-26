@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useUser } from '@/firebase/auth/use-user';
 import { useFirebase } from '@/firebase/client-provider';
 import {
   createUserWithEmailAndPassword,
@@ -19,6 +20,7 @@ export default function AuthPage() {
   const [isSignUp, setIsSignUp] = useState(true);
   const router = useRouter();
   const { auth } = useFirebase();
+  const { user, isLoading: isUserLoading } = useUser();
   const { toast } = useToast();
 
   const [name, setName] = useState('');
@@ -32,6 +34,12 @@ export default function AuthPage() {
   useEffect(() => {
     setIsClient(true);
   }, []);
+
+  useEffect(() => {
+    if (!isUserLoading && user) {
+      router.push('/dashboard');
+    }
+  }, [user, isUserLoading, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -100,6 +108,10 @@ export default function AuthPage() {
   
   const heroImage = PlaceHolderImages.find(img => img.id === 'crop-leaf');
 
+  if (isUserLoading || user) {
+    return null; // Or a loading spinner
+  }
+
   return (
     <div className="flex min-h-screen items-center justify-center p-4">
       <div className="w-full max-w-5xl rounded-3xl bg-white/5 shadow-2xl backdrop-blur-lg">
@@ -144,7 +156,7 @@ export default function AuthPage() {
                   <Checkbox
                     id="terms"
                     checked={agreed}
-                    onCheckedChange={(checked: boolean) => setAgreed(checked)}
+                    onCheckedChange={(checked) => setAgreed(!!checked)}
                     className="border-slate-500 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
                   />
                   <label htmlFor="terms" className="text-sm text-slate-400">
@@ -222,6 +234,4 @@ const SocialButton = ({ provider }: { provider: 'Google' | 'Facebook' }) => {
     </Button>
   );
 };
-    
-
     
