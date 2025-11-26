@@ -12,11 +12,11 @@ import { AiChatBot } from '@/components/ai-chat-bot';
 import { useUser } from '@/firebase/auth/use-user';
 
 const navLinks = [
-  { href: '/dashboard', label: 'HOME' },
-  { href: '/dashboard/about', label: 'ABOUT US' },
-  { href: '/dashboard/portfolio', label: 'PORTFOLIO' },
-  { href: '/dashboard/services', label: 'SERVICES' },
-  { href: '/dashboard/contact', label: 'CONTACT US' },
+  { href: '/dashboard', label: 'Dashboard' },
+  { href: '/dashboard/health-analysis', label: 'Health Analysis' },
+  { href: '/dashboard/products', label: 'Products' },
+  { href: '/dashboard/plant-details', label: 'Plant Details' },
+  { href: '/dashboard/user', label: 'Profile' },
 ];
 
 export default function DashboardLayout({
@@ -38,25 +38,25 @@ export default function DashboardLayout({
     }
   }, [user, isLoading, router, isClient]);
 
-  if (!isClient || isLoading || !user) {
+  if (!isClient || isLoading) {
     return (
       <div className="flex h-screen w-full items-center justify-center bg-background">
         <Loader className="h-12 w-12 animate-spin text-primary" />
       </div>
     );
   }
+  
+  if (!user) {
+    return null;
+  }
 
   return (
-    <div className="flex min-h-screen w-full flex-col bg-background">
-      <TopNavBar />
-      <main className="flex-1">
-        <div
-          className="absolute top-0 left-0 w-full h-full -z-10"
-          style={{
-            background:
-              'radial-gradient(circle at 30% 30%, #EAEF9D20, transparent 40%)',
-          }}
+    <div className="flex min-h-screen w-full flex-col">
+       <div
+          className="absolute top-0 left-0 w-full h-full -z-10 bg-gradient-to-br from-theme-start to-theme-end"
         />
+      <TopNavBar />
+      <main className="flex-1 overflow-y-auto">
         {children}
       </main>
       <AiChatBot />
