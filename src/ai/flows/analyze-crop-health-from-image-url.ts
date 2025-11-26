@@ -4,7 +4,7 @@
  * @fileOverview Analyzes crop health from an image URL, providing a label, confidence score, and a list of problems and solutions.
  * This flow passes the image URL directly to the model for analysis.
  *
- * - analyzeCropHealthFromImageUrl - A function that handles the crop health analysis process from a URL.
+ * - analyzeCropHealthFromImageUrl - A function that handles the crop health analysis from a URL.
  * - AnalyzeCropHealthFromImageUrlInput - The input type for the function.
  * - AnalyzeCropHealthFromImageUrlOutput - The return type for the function.
  */
@@ -12,7 +12,6 @@
 import { ai } from '@/ai/genkit';
 import { z } from 'genkit';
 import {
-  AnalyzeCropHealthFromImageInput,
   AnalyzeCropHealthFromImageOutput,
   AnalyzeCropHealthFromImageOutputSchema,
 } from './analyze-crop-health-from-image';
@@ -64,7 +63,7 @@ const analyzeCropHealthFromImageUrlFlow = ai.defineFlow(
   {
     name: 'analyzeCropHealthFromImageUrlFlow',
     inputSchema: AnalyzeCropHealthFromImageUrlInputSchema,
-    outputSchema: z.custom<AnalyzeCropHealthFromImageUrlOutput>(),
+    outputSchema: AnalyzeCropHealthFromImageOutputSchema,
   },
   async ({ photoUrl }) => {
     const { output } = await analyzeCropHealthFromImageUrlPrompt({ photoUrl });

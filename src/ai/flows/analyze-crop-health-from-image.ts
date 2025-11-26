@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview Analyzes crop health from an image, providing a label, confidence score, and a list of problems and solutions.
@@ -19,7 +20,7 @@ const AnalyzeCropHealthFromImageInputSchema = z.object({
 });
 export type AnalyzeCropHealthFromImageInput = z.infer<typeof AnalyzeCropHealthFromImageInputSchema>;
 
-const AnalyzeCropHealthFromImageOutputSchema = z.object({
+export const AnalyzeCropHealthFromImageOutputSchema = z.object({
   label: z.string().describe('The AI analysis label (e.g., "Corn Leaf Blight", "Healthy").'),
   confidence: z.number().describe('The confidence score of the AI analysis (0-1).'),
   problems: z
