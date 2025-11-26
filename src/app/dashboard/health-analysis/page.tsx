@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import {
   Card,
@@ -20,6 +20,8 @@ import {
   Info,
   Lightbulb,
   Upload,
+  Camera,
+  RefreshCw,
 } from 'lucide-react';
 import {
   analyzeCropHealthFromImage,
@@ -28,6 +30,7 @@ import {
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Progress } from '@/components/ui/progress';
+import Webcam from 'react-webcam';
 
 export default function HealthAnalysisPage() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -35,9 +38,13 @@ export default function HealthAnalysisPage() {
     useState<AnalyzeCropHealthFromImageOutput | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showCamera, setShowCamera] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const webcamRef = useRef<Webcam>(null);
 
   const defaultImage = PlaceHolderImages.find(img => img.id === 'crop-leaf');
+  const takePhotoImage = PlaceHolderImages.find(img => img.id === 'take-photo');
+
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -45,16 +52,27 @@ export default function HealthAnalysisPage() {
       const reader = new FileReader();
       reader.onload = e => {
         setSelectedImage(e.target?.result as string);
-        setAnalysisResult(null); // Clear previous results
+        setAnalysisResult(null); 
         setError(null);
+        setShowCamera(false);
       };
       reader.readAsDataURL(file);
     }
   };
 
+  const capture = useCallback(() => {
+    const imageSrc = webcamRef.current?.getScreenshot();
+    if (imageSrc) {
+      setSelectedImage(imageSrc);
+      setShowCamera(false);
+      setAnalysisResult(null);
+      setError(null);
+    }
+  }, [webcamRef]);
+
   const handleAnalyzeClick = async () => {
     if (!selectedImage) {
-      setError('Please select an image first.');
+      setError('Please select or capture an image first.');
       return;
     }
     setIsLoading(true);
@@ -70,6 +88,12 @@ export default function HealthAnalysisPage() {
     }
   };
 
+  const videoConstraints = {
+    width: 1280,
+    height: 720,
+    facingMode: "environment"
+  };
+
   return (
     <div className="container mx-auto p-4 md:p-8 space-y-8">
       <header className="text-center">
@@ -77,65 +101,100 @@ export default function HealthAnalysisPage() {
           AI Crop Health Analysis
         </h1>
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto mt-2">
-          Upload an image of a crop leaf to get an instant health diagnosis and
-          actionable solutions from our AI.
+          Use your camera or upload an image to get an instant health diagnosis from our AI.
         </p>
       </header>
 
       <div className="grid md:grid-cols-2 gap-8 items-start">
-        {/* Left Column: Image Upload & Display */}
+        {/* Left Column: Image Source */}
         <Card className="shadow-lg">
           <CardHeader>
-            <CardTitle>Crop Image</CardTitle>
+            <CardTitle>Image Source</CardTitle>
             <CardDescription>
-              Upload or select an image for analysis.
+              Choose to either capture a photo or upload an image file.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="relative aspect-video w-full bg-secondary rounded-lg overflow-hidden border">
-              <Image
-                src={selectedImage || defaultImage?.imageUrl || ''}
-                alt="Crop for analysis"
-                fill
-                className="object-cover"
-              />
-            </div>
-            <div className="flex gap-2">
-              <Button
-                onClick={() => fileInputRef.current?.click()}
-                className="flex-1"
-                variant="outline"
-              >
-                <Upload className="mr-2 h-4 w-4" />
-                Upload Image
-              </Button>
-              <Input
-                type="file"
-                ref={fileInputRef}
-                onChange={handleImageChange}
-                className="hidden"
-                accept="image/*"
-              />
+             {showCamera ? (
+                 <div className='space-y-4'>
+                    <div className="w-full aspect-video bg-secondary rounded-lg overflow-hidden border">
+                       <Webcam
+                            audio={false}
+                            ref={webcamRef}
+                            screenshotFormat="image/jpeg"
+                            videoConstraints={videoConstraints}
+                            className="w-full h-full object-cover"
+                        />
+                    </div>
+                    <div className='flex gap-2'>
+                        <Button onClick={() => setShowCamera(false)} variant='outline' className='flex-1'>Cancel</Button>
+                        <Button onClick={capture} className='flex-1'><Camera className='mr-2 h-4 w-4'/>Capture</Button>
+                    </div>
+                 </div>
+            ) : (
+                <div className='space-y-4'>
+                    <div className="relative aspect-video w-full bg-secondary rounded-lg overflow-hidden border">
+                        <Image
+                            src={selectedImage || takePhotoImage?.imageUrl || ''}
+                            alt="Selected or placeholder crop"
+                            fill
+                            className="object-cover"
+                            data-ai-hint={takePhotoImage?.imageHint || 'take photo illustration'}
+                        />
+                        {selectedImage && (
+                             <Button 
+                                variant='destructive' 
+                                size='icon' 
+                                className='absolute top-2 right-2 rounded-full h-8 w-8'
+                                onClick={() => setSelectedImage(null)}
+                              >
+                                <X className='h-4 w-4'/>
+                             </Button>
+                        )}
+                    </div>
+                     <div className="flex gap-2">
+                         <Button
+                            onClick={() => fileInputRef.current?.click()}
+                            className="flex-1"
+                            variant="outline"
+                        >
+                            <Upload className="mr-2 h-4 w-4" />
+                            Upload File
+                        </Button>
+                        <Button onClick={() => setShowCamera(true)} className="flex-1" variant="outline">
+                            <Camera className="mr-2 h-4 w-4" />
+                            Use Camera
+                        </Button>
+                        <Input
+                            type="file"
+                            ref={fileInputRef}
+                            onChange={handleImageChange}
+                            className="hidden"
+                            accept="image/*"
+                        />
+                    </div>
+                </div>
+            )}
+             
               <Button
                 onClick={handleAnalyzeClick}
-                disabled={isLoading || !selectedImage}
-                className="flex-1"
+                disabled={isLoading || (!selectedImage && !showCamera)}
+                className="w-full h-12 text-lg"
               >
                 {isLoading ? (
                   'Analyzing...'
                 ) : (
                   <>
-                    <HeartPulse className="mr-2 h-4 w-4" />
-                    Analyze
+                    <HeartPulse className="mr-2 h-5 w-5" />
+                    Analyze Image
                   </>
                 )}
               </Button>
-            </div>
           </CardContent>
         </Card>
 
         {/* Right Column: Analysis Results */}
-        <Card className="shadow-lg">
+        <Card className="shadow-lg min-h-[500px]">
           <CardHeader>
             <CardTitle>Analysis Report</CardTitle>
             <CardDescription>
@@ -248,3 +307,5 @@ function AnalysisLoadingSkeleton() {
     </div>
   );
 }
+
+    
