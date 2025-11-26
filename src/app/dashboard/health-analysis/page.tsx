@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import {
   Card,
@@ -164,8 +164,6 @@ export default function HealthAnalysisPage() {
                             fill
                             className="object-cover"
                             data-ai-hint={takePhotoImage?.imageHint || 'take photo illustration'}
-                            // This is important for cross-origin canvas manipulation
-                            crossOrigin="anonymous" 
                         />
                         {selectedImage && (
                              <Button 
