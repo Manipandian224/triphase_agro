@@ -89,19 +89,14 @@ export default function HealthAnalysisPage() {
     setIsLoading(true);
     setError(null);
     try {
-      let photoDataUri = imageToAnalyze;
-      // If it's a URL (from Firebase), fetch it on the client and convert to a data URI.
+      let result;
+      // If it's a URL (from Firebase), use the server-side flow to avoid CORS.
       if (imageToAnalyze.startsWith('http')) {
-        const response = await fetch(imageToAnalyze);
-        const blob = await response.blob();
-        photoDataUri = await new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.onloadend = () => resolve(reader.result as string);
-            reader.readAsDataURL(blob);
-        });
+        result = await analyzeCropHealthFromImageUrl({ photoUrl: imageToAnalyze });
+      } else {
+        // If it's a data URI (from upload/camera), use the direct flow.
+        result = await analyzeCropHealthFromImage({ photoDataUri: imageToAnalyze });
       }
-      
-      const result = await analyzeCropHealthFromImage({ photoDataUri });
       setAnalysisResult(result);
 
     } catch (err: any) {

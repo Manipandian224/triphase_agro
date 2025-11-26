@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview Analyzes crop health from an image URL, providing a label, confidence score, and a list of problems and solutions.
@@ -53,7 +54,7 @@ const analyzeCropHealthFromImageUrlFlow = ai.defineFlow(
       reader.onerror = reject;
       // FileReader in this context is a server-side polyfill, not browser API.
       // It needs an ArrayBuffer.
-      blob.arrayBuffer().then(buffer => reader.readAsDataURL(new Blob([buffer])));
+      blob.arrayBuffer().then(buffer => reader.readAsDataURL(new Blob([buffer], {type: blob.type})));
     });
     
     // Call the original analysis flow with the data URI.
