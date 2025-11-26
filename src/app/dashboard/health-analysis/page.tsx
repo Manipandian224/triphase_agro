@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import Image from 'next/image';
 import {
   Card,
@@ -21,7 +21,7 @@ import {
   Lightbulb,
   Upload,
   Camera,
-  RefreshCw,
+  X,
 } from 'lucide-react';
 import {
   analyzeCropHealthFromImage,
@@ -31,6 +31,9 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Progress } from '@/components/ui/progress';
 import Webcam from 'react-webcam';
+import { useFirebase } from '@/firebase/client-provider';
+import { useRtdbValue } from '@/hooks/use-rtdb-value';
+import { ref } from 'firebase/database';
 
 export default function HealthAnalysisPage() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -41,6 +44,12 @@ export default function HealthAnalysisPage() {
   const [showCamera, setShowCamera] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const webcamRef = useRef<Webcam>(null);
+
+  const { rtdb } = useFirebase();
+  const dbRef = rtdb ? ref(rtdb, 'SmartFarm/cropImageURL') : null;
+  const { data: firebaseImageUrl } = useRtdbValue<string>(dbRef);
+
+  const displayImage = firebaseImageUrl || selectedImage;
 
   const defaultImage = PlaceHolderImages.find(img => img.id === 'crop-leaf');
   const takePhotoImage = PlaceHolderImages.find(img => img.id === 'take-photo');
@@ -71,14 +80,27 @@ export default function HealthAnalysisPage() {
   }, [webcamRef]);
 
   const handleAnalyzeClick = async () => {
-    if (!selectedImage) {
-      setError('Please select or capture an image first.');
+    const imageToAnalyze = firebaseImageUrl || selectedImage;
+    if (!imageToAnalyze) {
+      setError('Please select, capture, or ensure an image is available from the database.');
       return;
     }
     setIsLoading(true);
     setError(null);
     try {
-      const result = await analyzeCropHealthFromImage({ photoDataUri: selectedImage });
+      // If the image is a standard URL (from Firebase RTDB), we need to fetch it and convert to data URI
+      let photoDataUri = imageToAnalyze;
+      if (imageToAnalyze.startsWith('http')) {
+        const response = await fetch(imageToAnalyze);
+        const blob = await response.blob();
+        photoDataUri = await new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result as string);
+            reader.readAsDataURL(blob);
+        });
+      }
+      
+      const result = await analyzeCropHealthFromImage({ photoDataUri });
       setAnalysisResult(result);
     } catch (err) {
       console.error(err);
@@ -101,7 +123,7 @@ export default function HealthAnalysisPage() {
           AI Crop Health Analysis
         </h1>
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto mt-2">
-          Use your camera or upload an image to get an instant health diagnosis from our AI.
+          Use your camera, upload an image, or view the live feed to get an instant health diagnosis.
         </p>
       </header>
 
@@ -111,7 +133,7 @@ export default function HealthAnalysisPage() {
           <CardHeader>
             <CardTitle>Image Source</CardTitle>
             <CardDescription>
-              Choose to either capture a photo or upload an image file.
+              The latest image from your smart farm is shown. You can also upload or capture a new one.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -135,7 +157,7 @@ export default function HealthAnalysisPage() {
                 <div className='space-y-4'>
                     <div className="relative aspect-video w-full bg-secondary rounded-lg overflow-hidden border">
                         <Image
-                            src={selectedImage || takePhotoImage?.imageUrl || ''}
+                            src={displayImage || takePhotoImage?.imageUrl || ''}
                             alt="Selected or placeholder crop"
                             fill
                             className="object-cover"
@@ -178,7 +200,7 @@ export default function HealthAnalysisPage() {
              
               <Button
                 onClick={handleAnalyzeClick}
-                disabled={isLoading || (!selectedImage && !showCamera)}
+                disabled={isLoading || !displayImage}
                 className="w-full h-12 text-lg"
               >
                 {isLoading ? (
