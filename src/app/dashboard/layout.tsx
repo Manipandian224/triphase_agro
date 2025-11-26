@@ -14,7 +14,6 @@ import { useUser } from '@/firebase/auth/use-user';
 const navLinks = [
   { href: '/dashboard', label: 'Dashboard' },
   { href: '/dashboard/health-analysis', label: 'Health Analysis' },
-  { href: '/dashboard/products', label: 'Products' },
   { href: '/dashboard/plant-details', label: 'Plant Details' },
   { href: '/dashboard/user', label: 'Profile' },
 ];
