@@ -124,14 +124,14 @@ export default function AuthPage() {
               )}
                <AuthInput icon={Lock} placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} type="password" />
 
-              {isSignUp && (
+              {isSignUp && isClient && (
                 <div className="flex items-center space-x-2">
-                  {isClient && <Checkbox
+                  <Checkbox
                     id="terms"
                     checked={agreed}
                     onCheckedChange={(checked: boolean) => setAgreed(checked)}
                     className="border-slate-500 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
-                  />}
+                  />
                   <label htmlFor="terms" className="text-sm text-slate-400">
                     I agree to the{' '}
                     <a href="#" className="text-primary hover:underline">
