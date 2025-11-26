@@ -11,7 +11,6 @@ import { cn } from '@/lib/utils';
 import { AiChatBot } from '@/components/ai-chat-bot';
 import { useUser } from '@/firebase/auth/use-user';
 import { LanguageProvider } from '@/context/language-context';
-import { LanguageSelector } from '@/components/language-selector';
 
 const navLinks = [
   { href: '/dashboard', label: 'Dashboard' },
@@ -105,7 +104,6 @@ function TopNavBar() {
         </nav>
 
         <div className='flex items-center gap-2'>
-           <LanguageSelector />
             {/* Mobile Navigation */}
             <div className="md:hidden">
               <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>

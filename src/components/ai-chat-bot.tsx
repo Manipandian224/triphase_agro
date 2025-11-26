@@ -11,8 +11,9 @@ import { askCropExpert, ChatMessage } from '@/ai/flows/ask-crop-expert';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { LanguageSelector } from './language-selector';
 import { useLanguage } from '@/context/language-context';
-import { useTranslation } from '@/hooks/use-translation';
+import { translateText } from '@/ai/flows/translate-text';
 
 
 export function AiChatBot() {
@@ -21,15 +22,28 @@ export function AiChatBot() {
   const [input, setInput] = useState('');
   const [isThinking, setIsThinking] = useState(false);
   const { language } = useLanguage();
-  const { translate, translatedTexts, isLoading: isTranslating } = useTranslation();
   const isMobile = useIsMobile();
 
 
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const translate = async (text: string, targetLanguage: string) => {
+    if (!text || targetLanguage === 'en') {
+      return text;
+    }
+    try {
+      const response = await translateText({ text, targetLanguage });
+      return response.translatedText;
+    } catch (error) {
+      console.error('Translation failed:', error);
+      return text; // Fallback to original text on error
+    }
+  };
+
+
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && messages.length === 0) {
       const greet = async () => {
          const translatedGreeting = await translate('Hello! I am AgriBot, your AI agriculture assistant. How can I help you today?', language);
          setMessages([
@@ -41,7 +55,7 @@ export function AiChatBot() {
       }
       greet();
     }
-  }, [isOpen, language]);
+  }, [isOpen, language, messages.length]);
 
   useEffect(() => {
     // Scroll to bottom when a new message is added
@@ -132,8 +146,6 @@ export function AiChatBot() {
     );
   }
   
-  const t = (key: string, defaultText: string) => translatedTexts[key] || defaultText;
-
   const cardPosition = isMobile 
     ? "fixed inset-0 z-50"
     : "fixed bottom-6 right-6 w-96 h-[600px] z-50";
@@ -150,11 +162,14 @@ export function AiChatBot() {
             <AvatarFallback>A</AvatarFallback>
             <AvatarImage src="https://images.unsplash.com/photo-1563233309-c96792900762?w=100&q=80" />
           </Avatar>
-          <CardTitle>{t('chatTitle', 'AgriBot Assistant')}</CardTitle>
+          <CardTitle>AgriBot Assistant</CardTitle>
         </div>
-        <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)}>
-          <X className="h-5 w-5" />
-        </Button>
+        <div className="flex items-center">
+            <LanguageSelector />
+            <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)}>
+              <X className="h-5 w-5" />
+            </Button>
+        </div>
       </CardHeader>
       <CardContent className="flex-1 overflow-hidden">
         <ScrollArea className="h-full" ref={scrollAreaRef}>
@@ -217,7 +232,7 @@ export function AiChatBot() {
          <div className="flex w-full items-center gap-2">
            <Input
             type="text"
-            placeholder={t('chatPlaceholder', 'Ask a question...')}
+            placeholder='Ask a question...'
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
@@ -230,7 +245,7 @@ export function AiChatBot() {
           <Button variant="ghost" size="icon">
             <Mic className="h-5 w-5" />
           </Button>
-          <Button size="icon" onClick={handleSend} disabled={isThinking || isTranslating}>
+          <Button size="icon" onClick={handleSend} disabled={isThinking}>
             <Send className="h-5 w-5" />
           </Button>
         </div>

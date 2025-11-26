@@ -7,7 +7,6 @@ import { Toaster } from "@/components/ui/toaster";
 import { FirebaseProvider } from "@/firebase/client-provider";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { LanguageProvider } from "@/context/language-context";
 
 const inter = Inter({ subsets: ["latin"], variable: '--font-inter' });
 
@@ -45,11 +44,9 @@ export default function RootLayout({
           "min-h-screen w-full",
            'bg-gradient-to-br from-theme-start to-theme-end'
         )}>
-          <LanguageProvider>
             <FirebaseProvider>
               {children}
             </FirebaseProvider>
-          </LanguageProvider>
           <Toaster />
         </div>
       </body>

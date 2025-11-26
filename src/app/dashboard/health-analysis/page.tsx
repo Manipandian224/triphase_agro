@@ -21,11 +21,21 @@ import {
   Upload,
   Camera,
   X,
+  Languages,
 } from 'lucide-react';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import {
   analyzeCropHealthFromImage,
   AnalyzeCropHealthFromImageOutput,
 } from '@/ai/flows/analyze-crop-health-from-image';
+import { analyzeCropHealthFromImageUrl } from '@/ai/flows/analyze-crop-health-from-image-url';
+import { translateText } from '@/ai/flows/translate-text';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Progress } from '@/components/ui/progress';
@@ -33,9 +43,7 @@ import Webcam from 'react-webcam';
 import { useFirebase } from '@/firebase/client-provider';
 import { useRtdbValue } from '@/hooks/use-rtdb-value';
 import { ref } from 'firebase/database';
-import { analyzeCropHealthFromImageUrl } from '@/ai/flows/analyze-crop-health-from-image-url';
-import { useLanguage } from '@/context/language-context';
-import { useTranslation } from '@/hooks/use-translation';
+import { languages } from '@/context/language-context';
 
 
 export default function HealthAnalysisPage() {
@@ -51,9 +59,6 @@ export default function HealthAnalysisPage() {
   const { rtdb } = useFirebase();
   const dbRef = rtdb ? ref(rtdb, 'SmartFarm/cropImageURL') : null;
   const { data: firebaseImageUrl } = useRtdbValue<string>(dbRef);
-
-  const { language } = useLanguage();
-  const { translate, translatedTexts } = useTranslation();
 
   const displayImage = selectedImage || firebaseImageUrl;
 
@@ -104,25 +109,12 @@ export default function HealthAnalysisPage() {
         } else {
             result = await analyzeCropHealthFromImage({ photoDataUri: imageToAnalyze });
         }
-
-        // Translate the results
-        const [translatedLabel, translatedProblems, translatedSolutions] = await Promise.all([
-            translate(result.label, language),
-            Promise.all(result.problems.map(p => translate(p, language))),
-            Promise.all(result.solutions.map(s => translate(s, language)))
-        ]);
         
-        setAnalysisResult({
-            ...result,
-            label: translatedLabel,
-            problems: translatedProblems,
-            solutions: translatedSolutions
-        });
+        setAnalysisResult(result);
 
     } catch (err: any) {
       console.error(err);
-      const translatedError = await translate('An error occurred during analysis. Please try again.', language);
-      setError(translatedError);
+      setError('An error occurred during analysis. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -134,17 +126,15 @@ export default function HealthAnalysisPage() {
     height: 720,
     facingMode: "environment"
   };
-  
-  const t = (key: string, defaultText: string) => translatedTexts[key] || defaultText;
 
   return (
     <div className="container mx-auto p-4 md:p-8 space-y-8">
       <header className="text-center">
         <h1 className="text-4xl md:text-5xl font-extrabold tracking-tighter">
-          {t('title', 'AI Crop Health Analysis')}
+          AI Crop Health Analysis
         </h1>
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto mt-2">
-           {t('subtitle', 'Use your camera, upload an image, or view the live feed to get an instant health diagnosis.')}
+           Use your camera, upload an image, or view the live feed to get an instant health diagnosis.
         </p>
       </header>
 
@@ -152,9 +142,9 @@ export default function HealthAnalysisPage() {
         {/* Left Column: Image Source */}
         <Card className="shadow-lg">
           <CardHeader>
-            <CardTitle>{t('imageSourceTitle', 'Image Source')}</CardTitle>
+            <CardTitle>Image Source</CardTitle>
             <CardDescription>
-              {t('imageSourceDesc', 'The latest image from your smart farm is shown. You can also upload or capture a new one.')}
+              The latest image from your smart farm is shown. You can also upload or capture a new one.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -170,8 +160,8 @@ export default function HealthAnalysisPage() {
                         />
                     </div>
                     <div className='flex gap-2'>
-                        <Button onClick={() => setShowCamera(false)} variant='outline' className='flex-1'>{t('cancel', 'Cancel')}</Button>
-                        <Button onClick={capture} className='flex-1'><Camera className='mr-2 h-4 w-4'/>{t('capture', 'Capture')}</Button>
+                        <Button onClick={() => setShowCamera(false)} variant='outline' className='flex-1'>Cancel</Button>
+                        <Button onClick={capture} className='flex-1'><Camera className='mr-2 h-4 w-4'/>Capture</Button>
                     </div>
                  </div>
             ) : (
@@ -204,11 +194,11 @@ export default function HealthAnalysisPage() {
                             variant="outline"
                         >
                             <Upload className="mr-2 h-4 w-4" />
-                            {t('uploadFile', 'Upload File')}
+                            Upload File
                         </Button>
                         <Button onClick={() => setShowCamera(true)} className="flex-1" variant="outline">
                             <Camera className="mr-2 h-4 w-4" />
-                             {t('useCamera', 'Use Camera')}
+                             Use Camera
                         </Button>
                         <Input
                             type="file"
@@ -227,11 +217,11 @@ export default function HealthAnalysisPage() {
                 className="w-full h-12 text-lg"
               >
                 {isLoading ? (
-                  t('analyzing', 'Analyzing...')
+                  'Analyzing...'
                 ) : (
                   <>
                     <HeartPulse className="mr-2 h-5 w-5" />
-                    {t('analyzeImage', 'Analyze Image')}
+                    Analyze Image
                   </>
                 )}
               </Button>
@@ -241,9 +231,9 @@ export default function HealthAnalysisPage() {
         {/* Right Column: Analysis Results */}
         <Card className="shadow-lg min-h-[500px]">
           <CardHeader>
-            <CardTitle>{t('reportTitle', 'Analysis Report')}</CardTitle>
+            <CardTitle>Analysis Report</CardTitle>
             <CardDescription>
-              {t('reportDesc', 'Review the diagnosis and recommended actions below.')}
+              Review the diagnosis and recommended actions below.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -252,10 +242,10 @@ export default function HealthAnalysisPage() {
             {!isLoading && !analysisResult && (
               <div className="text-center text-muted-foreground py-12">
                 <Info className="mx-auto h-12 w-12 mb-4" />
-                <p>{t('reportPlaceholder', 'Your analysis report will appear here.')}</p>
+                <p>Your analysis report will appear here.</p>
               </div>
             )}
-            {analysisResult && <AnalysisResultView result={analysisResult} />}
+            {analysisResult && <AnalysisResultView originalResult={analysisResult} />}
           </CardContent>
         </Card>
       </div>
@@ -263,63 +253,110 @@ export default function HealthAnalysisPage() {
   );
 }
 
-function AnalysisResultView({ result }: { result: AnalyzeCropHealthFromImageOutput }) {
+function AnalysisResultView({ originalResult }: { originalResult: AnalyzeCropHealthFromImageOutput }) {
+  const [result, setResult] = useState(originalResult);
+  const [isTranslating, setIsTranslating] = useState(false);
+
+  const handleTranslate = async (targetLanguage: string) => {
+      if (targetLanguage === 'en') {
+          setResult(originalResult);
+          return;
+      }
+      
+      setIsTranslating(true);
+      try {
+          const [translatedLabel, translatedProblems, translatedSolutions] = await Promise.all([
+              translateText({ text: originalResult.label, targetLanguage }),
+              Promise.all(originalResult.problems.map(p => translateText({ text: p, targetLanguage }))),
+              Promise.all(originalResult.solutions.map(s => translateText({ text: s, targetLanguage })))
+          ]);
+          
+          setResult({
+              ...originalResult,
+              label: translatedLabel.translatedText,
+              problems: translatedProblems.map(p => p.translatedText),
+              solutions: translatedSolutions.map(s => s.translatedText),
+          });
+
+      } catch (error) {
+          console.error("Translation failed", error);
+          // Optionally, show a toast to the user
+      } finally {
+          setIsTranslating(false);
+      }
+  };
+
   const isHealthy = result.label.toLowerCase().includes('healthy');
   const confidencePercent = Math.round(result.confidence * 100);
-   const { translatedTexts } = useTranslation();
-   const t = (key: string, defaultText: string) => translatedTexts[key] || defaultText;
 
   return (
     <div className="space-y-6">
       <div>
-        <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center justify-between mb-2 gap-2">
           <h3 className="text-xl font-bold flex items-center">
             {isHealthy ? (
               <CheckCircle2 className="mr-2 h-6 w-6 text-green-500" />
             ) : (
               <AlertCircle className="mr-2 h-6 w-6 text-yellow-500" />
             )}
-            {t('diagnosisLabel', 'Diagnosis')}: {result.label}
+            Diagnosis: {isTranslating ? <Skeleton className="h-6 w-32" /> : result.label}
           </h3>
-           <span
-              className={`font-bold text-lg ${
-                confidencePercent > 80 ? 'text-green-500' : 'text-yellow-500'
-              }`}
-            >
-              {confidencePercent}%
-            </span>
+          <div className="flex items-center gap-2">
+            <span
+                className={`font-bold text-lg ${
+                  confidencePercent > 80 ? 'text-green-500' : 'text-yellow-500'
+                }`}
+              >
+                {confidencePercent}%
+              </span>
+            <ResultTranslateSelector onTranslate={handleTranslate} disabled={isTranslating} />
+           </div>
         </div>
         <Progress value={confidencePercent} className="h-2" indicatorClassName={confidencePercent < 80 ? "bg-yellow-500" : ""} />
-        <p className="text-xs text-muted-foreground mt-1">{t('confidenceScore', 'AI Confidence Score')}</p>
+        <p className="text-xs text-muted-foreground mt-1">AI Confidence Score</p>
       </div>
 
       {!isHealthy && (
         <div>
           <h4 className="font-bold text-lg mb-2 flex items-center">
-            <AlertCircle className="mr-2 h-5 w-5 text-destructive" /> {t('problemsTitle', 'Identified Problems')}
+            <AlertCircle className="mr-2 h-5 w-5 text-destructive" /> Identified Problems
           </h4>
-          <ul className="list-disc pl-5 space-y-1 text-muted-foreground">
-            {result.problems.map((problem, index) => (
-              <li key={index}>{problem}</li>
-            ))}
-          </ul>
+          {isTranslating ? (
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-5/6" />
+            </div>
+          ) : (
+            <ul className="list-disc pl-5 space-y-1 text-muted-foreground">
+              {result.problems.map((problem, index) => (
+                <li key={index}>{problem}</li>
+              ))}
+            </ul>
+          )}
         </div>
       )}
 
       <div>
         <h4 className="font-bold text-lg mb-2 flex items-center">
-          <Lightbulb className="mr-2 h-5 w-5 text-primary" /> {t('solutionsTitle', 'Recommended Solutions')}
+          <Lightbulb className="mr-2 h-5 w-5 text-primary" /> Recommended Solutions
         </h4>
-        <ul className="list-disc pl-5 space-y-1 text-muted-foreground">
-          {result.solutions.map((solution, index) => (
-            <li key={index}>{solution}</li>
-          ))}
-        </ul>
+        {isTranslating ? (
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-full" />
+            </div>
+          ) : (
+            <ul className="list-disc pl-5 space-y-1 text-muted-foreground">
+              {result.solutions.map((solution, index) => (
+                <li key={index}>{solution}</li>
+              ))}
+            </ul>
+        )}
       </div>
 
        <div className="text-right mt-4">
             <Button variant="link" className="text-primary">
-                {t('learnMore', 'Learn More')} <ChevronRight className="ml-1 h-4 w-4" />
+                Learn More <ChevronRight className="ml-1 h-4 w-4" />
             </Button>
         </div>
     </div>
@@ -352,5 +389,25 @@ function AnalysisLoadingSkeleton() {
         </div>
       </div>
     </div>
+  );
+}
+
+
+function ResultTranslateSelector({ onTranslate, disabled }: { onTranslate: (lang: string) => void; disabled?: boolean; }) {
+  return (
+    <Select onValueChange={onTranslate} defaultValue="en" disabled={disabled}>
+      <SelectTrigger className="w-auto bg-transparent border-0 text-white focus:ring-0">
+         <div className='flex items-center gap-1'>
+            <Languages className="h-4 w-4 text-muted-foreground" />
+         </div>
+      </SelectTrigger>
+      <SelectContent>
+        {languages.map(lang => (
+          <SelectItem key={lang.code} value={lang.code}>
+            {lang.name}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
   );
 }
