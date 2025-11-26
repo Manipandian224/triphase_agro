@@ -54,18 +54,16 @@ export default function DashboardLayout({
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-transparent">
-       <TopNavBar />
-      <main className="flex-1 overflow-y-auto relative z-10">
-         <div
-          className="absolute top-0 left-0 w-full h-full"
-          style={{
-            background:
-              'radial-gradient(circle at 30% 30%, #EAEF9D20, transparent 40%)',
-          }}
-        />
-        <div className="relative z-10">
-            {children}
-        </div>
+       <div
+        className="absolute top-0 left-0 w-full h-full -z-10"
+        style={{
+          background:
+            'radial-gradient(circle at 30% 30%, #EAEF9D20, transparent 40%)',
+        }}
+      />
+      <TopNavBar />
+      <main className="flex-1">
+        {children}
       </main>
       <AiChatBot />
     </div>
