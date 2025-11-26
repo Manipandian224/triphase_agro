@@ -89,18 +89,21 @@ export default function HealthAnalysisPage() {
     setIsLoading(true);
     setError(null);
     try {
-      let result;
-      // If the image is a data URI (from upload or camera), use the original flow.
-      if (imageToAnalyze.startsWith('data:')) {
-        result = await analyzeCropHealthFromImage({ photoDataUri: imageToAnalyze });
-      } 
-      // If it's a URL (from Firebase), use the new flow that handles fetching on the server.
-      else if (imageToAnalyze.startsWith('http')) {
-        result = await analyzeCropHealthFromImageUrl({ photoUrl: imageToAnalyze });
-      } else {
-        throw new Error('Invalid image source.');
+      let photoDataUri = imageToAnalyze;
+      // If it's a URL (from Firebase), fetch it on the client and convert to a data URI.
+      if (imageToAnalyze.startsWith('http')) {
+        const response = await fetch(imageToAnalyze);
+        const blob = await response.blob();
+        photoDataUri = await new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result as string);
+            reader.readAsDataURL(blob);
+        });
       }
+      
+      const result = await analyzeCropHealthFromImage({ photoDataUri });
       setAnalysisResult(result);
+
     } catch (err: any) {
       console.error(err);
       setError(err.message || 'An error occurred during analysis. Please try again.');
