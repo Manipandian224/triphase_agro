@@ -7,6 +7,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetTrigger, SheetContent } from '@/components/ui/sheet';
 import { Menu, Leaf, Loader } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { AiChatBot } from '@/components/ai-chat-bot';
 import { useUser } from '@/firebase/auth/use-user';
@@ -72,14 +73,14 @@ function TopNavBar() {
 
   return (
     <header className="sticky top-0 z-30 flex h-24 items-center justify-center px-4 md:px-6">
-      <div className="flex items-center justify-between w-full max-w-7xl h-16 px-4 bg-black/30 backdrop-blur-lg rounded-full border border-white/10 shadow-lg">
+      <div className="flex items-center justify-between w-full max-w-7xl h-16 px-4 bg-white/5 backdrop-blur-2xl rounded-2xl border border-white/10 shadow-lg shadow-black/20">
         <Link href="/" className="flex items-center gap-2 font-bold text-xl text-foreground">
           <Leaf className="h-7 w-7 text-primary" />
           <span className="text-slate-100">Triphase Agro</span>
         </Link>
         
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-2 text-sm font-medium bg-black/20 p-1 rounded-full border border-white/10">
+        <nav className="hidden md:flex items-center text-sm font-medium">
           {navLinks.map((link) => {
             const isActive = pathname === link.href;
             return (
@@ -87,16 +88,17 @@ function TopNavBar() {
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  'relative px-5 py-2 rounded-full transition-colors duration-300 text-slate-300 hover:text-white',
-                  isActive ? 'text-white' : ''
+                  'relative px-5 py-2 rounded-full transition-colors duration-300 text-slate-300 hover:text-white'
                 )}
               >
                 <span className="relative z-10 tracking-wider">{link.label}</span>
                 {isActive && (
-                   <span 
-                    className="absolute bottom-1 left-1/2 -translate-x-1/2 w-2/3 h-0.5 bg-blue-400 rounded-full"
-                    style={{boxShadow: '0 0 8px rgba(59, 130, 246, 0.8)'}}
-                  ></span>
+                   <motion.span
+                    layoutId="navbar-pill"
+                    className="absolute inset-0 bg-primary/20 rounded-full border border-primary/50"
+                    style={{ borderRadius: 9999 }}
+                    transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                  />
                 )}
               </Link>
             );
