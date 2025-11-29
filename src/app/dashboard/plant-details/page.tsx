@@ -10,9 +10,8 @@ import {
   DialogDescription,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Droplets, Feather, Sun, Thermometer, Search, X } from 'lucide-react';
-import { cn } from '@/lib/utils';
 import plantData from '@/lib/plant-data.json';
 import type { Plant } from '@/types/plant';
 
@@ -125,7 +124,7 @@ function PlantDetailModal({ plant, isOpen, onClose }: { plant: Plant; isOpen: bo
              <h3 className="text-xl font-bold">Growth Timeline</h3>
              <div className="relative flex justify-between items-start w-full pt-4">
               <div className="absolute top-1/2 left-0 w-full h-0.5 bg-border -translate-y-1/2"></div>
-               {plant.growth.stages.map((stage, index) => (
+               {plant.growth.stages.map((stage) => (
                 <div key={stage.name} className="relative z-10 flex flex-col items-center w-1/4">
                   <div className="h-4 w-4 rounded-full bg-card border-2 border-primary mb-2"></div>
                   <p className="font-bold text-center text-xs md:text-sm">{stage.name}</p>
