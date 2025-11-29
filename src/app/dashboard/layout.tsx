@@ -15,7 +15,7 @@ import { LanguageProvider } from '@/context/language-context';
 const navLinks = [
   { href: '/dashboard', label: 'Dashboard' },
   { href: '/dashboard/health-analysis', label: 'Health Analysis' },
-  { href: '/dashboard/plant-details', label: 'Plant Details' },
+  { href: '/dashboard/plant-details', label: 'Plants & Crops' },
   { href: '/dashboard/user', label: 'Profile' },
 ];
 
