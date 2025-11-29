@@ -18,7 +18,7 @@ import { translateText } from '@/ai/flows/translate-text';
 export function AiChatBot() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [input, setInput]_useState('');
+  const [input, setInput] = useState('');
   const [isThinking, setIsThinking] = useState(false);
   const { language } = useLanguage();
   const isMobile = useIsMobile();
@@ -252,4 +252,5 @@ export function AiChatBot() {
     </Card>
   );
 }
+
     
