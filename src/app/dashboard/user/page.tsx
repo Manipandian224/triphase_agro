@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -24,10 +23,10 @@ export default function UserProfilePage() {
   return (
     <div className="container mx-auto p-4 md:p-8">
       <header className="mb-12 text-center">
-        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tighter">
+        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tighter text-slate-100">
           User Profile
         </h1>
-        <p className="text-lg text-muted-foreground max-w-2xl mx-auto mt-2">
+        <p className="text-lg text-slate-300 max-w-2xl mx-auto mt-2">
           Manage your account settings and preferences.
         </p>
       </header>
@@ -41,8 +40,8 @@ export default function UserProfilePage() {
               <User className="w-16 h-16" />
             </AvatarFallback>
           </Avatar>
-          <h2 className="text-2xl font-bold">Alex Doe</h2>
-          <p className="text-muted-foreground">alex.doe@example.com</p>
+          <h2 className="text-2xl font-bold text-slate-100">Alex Doe</h2>
+          <p className="text-slate-400">alex.doe@example.com</p>
           <Button variant="outline" className="mt-4">
             Edit Profile
           </Button>
@@ -52,53 +51,53 @@ export default function UserProfilePage() {
         <div className="md:col-span-2">
           <Card className="bg-white/5 backdrop-blur-2xl border border-white/10 shadow-lg">
             <CardHeader>
-              <CardTitle>Account Settings</CardTitle>
+              <CardTitle className="text-slate-100">Account Settings</CardTitle>
             </CardHeader>
             <CardContent className="space-y-8">
               {/* General Settings */}
               <div className="space-y-4">
-                <h3 className="font-semibold text-lg flex items-center">
+                <h3 className="font-semibold text-lg flex items-center text-slate-200">
                   <User className="mr-3 h-5 w-5 text-primary" /> General
                 </h3>
-                <div className="grid gap-4">
+                <div className="grid gap-4 text-slate-300">
                   <div className="space-y-2">
-                    <Label htmlFor="name">Full Name</Label>
-                    <Input id="name" defaultValue="Alex Doe" className="bg-black/20 border-white/20"/>
+                    <Label htmlFor="name" className="text-slate-300">Full Name</Label>
+                    <Input id="name" defaultValue="Alex Doe" className="bg-black/20 border-white/20 text-slate-100"/>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="email">Email Address</Label>
-                    <Input id="email" type="email" defaultValue="alex.doe@example.com" className="bg-black/20 border-white/20"/>
+                    <Label htmlFor="email" className="text-slate-300">Email Address</Label>
+                    <Input id="email" type="email" defaultValue="alex.doe@example.com" className="bg-black/20 border-white/20 text-slate-100"/>
                   </div>
                 </div>
               </div>
 
-              <Separator />
+              <Separator className="border-white/10"/>
 
               {/* Notification Settings */}
               <div className="space-y-4">
-                <h3 className="font-semibold text-lg flex items-center">
+                <h3 className="font-semibold text-lg flex items-center text-slate-200">
                   <Bell className="mr-3 h-5 w-5 text-primary" /> Notifications
                 </h3>
                 <div className="space-y-3">
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between text-slate-300">
                     <Label htmlFor="email-notifications">Email Notifications</Label>
                     {isClient && <Switch id="email-notifications" checked={emailNotifications} onCheckedChange={setEmailNotifications} />}
                   </div>
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between text-slate-300">
                     <Label htmlFor="push-notifications">Push Notifications</Label>
                     {isClient && <Switch id="push-notifications" checked={pushNotifications} onCheckedChange={setPushNotifications}/>}
                   </div>
                 </div>
               </div>
               
-               <Separator />
+               <Separator className="border-white/10"/>
 
               {/* Theme Settings */}
               <div className="space-y-4">
-                <h3 className="font-semibold text-lg flex items-center">
+                <h3 className="font-semibold text-lg flex items-center text-slate-200">
                   <Palette className="mr-3 h-5 w-5 text-primary" /> Appearance
                 </h3>
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between text-slate-300">
                     <Label htmlFor="dark-mode">Dark Mode</Label>
                     {isClient && <Switch id="dark-mode" checked={darkMode} onCheckedChange={setDarkMode} disabled />}
                   </div>
@@ -115,3 +114,4 @@ export default function UserProfilePage() {
     </div>
   );
 }
+    

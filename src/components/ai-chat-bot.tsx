@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
@@ -19,7 +18,7 @@ import { translateText } from '@/ai/flows/translate-text';
 export function AiChatBot() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [input, setInput] = useState('');
+  const [input, setInput]_useState('');
   const [isThinking, setIsThinking] = useState(false);
   const { language } = useLanguage();
   const isMobile = useIsMobile();
@@ -162,11 +161,11 @@ export function AiChatBot() {
             <AvatarFallback>A</AvatarFallback>
             <AvatarImage src="https://images.unsplash.com/photo-1563233309-c96792900762?w=100&q=80" />
           </Avatar>
-          <CardTitle>AgriBot Assistant</CardTitle>
+          <CardTitle className="text-slate-100">AgriBot Assistant</CardTitle>
         </div>
         <div className="flex items-center">
             <LanguageSelector />
-            <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)}>
+            <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)} className="text-slate-300 hover:text-slate-100">
               <X className="h-5 w-5" />
             </Button>
         </div>
@@ -193,7 +192,7 @@ export function AiChatBot() {
                     'max-w-[80%] rounded-2xl p-3 text-sm',
                     message.role === 'user'
                       ? 'bg-primary text-primary-foreground rounded-br-none'
-                      : 'bg-secondary rounded-bl-none'
+                      : 'bg-black/20 text-slate-200 rounded-bl-none'
                   )}
                 >
                   {message.content.map((part, partIndex) => (
@@ -216,11 +215,11 @@ export function AiChatBot() {
                     <AvatarFallback>A</AvatarFallback>
                     <AvatarImage src="https://images.unsplash.com/photo-1563233309-c96792900762?w=100&q=80" />
                 </Avatar>
-                <div className="bg-secondary rounded-2xl p-3 text-sm rounded-bl-none">
+                <div className="bg-black/20 rounded-2xl p-3 text-sm rounded-bl-none">
                   <div className="flex items-center gap-2">
-                    <span className="h-2 w-2 bg-muted-foreground rounded-full animate-pulse delay-0"></span>
-                    <span className="h-2 w-2 bg-muted-foreground rounded-full animate-pulse delay-150"></span>
-                    <span className="h-2 w-2 bg-muted-foreground rounded-full animate-pulse delay-300"></span>
+                    <span className="h-2 w-2 bg-slate-400 rounded-full animate-pulse delay-0"></span>
+                    <span className="h-2 w-2 bg-slate-400 rounded-full animate-pulse delay-150"></span>
+                    <span className="h-2 w-2 bg-slate-400 rounded-full animate-pulse delay-300"></span>
                   </div>
                 </div>
               </div>
@@ -236,13 +235,13 @@ export function AiChatBot() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-            className="flex-1 bg-black/20 border-white/20"
+            className="flex-1 bg-black/20 border-white/20 text-slate-100"
           />
            <input type="file" ref={fileInputRef} onChange={handleImageUpload} accept="image/*" className="hidden" />
-          <Button variant="ghost" size="icon" onClick={() => fileInputRef.current?.click()}>
+          <Button variant="ghost" size="icon" onClick={() => fileInputRef.current?.click()} className="text-slate-300 hover:text-slate-100">
             <ImageIcon className="h-5 w-5" />
           </Button>
-          <Button variant="ghost" size="icon">
+          <Button variant="ghost" size="icon" className="text-slate-300 hover:text-slate-100">
             <Mic className="h-5 w-5" />
           </Button>
           <Button size="icon" onClick={handleSend} disabled={isThinking}>
@@ -253,3 +252,4 @@ export function AiChatBot() {
     </Card>
   );
 }
+    

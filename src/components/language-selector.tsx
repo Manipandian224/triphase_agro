@@ -1,4 +1,3 @@
-
 'use client';
 import {
   Select,
@@ -15,7 +14,7 @@ export function LanguageSelector() {
 
   return (
     <Select value={language} onValueChange={setLanguage}>
-      <SelectTrigger className="w-auto bg-transparent border-0 text-white focus:ring-0">
+      <SelectTrigger className="w-auto bg-transparent border-0 text-slate-100 focus:ring-0">
          <div className='flex items-center gap-2'>
             <Languages className="h-5 w-5" />
             <SelectValue placeholder="Language" />
@@ -31,3 +30,5 @@ export function LanguageSelector() {
     </Select>
   );
 }
+
+    

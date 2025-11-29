@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect, FC, ReactNode } from 'react';
@@ -158,7 +157,7 @@ const CircularProgressCard: FC<CircularProgressCardProps> = ({ title, value, dis
           >
             <PolarAngleAxis type="number" domain={[0, 100]} angleAxisId={0} tick={false} />
             <RadialBar
-              background={{ fill: 'hsl(var(--muted) / 0.3)' }}
+              background={{ fill: 'hsla(var(--muted-foreground), 0.2)' }}
               dataKey="value"
               cornerRadius={10}
               animationDuration={1500}
@@ -228,3 +227,4 @@ const DashboardLoadingSkeleton = () => (
     <Skeleton className="h-[220px] bg-white/5 rounded-2xl" />
   </div>
 );
+    

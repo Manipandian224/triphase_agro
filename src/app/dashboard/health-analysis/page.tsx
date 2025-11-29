@@ -130,10 +130,10 @@ export default function HealthAnalysisPage() {
   return (
     <div className="container mx-auto p-4 md:p-8 space-y-8">
       <header className="text-center">
-        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tighter">
+        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tighter text-slate-100">
           AI Crop Health Analysis
         </h1>
-        <p className="text-lg text-muted-foreground max-w-2xl mx-auto mt-2">
+        <p className="text-lg text-slate-300 max-w-2xl mx-auto mt-2">
            Use your camera, upload an image, or view the live feed to get an instant health diagnosis.
         </p>
       </header>
@@ -142,8 +142,8 @@ export default function HealthAnalysisPage() {
         {/* Left Column: Image Source */}
         <Card className="bg-white/5 backdrop-blur-2xl border border-white/10 shadow-lg">
           <CardHeader>
-            <CardTitle>Image Source</CardTitle>
-            <CardDescription>
+            <CardTitle className="text-slate-100">Image Source</CardTitle>
+            <CardDescription className="text-slate-400">
               The latest image from your smart farm is shown. You can also upload or capture a new one.
             </CardDescription>
           </CardHeader>
@@ -231,8 +231,8 @@ export default function HealthAnalysisPage() {
         {/* Right Column: Analysis Results */}
         <Card className="bg-white/5 backdrop-blur-2xl border border-white/10 shadow-lg min-h-[500px]">
           <CardHeader>
-            <CardTitle>Analysis Report</CardTitle>
-            <CardDescription>
+            <CardTitle className="text-slate-100">Analysis Report</CardTitle>
+            <CardDescription className="text-slate-400">
               Review the diagnosis and recommended actions below.
             </CardDescription>
           </CardHeader>
@@ -240,7 +240,7 @@ export default function HealthAnalysisPage() {
             {isLoading && <AnalysisLoadingSkeleton />}
             {error && <p className="text-destructive">{error}</p>}
             {!isLoading && !analysisResult && (
-              <div className="text-center text-muted-foreground py-12">
+              <div className="text-center text-slate-400 py-12">
                 <Info className="mx-auto h-12 w-12 mb-4" />
                 <p>Your analysis report will appear here.</p>
               </div>
@@ -293,7 +293,7 @@ function AnalysisResultView({ originalResult }: { originalResult: AnalyzeCropHea
     <div className="space-y-6">
       <div>
         <div className="flex items-center justify-between mb-2 gap-2">
-          <h3 className="text-xl font-bold flex items-center">
+          <h3 className="text-xl font-bold flex items-center text-slate-100">
             {isHealthy ? (
               <CheckCircle2 className="mr-2 h-6 w-6 text-green-500" />
             ) : (
@@ -304,7 +304,7 @@ function AnalysisResultView({ originalResult }: { originalResult: AnalyzeCropHea
           <div className="flex items-center gap-2">
             <span
                 className={`font-bold text-lg ${
-                  confidencePercent > 80 ? 'text-green-500' : 'text-yellow-500'
+                  confidencePercent > 80 ? 'text-green-400' : 'text-yellow-400'
                 }`}
               >
                 {confidencePercent}%
@@ -313,12 +313,12 @@ function AnalysisResultView({ originalResult }: { originalResult: AnalyzeCropHea
            </div>
         </div>
         <Progress value={confidencePercent} className="h-2" indicatorClassName={confidencePercent < 80 ? "bg-yellow-500" : ""} />
-        <p className="text-xs text-muted-foreground mt-1">AI Confidence Score</p>
+        <p className="text-xs text-slate-400 mt-1">AI Confidence Score</p>
       </div>
 
       {!isHealthy && (
         <div>
-          <h4 className="font-bold text-lg mb-2 flex items-center">
+          <h4 className="font-bold text-lg mb-2 flex items-center text-slate-100">
             <AlertCircle className="mr-2 h-5 w-5 text-destructive" /> Identified Problems
           </h4>
           {isTranslating ? (
@@ -327,7 +327,7 @@ function AnalysisResultView({ originalResult }: { originalResult: AnalyzeCropHea
               <Skeleton className="h-4 w-5/6" />
             </div>
           ) : (
-            <ul className="list-disc pl-5 space-y-1 text-muted-foreground">
+            <ul className="list-disc pl-5 space-y-1 text-slate-300">
               {result.problems.map((problem, index) => (
                 <li key={index}>{problem}</li>
               ))}
@@ -337,7 +337,7 @@ function AnalysisResultView({ originalResult }: { originalResult: AnalyzeCropHea
       )}
 
       <div>
-        <h4 className="font-bold text-lg mb-2 flex items-center">
+        <h4 className="font-bold text-lg mb-2 flex items-center text-slate-100">
           <Lightbulb className="mr-2 h-5 w-5 text-primary" /> Recommended Solutions
         </h4>
         {isTranslating ? (
@@ -346,7 +346,7 @@ function AnalysisResultView({ originalResult }: { originalResult: AnalyzeCropHea
               <Skeleton className="h-4 w-full" />
             </div>
           ) : (
-            <ul className="list-disc pl-5 space-y-1 text-muted-foreground">
+            <ul className="list-disc pl-5 space-y-1 text-slate-300">
               {result.solutions.map((solution, index) => (
                 <li key={index}>{solution}</li>
               ))}
@@ -396,9 +396,9 @@ function AnalysisLoadingSkeleton() {
 function ResultTranslateSelector({ onTranslate, disabled }: { onTranslate: (lang: string) => void; disabled?: boolean; }) {
   return (
     <Select onValueChange={onTranslate} defaultValue="en" disabled={disabled}>
-      <SelectTrigger className="w-auto bg-transparent border-0 text-foreground focus:ring-0">
+      <SelectTrigger className="w-auto bg-transparent border-0 text-slate-100 focus:ring-0">
          <div className='flex items-center gap-1'>
-            <Languages className="h-4 w-4 text-muted-foreground" />
+            <Languages className="h-4 w-4 text-slate-400" />
          </div>
       </SelectTrigger>
       <SelectContent>
@@ -411,3 +411,5 @@ function ResultTranslateSelector({ onTranslate, disabled }: { onTranslate: (lang
     </Select>
   );
 }
+
+    
