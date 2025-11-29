@@ -7,11 +7,11 @@
         "description": "Famous for its quirky, natural leaf holes, this plant brings a lush, tropical jungle vibe to any room.",
         "image": "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxtb25zdGVyYSUyMGRlbGljaW9zYSUyMHBsYW50JTIwaXNvbGF0ZWR8ZW58MHx8fHwxNzIyNDk3Mzk0fDA&ixlib=rb-4.1.0&fm=jpg&w=1080&h=1080&fit=crop",
         "growth": {
-          "total_duration": "6-10 weeks",
+          "total_duration": "6-10 weeks to establish",
           "stages": [
-            { "name": "Germination", "duration": "1-2 weeks" },
-            { "name": "Seedling", "duration": "2-3 weeks" },
-            { "name": "Vegetative", "duration": "3-4 weeks" },
+            { "name": "Propagation", "duration": "2-4 weeks" },
+            { "name": "Rooting", "duration": "2-3 weeks" },
+            { "name": "New Leaf", "duration": "2-3 weeks" },
             { "name": "Mature", "duration": "Ongoing" }
           ]
         },
@@ -25,27 +25,401 @@
       {
         "id": "snake-plant",
         "name": "Snake Plant",
-        "image": "https://images.unsplash.com/photo-1593971265823-3a5539f345c6?ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzbmFrZSUyMHBsYW50JTIwaXNvbGF0ZWR8ZW58MHx8fHwxNzIyNDk3NDU4fDA&ixlib=rb-4.1.0&fm=jpg&w=1080&h=1080&fit=crop"
+        "description": "A low-maintenance plant known for its air-purifying qualities and striking upright leaves.",
+        "image": "https://images.unsplash.com/photo-1593971265823-3a5539f345c6?ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzbmFrZSUyMHBsYW50JTIwaXNvbGF0ZWR8ZW58MHx8fHwxNzIyNDk3NDU4fDA&ixlib=rb-4.1.0&fm=jpg&w=1080&h=1080&fit=crop",
+        "growth": {
+            "total_duration": "2-3 years to mature",
+            "stages": [
+              { "name": "Pup", "duration": "2-6 months" },
+              { "name": "Juvenile", "duration": "1-2 years" },
+              { "name": "Growth", "duration": "Ongoing" },
+              { "name": "Flowering", "duration": "Rarely" }
+            ]
+        },
+        "care": {
+            "water": "Every 2-8 weeks",
+            "sunlight": "Low to bright indirect light",
+            "temperature": "18-35°C",
+            "fertilizer": "Twice a year in spring/summer"
+        }
       },
       {
         "id": "pothos",
         "name": "Golden Pothos",
-        "image": "https://images.unsplash.com/photo-1615591304812-64860a440156?ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxwb3Rob3MlMjBwbGFudCUyMGlzb2xhdGVkfGVufDB8fHx8MTcyMjQ5NzQ4MXww&ixlib=rb-4.1.0&fm=jpg&w=1080&h=1080&fit=crop"
+        "description": "A forgiving and versatile trailing vine, perfect for beginners and hanging baskets.",
+        "image": "https://images.unsplash.com/photo-1615591304812-64860a440156?ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxwb3Rob3MlMjBwbGFudCUyMGlzb2xhdGVkfGVufDB8fHx8MTcyMjQ5NzQ4MXww&ixlib=rb-4.1.0&fm=jpg&w=1080&h=1080&fit=crop",
+         "growth": {
+            "total_duration": "Fast-growing",
+            "stages": [
+              { "name": "Cutting", "duration": "1-2 weeks" },
+              { "name": "Rooting", "duration": "2-4 weeks" },
+              { "name": "Vine Growth", "duration": "Ongoing" },
+              { "name": "Mature", "duration": "1-2 years" }
+            ]
+        },
+        "care": {
+            "water": "Every 1-2 weeks",
+            "sunlight": "Low to bright indirect light",
+            "temperature": "18-29°C",
+            "fertilizer": "Monthly during spring/summer"
+        }
       },
       {
         "id": "fiddle-leaf-fig",
         "name": "Fiddle Leaf Fig",
-        "image": "https://images.unsplash.com/photo-1588697232236-733d67493b8c?ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxmaWRkbGUlMjBsZWFmJTIwZmlnJTIwaXNvbGF0ZWR8ZW58MHx8fHwxNzIyNDk3NTIwfDA&ixlib-rb-4.1.0&fm=jpg&w=1080&h=1080&fit=crop"
+        "description": "A popular indoor tree with large, violin-shaped leaves that makes a dramatic statement.",
+        "image": "https://images.unsplash.com/photo-1588697232236-733d67493b8c?ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxmaWRkbGUlMjBsZWFmJTIwZmlnJTIwaXNvbGF0ZWR8ZW58MHx8fHwxNzIyNDk3NTIwfDA&ixlib=rb-4.1.0&fm=jpg&w=1080&h=1080&fit=crop",
+        "growth": {
+            "total_duration": "3-5 years to mature",
+            "stages": [
+              { "name": "Acclimation", "duration": "2-4 weeks" },
+              { "name": "Slow Growth", "duration": "1-2 years" },
+              { "name": "Growth Spurt", "duration": "Annual" },
+              { "name": "Mature", "duration": "Ongoing" }
+            ]
+        },
+        "care": {
+            "water": "When top inch of soil is dry",
+            "sunlight": "Bright, indirect light",
+            "temperature": "18-24°C",
+            "fertilizer": "Monthly during growing season"
+        }
       },
       {
         "id": "calathea-orbifolia",
         "name": "Calathea Orbifolia",
-        "image": "https://images.unsplash.com/photo-1628160133983-40a1d436b7aa?ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjYWxhdGhlYSUyMG9yYmlmb2xpYSUyMGlzb2xhdGVkfGVufDB8fHx8MTcyMjQ5NzU0MHww&ixlib=rb-4.1.0&fm=jpg&w=1080&h=1080&fit=crop"
+        "description": "Features large, round leaves with beautiful silver stripes, known for its air-purifying abilities.",
+        "image": "https://images.unsplash.com/photo-1628160133983-40a1d436b7aa?ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjYWxhdGhlYSUyMG9yYmlmb2xpYSUyMGlzb2xhdGVkfGVufDB8fHx8MTcyMjQ5NzU0MHww&ixlib=rb-4.1.0&fm=jpg&w=1080&h=1080&fit=crop",
+        "growth": {
+            "total_duration": "1-2 years to full size",
+            "stages": [
+              { "name": "New Shoot", "duration": "1-2 months" },
+              { "name": "Leaf Unfurling", "duration": "1-2 weeks" },
+              { "name": "Growth", "duration": "Ongoing" },
+              { "name": "Mature", "duration": "1-2 years" }
+            ]
+        },
+        "care": {
+            "water": "Keep soil consistently moist",
+            "sunlight": "Medium to bright indirect light",
+            "temperature": "18-24°C",
+            "fertilizer": "Every 2-4 weeks during growing season"
+        }
       },
       {
         "id": "zz-plant",
         "name": "ZZ Plant",
-        "image": "https://images.unsplash.com/photo-1622326049849-CFab174a77df?ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx6eiUyMHBsYW50JTIwaXNvbGF0ZWR8ZW58MHx8fHwxNzIyNDk3NTAwfDA&ixlib-rb-4.1.0&fm=jpg&w=1080&h=1080&fit=crop"
+        "description": "An incredibly durable plant that thrives on neglect, perfect for beginners or low-light spaces.",
+        "image": "https://images.unsplash.com/photo-1622326049849-CFab174a77df?ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx6eiUyMHBsYW50JTIwaXNvbGF0ZWR8ZW58MHx8fHwxNzIyNDk3NTAwfDA&ixlib=rb-4.1.0&fm=jpg&w=1080&h=1080&fit=crop",
+        "growth": {
+            "total_duration": "Very slow growing",
+            "stages": [
+              { "name": "Rhizome", "duration": "Months" },
+              { "name": "New Stalk", "duration": "1-3 months" },
+              { "name": "Leaf Growth", "duration": "Ongoing" },
+              { "name": "Mature", "duration": "3-5 years" }
+            ]
+        },
+        "care": {
+            "water": "Every 3-4 weeks",
+            "sunlight": "Low to bright indirect light",
+            "temperature": "15-24°C",
+            "fertilizer": "1-2 times a year"
+        }
+      },
+      {
+        "id": "tomato",
+        "name": "Tomato",
+        "description": "A widely cultivated crop for its edible fruits, a staple in kitchens worldwide.",
+        "image": "https://images.unsplash.com/photo-1598512752271-33f913a53122?w=1080&h=1080&fit=crop&q=80",
+        "growth": {
+            "total_duration": "60-100 days",
+            "stages": [
+                { "name": "Seed", "duration": "5-10 days" },
+                { "name": "Sprout", "duration": "10-20 days" },
+                { "name": "Vegetative", "duration": "20-30 days" },
+                { "name": "Flowering", "duration": "25-60 days" }
+            ]
+        },
+        "care": {
+            "water": "1-2 inches per week",
+            "sunlight": "Full sun (6-8 hours)",
+            "temperature": "21-29°C",
+            "fertilizer": "Rich in phosphorus and potassium"
+        }
+      },
+      {
+        "id": "rice",
+        "name": "Rice",
+        "description": "A staple food for over half of the world's population, grown in flooded paddy fields.",
+        "image": "https://images.unsplash.com/photo-1536300195517-7c3a07335293?w=1080&h=1080&fit=crop&q=80",
+        "growth": {
+            "total_duration": "3-6 months",
+            "stages": [
+                { "name": "Germination", "duration": "5-10 days" },
+                { "name": "Seedling", "duration": "15-30 days" },
+                { "name": "Tillering", "duration": "30-50 days" },
+                { "name": "Maturity", "duration": "30-60 days" }
+            ]
+        },
+        "care": {
+            "water": "Flooded conditions (paddy)",
+            "sunlight": "Full sun",
+            "temperature": "21-37°C",
+            "fertilizer": "Nitrogen-rich at early stages"
+        }
+      },
+      {
+        "id": "wheat",
+        "name": "Wheat",
+        "description": "A cereal grain, which is a worldwide staple food, used to make flour for bread and other foods.",
+        "image": "https://images.unsplash.com/photo-1542223326-ef3503102115?w=1080&h=1080&fit=crop&q=80",
+        "growth": {
+            "total_duration": "4-5 months",
+            "stages": [
+                { "name": "Germination", "duration": "7-10 days" },
+                { "name": "Tillering", "duration": "2-3 weeks" },
+                { "name": "Stem Extension", "duration": "3-4 weeks" },
+                { "name": "Heading", "duration": "4-5 weeks" }
+            ]
+        },
+        "care": {
+            "water": "Moderate, well-drained soil",
+            "sunlight": "Full sun",
+            "temperature": "12-25°C",
+            "fertilizer": "Balanced NPK fertilizer"
+        }
+      },
+      {
+        "id": "corn",
+        "name": "Maize (Corn)",
+        "description": "A tall annual cereal grass that yields large grains, or kernels, set in rows on a cob.",
+        "image": "https://images.unsplash.com/photo-1547050638-3818bb050313?w=1080&h=1080&fit=crop&q=80",
+        "growth": {
+            "total_duration": "60-100 days",
+            "stages": [
+                { "name": "Sprouting", "duration": "4-7 days" },
+                { "name": "Vegetative", "duration": "30-50 days" },
+                { "name": "Tasseling", "duration": "3-5 days" },
+                { "name": "Harvest", "duration": "15-25 days" }
+            ]
+        },
+        "care": {
+            "water": "1-2 inches per week",
+            "sunlight": "Full sun",
+            "temperature": "21-32°C",
+            "fertilizer": "High nitrogen needs"
+        }
+      },
+      {
+        "id": "potato",
+        "name": "Potato",
+        "description": "A starchy root vegetable, one of the world's most common and important food sources.",
+        "image": "https://images.unsplash.com/photo-1590165482129-1b8b21703b64?w=1080&h=1080&fit=crop&q=80",
+        "growth": {
+            "total_duration": "70-120 days",
+            "stages": [
+                { "name": "Sprouting", "duration": "2-4 weeks" },
+                { "name": "Vegetative", "duration": "30-45 days" },
+                { "name": "Tuber Formation", "duration": "30-60 days" },
+                { "name": "Maturation", "duration": "10-20 days" }
+            ]
+        },
+        "care": {
+            "water": "Consistent moisture",
+            "sunlight": "Full sun",
+            "temperature": "16-21°C",
+            "fertilizer": "Balanced fertilizer, rich in potassium"
+        }
+      },
+      {
+        "id": "soybean",
+        "name": "Soybean",
+        "description": "A species of legume native to East Asia, widely grown for its edible bean.",
+        "image": "https://images.unsplash.com/photo-1520065792241-b84a6018903c?w=1080&h=1080&fit=crop&q=80",
+        "growth": {
+            "total_duration": "100-130 days",
+            "stages": [
+                { "name": "Germination", "duration": "5-7 days" },
+                { "name": "Vegetative", "duration": "6-8 weeks" },
+                { "name": "Flowering", "duration": "4-6 weeks" },
+                { "name": "Pod Fill", "duration": "4-6 weeks" }
+            ]
+        },
+        "care": {
+            "water": "1 inch per week",
+            "sunlight": "Full sun",
+            "temperature": "20-30°C",
+            "fertilizer": "Low nitrogen, inoculate with rhizobia"
+        }
+      },
+      {
+        "id": "sugarcane",
+        "name": "Sugarcane",
+        "description": "A tall perennial grass used for sugar production, with fibrous stalks rich in sucrose.",
+        "image": "https://images.unsplash.com/photo-1620138346132-2337c7ed8c22?w=1080&h=1080&fit=crop&q=80",
+        "growth": {
+            "total_duration": "12-18 months",
+            "stages": [
+                { "name": "Germination", "duration": "1-2 months" },
+                { "name": "Tillering", "duration": "3-4 months" },
+                { "name": "Grand Growth", "duration": "6-9 months" },
+                { "name": "Maturity", "duration": "2-3 months" }
+            ]
+        },
+        "care": {
+            "water": "High water requirement",
+            "sunlight": "Full sun",
+            "temperature": "21-32°C",
+            "fertilizer": "Nitrogen, phosphorus, and potassium"
+        }
+      },
+      {
+        "id": "cotton",
+        "name": "Cotton",
+        "description": "A soft, fluffy staple fiber that grows in a boll, or protective case, around the seeds.",
+        "image": "https://images.unsplash.com/photo-1619379010182-1f316bde11e2?w=1080&h=1080&fit=crop&q=80",
+        "growth": {
+            "total_duration": "150-180 days",
+            "stages": [
+                { "name": "Emergence", "duration": "5-10 days" },
+                { "name": "Vegetative", "duration": "40-50 days" },
+                { "name": "Flowering", "duration": "40-60 days" },
+                { "name": "Boll Opening", "duration": "45-65 days" }
+            ]
+        },
+        "care": {
+            "water": "Moderate, drought-tolerant once established",
+            "sunlight": "Full sun",
+            "temperature": "21-35°C",
+            "fertilizer": "Nitrogen during early growth"
+        }
+      },
+      {
+        "id": "sunflower",
+        "name": "Sunflower",
+        "description": "A tall North American plant of the daisy family, with very large golden-rayed flowers.",
+        "image": "https://images.unsplash.com/photo-1563241527-540e1b83141b?w=1080&h=1080&fit=crop&q=80",
+        "growth": {
+            "total_duration": "70-100 days",
+            "stages": [
+                { "name": "Germination", "duration": "7-10 days" },
+                { "name": "Vegetative", "duration": "30-50 days" },
+                { "name": "Budding", "duration": "10-15 days" },
+                { "name": "Flowering", "duration": "20-30 days" }
+            ]
+        },
+        "care": {
+            "water": "Regular watering",
+            "sunlight": "Full sun (6-8 hours)",
+            "temperature": "21-26°C",
+            "fertilizer": "Low nitrogen, high phosphorus"
+        }
+      },
+      {
+        "id": "lettuce",
+        "name": "Lettuce",
+        "description": "A leafy green vegetable, often used in salads and sandwiches; a cool-weather crop.",
+        "image": "https://images.unsplash.com/photo-1556910110-a5a6350d3958?w=1080&h=1080&fit=crop&q=80",
+        "growth": {
+            "total_duration": "45-55 days",
+            "stages": [
+                { "name": "Seed", "duration": "2-10 days" },
+                { "name": "Seedling", "duration": "2 weeks" },
+                { "name": "Forming Head", "duration": "3-4 weeks" },
+                { "name": "Harvest", "duration": "Ongoing" }
+            ]
+        },
+        "care": {
+            "water": "Consistent moisture",
+            "sunlight": "Full sun to partial shade",
+            "temperature": "15-21°C",
+            "fertilizer": "Nitrogen-rich"
+        }
+      },
+      {
+        "id": "lavender",
+        "name": "Lavender",
+        "description": "A fragrant herb known for its purple flowers and calming scent, used in oils and aromatherapy.",
+        "image": "https://images.unsplash.com/photo-1598233355227-2e1b12b52758?w=1080&h=1080&fit=crop&q=80",
+        "growth": {
+            "total_duration": "1-3 years to mature",
+            "stages": [
+                { "name": "Germination", "duration": "2-4 weeks" },
+                { "name": "Seedling", "duration": "1-2 months" },
+                { "name": "First Year", "duration": "Slow growth" },
+                { "name": "Mature", "duration": "2+ years" }
+            ]
+        },
+        "care": {
+            "water": "Drought-tolerant, water sparingly",
+            "sunlight": "Full sun",
+            "temperature": "15-25°C",
+            "fertilizer": "Low-fertilizer needs"
+        }
+      },
+      {
+        "id": "blueberry",
+        "name": "Blueberry",
+        "description": "A perennial flowering plant with blue or purple berries, packed with antioxidants.",
+        "image": "https://images.unsplash.com/photo-1627733560233-3115a31a5592?w=1080&h=1080&fit=crop&q=80",
+        "growth": {
+            "total_duration": "3-4 years for full production",
+            "stages": [
+                { "name": "Establishment", "duration": "Year 1" },
+                { "name": "Vegetative", "duration": "Year 2" },
+                { "name": "First Fruit", "duration": "Year 3" },
+                { "name": "Full Production", "duration": "Year 4+" }
+            ]
+        },
+        "care": {
+            "water": "1-2 inches per week",
+            "sunlight": "Full sun",
+            "temperature": "Acidic soil (pH 4.5-5.5)",
+            "fertilizer": "Acid-loving plant fertilizer"
+        }
+      },
+      {
+        "id": "strawberry",
+        "name": "Strawberry",
+        "description": "A widely grown hybrid species of the genus Fragaria, cultivated for its bright red, juicy fruit.",
+        "image": "https://images.unsplash.com/photo-1587393855524-7ab3f94633a2?w=1080&h=1080&fit=crop&q=80",
+        "growth": {
+            "total_duration": "4-6 weeks to fruit",
+            "stages": [
+                { "name": "Planting", "duration": "Spring" },
+                { "name": "Flowering", "duration": "4-5 weeks" },
+                { "name": "Fruiting", "duration": "4 weeks" },
+                { "name": "Runners", "duration": "Summer" }
+            ]
+        },
+        "care": {
+            "water": "1-2 inches per week",
+            "sunlight": "At least 8 hours of full sun",
+            "temperature": "15-26°C",
+            "fertilizer": "Balanced (10-10-10) fertilizer"
+        }
+      },
+      {
+        "id": "carrot",
+        "name": "Carrot",
+        "description": "A root vegetable, typically orange in color, though purple, black, red, white, and yellow cultivars exist.",
+        "image": "https://images.unsplash.com/photo-1590413024885-6e3a47a8f903?w=1080&h=1080&fit=crop&q=80",
+        "growth": {
+            "total_duration": "70-80 days",
+            "stages": [
+                { "name": "Germination", "duration": "1-3 weeks" },
+                { "name": "Seedling", "duration": "2-3 weeks" },
+                { "name": "Root Growth", "duration": "6-8 weeks" },
+                { "name": "Harvest", "duration": "Ready" }
+            ]
+        },
+        "care": {
+            "water": "1 inch per week",
+            "sunlight": "Full sun to light shade",
+            "temperature": "15-21°C",
+            "fertilizer": "Low nitrogen, high potassium/phosphate"
+        }
       }
     ]
   }
