@@ -153,7 +153,7 @@ function PlantDetailModal({ plant, isOpen, onClose }: { plant: Plant; isOpen: bo
 
 const CareItem = ({ icon: Icon, title, value }: { icon: React.ElementType; title: string; value: string; }) => (
   <div className="flex items-start gap-4">
-    <div className="p-2 bg-secondary rounded-full mt-1">
+    <div className="p-2 bg-secondary rounded-full mt-1 flex-shrink-0">
       <Icon className="h-5 w-5 text-primary" />
     </div>
     <div>
