@@ -140,7 +140,7 @@ export default function HealthAnalysisPage() {
 
       <div className="grid md:grid-cols-2 gap-8 items-start">
         {/* Left Column: Image Source */}
-        <Card className="shadow-lg">
+        <Card className="bg-white/5 backdrop-blur-2xl border border-white/10 shadow-lg">
           <CardHeader>
             <CardTitle>Image Source</CardTitle>
             <CardDescription>
@@ -150,7 +150,7 @@ export default function HealthAnalysisPage() {
           <CardContent className="space-y-4">
              {showCamera ? (
                  <div className='space-y-4'>
-                    <div className="w-full aspect-video bg-secondary rounded-lg overflow-hidden border">
+                    <div className="w-full aspect-video bg-black/30 rounded-lg overflow-hidden border border-white/10">
                        <Webcam
                             audio={false}
                             ref={webcamRef}
@@ -166,7 +166,7 @@ export default function HealthAnalysisPage() {
                  </div>
             ) : (
                 <div className='space-y-4'>
-                    <div className="relative aspect-video w-full bg-secondary rounded-lg overflow-hidden border">
+                    <div className="relative aspect-video w-full bg-black/30 rounded-lg overflow-hidden border border-white/10">
                         <Image
                             id="analysis-image"
                             src={displayImage || takePhotoImage?.imageUrl || ''}
@@ -229,7 +229,7 @@ export default function HealthAnalysisPage() {
         </Card>
 
         {/* Right Column: Analysis Results */}
-        <Card className="shadow-lg min-h-[500px]">
+        <Card className="bg-white/5 backdrop-blur-2xl border border-white/10 shadow-lg min-h-[500px]">
           <CardHeader>
             <CardTitle>Analysis Report</CardTitle>
             <CardDescription>
@@ -396,7 +396,7 @@ function AnalysisLoadingSkeleton() {
 function ResultTranslateSelector({ onTranslate, disabled }: { onTranslate: (lang: string) => void; disabled?: boolean; }) {
   return (
     <Select onValueChange={onTranslate} defaultValue="en" disabled={disabled}>
-      <SelectTrigger className="w-auto bg-transparent border-0 text-white focus:ring-0">
+      <SelectTrigger className="w-auto bg-transparent border-0 text-foreground focus:ring-0">
          <div className='flex items-center gap-1'>
             <Languages className="h-4 w-4 text-muted-foreground" />
          </div>

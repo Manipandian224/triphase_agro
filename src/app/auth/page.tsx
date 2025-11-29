@@ -1,4 +1,3 @@
-
 'use client';
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
@@ -114,7 +113,7 @@ export default function AuthPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center p-4">
-      <div className="w-full max-w-5xl rounded-3xl bg-white/5 shadow-2xl backdrop-blur-lg">
+      <div className="w-full max-w-5xl rounded-3xl bg-white/5 shadow-2xl backdrop-blur-2xl border border-white/10">
         <div className="grid grid-cols-1 md:grid-cols-2">
           {/* Left Panel: Image */}
           <div className="relative hidden h-full min-h-[600px] rounded-l-3xl md:block">
@@ -217,7 +216,7 @@ const AuthInput = ({ icon: Icon, ...props }: { icon: React.ElementType } & React
         <Icon className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
         <Input 
             {...props} 
-            className="h-12 pl-12 bg-slate-800/50 border-slate-700 focus:border-primary focus:ring-primary/50 text-base text-slate-100"
+            className="h-12 pl-12 bg-black/20 border-white/20 focus:border-primary focus:ring-primary/50 text-base text-slate-100"
         />
     </div>
 );
@@ -228,7 +227,7 @@ const SocialButton = ({ provider }: { provider: 'Google' | 'Facebook' }) => {
     : () => <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className="h-5 w-5"><title>Facebook</title><path d="M22.676 0H1.324C.593 0 0 .593 0 1.324v21.352C0 23.407.593 24 1.324 24h11.494v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12V24h6.116c.73 0 1.323-.593 1.323-1.324V1.324C24 .593 23.407 0 22.676 0z" fill="currentColor"/></svg>;
 
   return (
-    <Button variant="outline" className="h-12 flex-1 bg-slate-800/50 border-slate-700 hover:bg-slate-800 text-slate-200">
+    <Button variant="outline" className="h-12 flex-1 bg-black/20 border-white/20 hover:bg-black/30 text-slate-200">
       <Icon />
       <span className="ml-2">{provider}</span>
     </Button>

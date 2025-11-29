@@ -152,11 +152,11 @@ export function AiChatBot() {
 
   return (
     <Card className={cn(
-      "flex flex-col shadow-2xl", 
+      "flex flex-col shadow-2xl bg-white/5 backdrop-blur-2xl border border-white/10", 
       isMobile ? "rounded-none" : "rounded-2xl",
       cardPosition
       )}>
-      <CardHeader className="flex flex-row items-center justify-between">
+      <CardHeader className="flex flex-row items-center justify-between border-b border-white/10">
         <div className="flex items-center gap-3">
           <Avatar>
             <AvatarFallback>A</AvatarFallback>
@@ -171,7 +171,7 @@ export function AiChatBot() {
             </Button>
         </div>
       </CardHeader>
-      <CardContent className="flex-1 overflow-hidden">
+      <CardContent className="flex-1 overflow-hidden p-3">
         <ScrollArea className="h-full" ref={scrollAreaRef}>
           <div className="space-y-4 pr-4">
             {messages.map((message, index) => (
@@ -228,7 +228,7 @@ export function AiChatBot() {
           </div>
         </ScrollArea>
       </CardContent>
-      <CardFooter className='p-3 border-t'>
+      <CardFooter className='p-3 border-t border-white/10'>
          <div className="flex w-full items-center gap-2">
            <Input
             type="text"
@@ -236,7 +236,7 @@ export function AiChatBot() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-            className="flex-1"
+            className="flex-1 bg-black/20 border-white/20"
           />
            <input type="file" ref={fileInputRef} onChange={handleImageUpload} accept="image/*" className="hidden" />
           <Button variant="ghost" size="icon" onClick={() => fileInputRef.current?.click()}>

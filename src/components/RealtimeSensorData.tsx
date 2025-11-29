@@ -110,12 +110,11 @@ export function RealtimeSensorData() {
 
 const CardWrapper = ({ children, className }: { children: ReactNode, className?: string }) => (
   <div className={cn(
-    'relative h-full rounded-2xl p-6 shadow-lg backdrop-blur-sm',
-    'bg-card/60 border border-white/10', // Glossy finish
+    'relative h-full rounded-2xl p-6 shadow-lg',
+    'bg-white/5 backdrop-blur-2xl border border-white/10',
     'transition-all duration-300 hover:shadow-2xl hover:border-white/20',
     className
   )}>
-     <div className="absolute inset-0 bg-gradient-to-br from-card/80 to-transparent rounded-2xl opacity-50"></div>
     <div className="relative z-10 flex flex-col h-full">{children}</div>
   </div>
 );
@@ -223,9 +222,9 @@ const PumpStatusCard: FC<PumpStatusCardProps> = ({ pumpStatus, onToggle }) => {
 
 const DashboardLoadingSkeleton = () => (
   <div className="grid gap-6 md:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4">
-    <Skeleton className="h-[220px] bg-card/60 rounded-2xl" />
-    <Skeleton className="h-[220px] bg-card/60 rounded-2xl" />
-    <Skeleton className="h-[220px] bg-card/60 rounded-2xl" />
-    <Skeleton className="h-[220px] bg-card/60 rounded-2xl" />
+    <Skeleton className="h-[220px] bg-white/5 rounded-2xl" />
+    <Skeleton className="h-[220px] bg-white/5 rounded-2xl" />
+    <Skeleton className="h-[220px] bg-white/5 rounded-2xl" />
+    <Skeleton className="h-[220px] bg-white/5 rounded-2xl" />
   </div>
 );

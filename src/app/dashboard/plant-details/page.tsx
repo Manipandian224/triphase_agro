@@ -41,7 +41,7 @@ export default function PlantDetailsPage() {
           placeholder="Search for a plant or crop..."
           value={searchTerm}
           onChange={e => setSearchTerm(e.target.value)}
-          className="h-12 pl-12 pr-10 w-full rounded-full bg-card/50"
+          className="h-12 pl-12 pr-10 w-full rounded-full bg-white/5 backdrop-blur-xl border border-white/10"
         />
         {searchTerm && (
           <button
@@ -78,7 +78,7 @@ function PlantCard({ plant, onSelect }: { plant: Plant; onSelect: () => void }) 
   return (
     <Card
       onClick={onSelect}
-      className="cursor-pointer group overflow-hidden bg-card/50 hover:bg-card transition-all duration-300 hover:shadow-glow-primary/20"
+      className="cursor-pointer group overflow-hidden bg-white/5 backdrop-blur-xl border border-white/10 shadow-lg hover:shadow-primary/20 transition-all duration-300"
     >
       <CardContent className="p-0">
         <div className="relative aspect-square">
@@ -101,7 +101,7 @@ function PlantCard({ plant, onSelect }: { plant: Plant; onSelect: () => void }) 
 function PlantDetailModal({ plant, isOpen, onClose }: { plant: Plant; isOpen: boolean; onClose: () => void; }) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-3xl bg-card/80 backdrop-blur-lg">
+      <DialogContent className="max-w-3xl bg-white/5 backdrop-blur-2xl border border-white/10 shadow-lg">
         <DialogHeader>
           <div className="relative h-64 w-full rounded-t-lg overflow-hidden mb-4">
             <Image
@@ -126,7 +126,7 @@ function PlantDetailModal({ plant, isOpen, onClose }: { plant: Plant; isOpen: bo
               <div className="absolute top-1/2 left-0 w-full h-0.5 bg-border -translate-y-1/2"></div>
                {plant.growth.stages.map((stage) => (
                 <div key={stage.name} className="relative z-10 flex flex-col items-center w-1/4">
-                  <div className="h-4 w-4 rounded-full bg-card border-2 border-primary mb-2"></div>
+                  <div className="h-4 w-4 rounded-full bg-background border-2 border-primary mb-2"></div>
                   <p className="font-bold text-center text-xs md:text-sm">{stage.name}</p>
                   <p className="text-muted-foreground text-xs">{stage.duration}</p>
                 </div>
@@ -153,7 +153,7 @@ function PlantDetailModal({ plant, isOpen, onClose }: { plant: Plant; isOpen: bo
 
 const CareItem = ({ icon: Icon, title, value }: { icon: React.ElementType; title: string; value: string; }) => (
   <div className="flex gap-4">
-    <div className="p-2 bg-secondary rounded-full mt-1 flex-shrink-0">
+    <div className="p-2 bg-black/20 rounded-full mt-1 flex-shrink-0 h-9 w-9 flex items-center justify-center">
       <Icon className="h-5 w-5 text-primary" />
     </div>
     <div>

@@ -50,7 +50,7 @@ export default function UserProfilePage() {
 
         {/* Right Column: Settings */}
         <div className="md:col-span-2">
-          <Card className="shadow-lg bg-card/50">
+          <Card className="bg-white/5 backdrop-blur-2xl border border-white/10 shadow-lg">
             <CardHeader>
               <CardTitle>Account Settings</CardTitle>
             </CardHeader>
@@ -63,11 +63,11 @@ export default function UserProfilePage() {
                 <div className="grid gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="name">Full Name</Label>
-                    <Input id="name" defaultValue="Alex Doe" />
+                    <Input id="name" defaultValue="Alex Doe" className="bg-black/20 border-white/20"/>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="email">Email Address</Label>
-                    <Input id="email" type="email" defaultValue="alex.doe@example.com" />
+                    <Input id="email" type="email" defaultValue="alex.doe@example.com" className="bg-black/20 border-white/20"/>
                   </div>
                 </div>
               </div>
