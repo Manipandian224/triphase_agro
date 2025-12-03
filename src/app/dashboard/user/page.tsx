@@ -24,7 +24,6 @@ export default function UserProfilePage() {
   const [email, setEmail] = useState('');
   const [emailNotifications, setEmailNotifications] = useState(true);
   const [pushNotifications, setPushNotifications] = useState(false);
-  const [darkMode, setDarkMode] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
@@ -136,20 +135,6 @@ export default function UserProfilePage() {
                   </div>
                 </div>
               </div>
-              
-               <Separator className="border-white/10"/>
-
-              {/* Theme Settings */}
-              <div className="space-y-4">
-                <h3 className="font-semibold text-lg flex items-center text-slate-200">
-                  <Palette className="mr-3 h-5 w-5 text-primary" /> Appearance
-                </h3>
-                <div className="flex items-center justify-between text-slate-300">
-                    <Label htmlFor="dark-mode">Dark Mode</Label>
-                    {isClient && <Switch id="dark-mode" checked={darkMode} onCheckedChange={setDarkMode} disabled />}
-                  </div>
-              </div>
-
 
               <div className="pt-4 text-right">
                 <Button onClick={handleSaveChanges} disabled={isSaving}>
