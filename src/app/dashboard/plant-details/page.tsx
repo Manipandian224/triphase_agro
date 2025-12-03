@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
-import { Droplets, Feather, Sun, Thermometer, Search, X } from 'lucide-react';
+import { Droplets, Feather, Sun, Thermometer, Search, X, Leaf } from 'lucide-react';
 import plantData from '@/lib/plant-data.json';
 import type { Plant } from '@/types/plant';
 
@@ -81,13 +81,19 @@ function PlantCard({ plant, onSelect }: { plant: Plant; onSelect: () => void }) 
     >
       <CardContent className="p-0">
         <div className="relative aspect-square">
-          <Image
-            src={plant.image}
-            alt={plant.name}
-            fill
-            className="object-cover group-hover:scale-105 transition-transform duration-300"
-            data-ai-hint="plant professional photo"
-          />
+          {plant.image ? (
+            <Image
+              src={plant.image}
+              alt={plant.name}
+              fill
+              className="object-cover group-hover:scale-105 transition-transform duration-300"
+              data-ai-hint="plant professional photo"
+            />
+          ) : (
+            <div className="w-full h-full bg-green-900/30 flex items-center justify-center">
+              <Leaf className="w-12 h-12 text-green-400/50" />
+            </div>
+          )}
         </div>
         <div className="p-4">
           <h3 className="font-bold text-lg text-center text-slate-100 truncate">{plant.name}</h3>
@@ -97,19 +103,26 @@ function PlantCard({ plant, onSelect }: { plant: Plant; onSelect: () => void }) 
   );
 }
 
+
 function PlantDetailModal({ plant, isOpen, onClose }: { plant: Plant; isOpen: boolean; onClose: () => void; }) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-3xl bg-white/5 backdrop-blur-2xl border border-white/10 shadow-lg text-slate-100">
         <DialogHeader>
           <div className="relative h-64 w-full rounded-t-lg overflow-hidden mb-4">
-            <Image
-              src={plant.image}
-              alt={plant.name}
-              fill
-              className="object-cover"
-              data-ai-hint="plant cinematic photo"
-            />
+             {plant.image ? (
+                <Image
+                  src={plant.image}
+                  alt={plant.name}
+                  fill
+                  className="object-cover"
+                  data-ai-hint="plant cinematic photo"
+                />
+              ) : (
+                <div className="w-full h-full bg-green-900/30 flex items-center justify-center">
+                  <Leaf className="w-16 h-16 text-green-400/50" />
+                </div>
+              )}
           </div>
           <DialogTitle className="text-3xl font-bold text-slate-100">{plant.name}</DialogTitle>
           <DialogDescription className="text-base text-slate-300 pt-2">
@@ -152,10 +165,10 @@ function PlantDetailModal({ plant, isOpen, onClose }: { plant: Plant; isOpen: bo
 
 const CareItem = ({ icon: Icon, title, value }: { icon: React.ElementType; title: string; value: string; }) => (
   <div className="flex gap-4">
-    <div className="p-2 bg-black/20 rounded-full mt-1 flex-shrink-0 h-9 w-9 flex items-center justify-center">
+    <div className="p-2 bg-black/20 rounded-full flex-shrink-0 h-9 w-9 flex items-center justify-center">
       <Icon className="h-5 w-5 text-primary" />
     </div>
-    <div>
+    <div className="flex-1">
       <p className="font-semibold text-slate-100">{title}</p>
       <p className="text-slate-300">{value}</p>
     </div>
