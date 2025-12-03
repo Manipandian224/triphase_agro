@@ -34,12 +34,6 @@ export default function AuthPage() {
     setIsClient(true);
   }, []);
 
-  useEffect(() => {
-    if (!isUserLoading && user) {
-      router.push('/dashboard');
-    }
-  }, [user, isUserLoading, router]);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!auth) {
@@ -85,12 +79,9 @@ export default function AuthPage() {
         if (error.code === 'auth/email-already-in-use') {
             title = 'Email Already in Use';
             description = 'This email is already registered. Please log in instead.';
-        } else if (error.code === 'auth/wrong-password') {
-            title = 'Incorrect Password';
-            description = 'The password you entered is incorrect. Please try again.';
-        } else if (error.code === 'auth/user-not-found') {
-            title = 'User Not Found';
-            description = 'No account found with this email. Please sign up first.';
+        } else if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
+            title = 'Invalid Credentials';
+            description = 'The email or password you entered is incorrect. Please try again.';
         } else if (error.message) {
             description = error.message;
         }
@@ -107,7 +98,7 @@ export default function AuthPage() {
   
   const heroImage = PlaceHolderImages.find(img => img.id === 'crop-leaf');
 
-  if (isUserLoading || user) {
+  if (isUserLoading) {
     return null; // Or a loading spinner
   }
 
@@ -233,4 +224,3 @@ const SocialButton = ({ provider }: { provider: 'Google' | 'Facebook' }) => {
     </Button>
   );
 };
-    
