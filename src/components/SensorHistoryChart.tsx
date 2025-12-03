@@ -82,7 +82,7 @@ export function SensorHistoryChart() {
     );
 
     return () => unsubscribe();
-  }, [rtdb]);
+  }, [rtdb, data.length]);
 
   if (loading && data.length === 0) {
     return <Skeleton className="h-[400px] w-full bg-white/5 rounded-2xl" />;
@@ -92,7 +92,7 @@ export function SensorHistoryChart() {
     <Card className="bg-white/5 backdrop-blur-2xl border border-white/10 shadow-lg">
       <CardHeader>
         <CardTitle className="text-slate-100">Sensor Data Trends</CardTitle>
-        <CardDescription className="text-slate-400">
+        <CardDescription className="text-slate-300">
           Historical data from the last 30 readings.
         </CardDescription>
       </CardHeader>
@@ -107,9 +107,9 @@ export function SensorHistoryChart() {
               bottom: 5,
             }}
           >
-            <CartesianGrid strokeDasharray="3 3" stroke="hsla(var(--border), 0.5)" />
-            <XAxis dataKey="time" stroke="hsl(var(--muted-foreground))" fontSize={12} />
-            <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} />
+            <CartesianGrid strokeDasharray="3 3" stroke="hsla(var(--foreground), 0.2)" />
+            <XAxis dataKey="time" stroke="hsl(var(--foreground))" fontSize={12} />
+            <YAxis stroke="hsl(var(--foreground))" fontSize={12} />
             <Tooltip
               contentStyle={{
                 backgroundColor: 'hsla(var(--background), 0.8)',
@@ -118,7 +118,7 @@ export function SensorHistoryChart() {
                 borderRadius: 'var(--radius)'
               }}
             />
-            <Legend wrapperStyle={{fontSize: "14px"}}/>
+            <Legend wrapperStyle={{fontSize: "14px", color: 'hsl(var(--foreground))'}}/>
             <Line
               type="monotone"
               dataKey="Temperature"
