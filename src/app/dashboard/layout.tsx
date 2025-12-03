@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetTrigger, SheetContent, SheetTitle, SheetClose } from '@/components/ui/sheet';
+import { Sheet, SheetTrigger, SheetContent, SheetTitle, SheetClose, SheetHeader } from '@/components/ui/sheet';
 import { Menu, Leaf, Loader, LayoutDashboard, HeartPulse, User, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
@@ -179,4 +179,3 @@ function BottomNavBar() {
         </nav>
     )
 }
-
