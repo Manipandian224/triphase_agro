@@ -5,7 +5,7 @@
         "id": "monstera-deliciosa",
         "name": "Monstera Deliciosa",
         "description": "Famous for its quirky, natural leaf holes, this plant brings a lush, tropical jungle vibe to any room.",
-        "image": "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxtb25zdGVyYSUyMGRlbGljaW9zYSUyMHBsYW50JTIwaXNvbGF0ZWR8ZW58MHx8fHwxNzIyNDk3Mzk0fDA&ixlib=rb-4.1.0&fm=jpg&w=1080&h=1080&fit=crop",
+        "image": "/images/plants/monstera-deliciosa.jpg",
         "growth": {
           "total_duration": "6-10 weeks to establish",
           "stages": [
@@ -26,7 +26,7 @@
         "id": "snake-plant",
         "name": "Snake Plant",
         "description": "A low-maintenance plant known for its air-purifying qualities and striking upright leaves.",
-        "image": "https://images.unsplash.com/photo-1593971265823-3a5539f345c6?ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzbmFrZSUyMHBsYW50JTIwaXNvbGF0ZWR8ZW58MHx8fHwxNzIyNDk3NDU4fDA&ixlib=rb-4.1.0&fm=jpg&w=1080&h=1080&fit=crop",
+        "image": "/images/plants/snake-plant.jpg",
         "growth": {
             "total_duration": "2-3 years to mature",
             "stages": [
@@ -47,7 +47,7 @@
         "id": "pothos",
         "name": "Golden Pothos",
         "description": "A forgiving and versatile trailing vine, perfect for beginners and hanging baskets.",
-        "image": "https://images.unsplash.com/photo-1615591304812-64860a440156?ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxwb3Rob3MlMjBwbGFudCUyMGlzb2xhdGVkfGVufDB8fHx8MTcyMjQ5NzQ4MXww&ixlib=rb-4.1.0&fm=jpg&w=1080&h=1080&fit=crop",
+        "image": "/images/plants/pothos.jpg",
          "growth": {
             "total_duration": "Fast-growing",
             "stages": [
@@ -68,7 +68,7 @@
         "id": "fiddle-leaf-fig",
         "name": "Fiddle Leaf Fig",
         "description": "A popular indoor tree with large, violin-shaped leaves that makes a dramatic statement.",
-        "image": "https://images.unsplash.com/photo-1588697232236-733d67493b8c?ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxmaWRkbGUlMjBsZWFmJTIwZmlnJTIwaXNvbGF0ZWR8ZW58MHx8fHwxNzIyNDk3NTIwfDA&ixlib=rb-4.1.0&fm=jpg&w=1080&h=1080&fit=crop",
+        "image": "/images/plants/fiddle-leaf-fig.jpg",
         "growth": {
             "total_duration": "3-5 years to mature",
             "stages": [
@@ -89,7 +89,7 @@
         "id": "calathea-orbifolia",
         "name": "Calathea Orbifolia",
         "description": "Features large, round leaves with beautiful silver stripes, known for its air-purifying abilities.",
-        "image": "https://images.unsplash.com/photo-1628160133983-40a1d436b7aa?ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjYWxhdGhlYSUyMG9yYmlmb2xpYSUyMGlzb2xhdGVkfGVufDB8fHx8MTcyMjQ5NzU0MHww&ixlib=rb-4.1.0&fm=jpg&w=1080&h=1080&fit=crop",
+        "image": "/images/plants/calathea-orbifolia.jpg",
         "growth": {
             "total_duration": "1-2 years to full size",
             "stages": [
@@ -110,7 +110,7 @@
         "id": "zz-plant",
         "name": "ZZ Plant",
         "description": "An incredibly durable plant that thrives on neglect, perfect for beginners or low-light spaces.",
-        "image": "https://images.unsplash.com/photo-1622326049849-CFab174a77df?ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx6eiUyMHBsYW50JTIwaXNvbGF0ZWR8ZW58MHx8fHwxNzIyNDk3NTAwfDA&ixlib=rb-4.1.0&fm=jpg&w=1080&h=1080&fit=crop",
+        "image": "/images/plants/zz-plant.jpg",
         "growth": {
             "total_duration": "Very slow growing",
             "stages": [
@@ -131,7 +131,7 @@
         "id": "tomato",
         "name": "Tomato",
         "description": "A widely cultivated crop for its edible fruits, a staple in kitchens worldwide.",
-        "image": "https://images.unsplash.com/photo-1598512752271-33f913a53122?w=1080&h=1080&fit=crop&q=80",
+        "image": "/images/plants/tomato.jpg",
         "growth": {
             "total_duration": "60-100 days",
             "stages": [
@@ -152,7 +152,7 @@
         "id": "rice",
         "name": "Rice",
         "description": "A staple food for over half of the world's population, grown in flooded paddy fields.",
-        "image": "https://images.unsplash.com/photo-1536300195517-7c3a07335293?w=1080&h=1080&fit=crop&q=80",
+        "image": "/images/plants/rice.jpg",
         "growth": {
             "total_duration": "3-6 months",
             "stages": [
@@ -173,7 +173,7 @@
         "id": "wheat",
         "name": "Wheat",
         "description": "A cereal grain, which is a worldwide staple food, used to make flour for bread and other foods.",
-        "image": "https://images.unsplash.com/photo-1542223326-ef3503102115?w=1080&h=1080&fit=crop&q=80",
+        "image": "/images/plants/wheat.jpg",
         "growth": {
             "total_duration": "4-5 months",
             "stages": [
@@ -194,7 +194,7 @@
         "id": "corn",
         "name": "Maize (Corn)",
         "description": "A tall annual cereal grass that yields large grains, or kernels, set in rows on a cob.",
-        "image": "https://images.unsplash.com/photo-1547050638-3818bb050313?w=1080&h=1080&fit=crop&q=80",
+        "image": "/images/plants/corn.jpg",
         "growth": {
             "total_duration": "60-100 days",
             "stages": [
@@ -215,7 +215,7 @@
         "id": "potato",
         "name": "Potato",
         "description": "A starchy root vegetable, one of the world's most common and important food sources.",
-        "image": "https://images.unsplash.com/photo-1590165482129-1b8b21703b64?w=1080&h=1080&fit=crop&q=80",
+        "image": "/images/plants/potato.jpg",
         "growth": {
             "total_duration": "70-120 days",
             "stages": [
@@ -236,7 +236,7 @@
         "id": "soybean",
         "name": "Soybean",
         "description": "A species of legume native to East Asia, widely grown for its edible bean.",
-        "image": "https://images.unsplash.com/photo-1520065792241-b84a6018903c?w=1080&h=1080&fit=crop&q=80",
+        "image": "/images/plants/soybean.jpg",
         "growth": {
             "total_duration": "100-130 days",
             "stages": [
@@ -257,7 +257,7 @@
         "id": "sugarcane",
         "name": "Sugarcane",
         "description": "A tall perennial grass used for sugar production, with fibrous stalks rich in sucrose.",
-        "image": "https://images.unsplash.com/photo-1620138346132-2337c7ed8c22?w=1080&h=1080&fit=crop&q=80",
+        "image": "/images/plants/sugarcane.jpg",
         "growth": {
             "total_duration": "12-18 months",
             "stages": [
@@ -278,7 +278,7 @@
         "id": "cotton",
         "name": "Cotton",
         "description": "A soft, fluffy staple fiber that grows in a boll, or protective case, around the seeds.",
-        "image": "https://images.unsplash.com/photo-1619379010182-1f316bde11e2?w=1080&h=1080&fit=crop&q=80",
+        "image": "/images/plants/cotton.jpg",
         "growth": {
             "total_duration": "150-180 days",
             "stages": [
@@ -299,7 +299,7 @@
         "id": "sunflower",
         "name": "Sunflower",
         "description": "A tall North American plant of the daisy family, with very large golden-rayed flowers.",
-        "image": "https://images.unsplash.com/photo-1563241527-540e1b83141b?w=1080&h=1080&fit=crop&q=80",
+        "image": "/images/plants/sunflower.jpg",
         "growth": {
             "total_duration": "70-100 days",
             "stages": [
@@ -320,7 +320,7 @@
         "id": "lettuce",
         "name": "Lettuce",
         "description": "A leafy green vegetable, often used in salads and sandwiches; a cool-weather crop.",
-        "image": "https://images.unsplash.com/photo-1556910110-a5a6350d3958?w=1080&h=1080&fit=crop&q=80",
+        "image": "/images/plants/lettuce.jpg",
         "growth": {
             "total_duration": "45-55 days",
             "stages": [
@@ -341,7 +341,7 @@
         "id": "lavender",
         "name": "Lavender",
         "description": "A fragrant herb known for its purple flowers and calming scent, used in oils and aromatherapy.",
-        "image": "https://images.unsplash.com/photo-1598233355227-2e1b12b52758?w=1080&h=1080&fit=crop&q=80",
+        "image": "/images/plants/lavender.jpg",
         "growth": {
             "total_duration": "1-3 years to mature",
             "stages": [
@@ -362,7 +362,7 @@
         "id": "blueberry",
         "name": "Blueberry",
         "description": "A perennial flowering plant with blue or purple berries, packed with antioxidants.",
-        "image": "https://images.unsplash.com/photo-1627733560233-3115a31a5592?w=1080&h=1080&fit=crop&q=80",
+        "image": "/images/plants/blueberry.jpg",
         "growth": {
             "total_duration": "3-4 years for full production",
             "stages": [
@@ -383,7 +383,7 @@
         "id": "strawberry",
         "name": "Strawberry",
         "description": "A widely grown hybrid species of the genus Fragaria, cultivated for its bright red, juicy fruit.",
-        "image": "https://images.unsplash.com/photo-1587393855524-7ab3f94633a2?w=1080&h=1080&fit=crop&q=80",
+        "image": "/images/plants/strawberry.jpg",
         "growth": {
             "total_duration": "4-6 weeks to fruit",
             "stages": [
@@ -404,7 +404,7 @@
         "id": "carrot",
         "name": "Carrot",
         "description": "A root vegetable, typically orange in color, though purple, black, red, white, and yellow cultivars exist.",
-        "image": "https://images.unsplash.com/photo-1590413024885-6e3a47a8f903?w=1080&h=1080&fit=crop&q=80",
+        "image": "/images/plants/carrot.jpg",
         "growth": {
             "total_duration": "70-80 days",
             "stages": [
@@ -424,3 +424,5 @@
     ]
   }
   
+
+    
