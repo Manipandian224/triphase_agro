@@ -143,7 +143,7 @@ export default function HealthAnalysisPage() {
         <Card className="bg-white/5 backdrop-blur-2xl border border-white/10 shadow-lg">
           <CardHeader>
             <CardTitle className="text-slate-100">Image Source</CardTitle>
-            <CardDescription className="text-slate-400">
+            <CardDescription className="text-slate-300">
               The latest image from your smart farm is shown. You can also upload or capture a new one.
             </CardDescription>
           </CardHeader>
@@ -411,5 +411,3 @@ function ResultTranslateSelector({ onTranslate, disabled }: { onTranslate: (lang
     </Select>
   );
 }
-
-    
