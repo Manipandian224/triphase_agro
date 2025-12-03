@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetTrigger, SheetContent, SheetTitle } from '@/components/ui/sheet';
-import { Menu, Leaf, Loader } from 'lucide-react';
+import { Menu, Leaf, Loader, LayoutDashboard, HeartPulse, User } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { AiChatBot } from '@/components/ai-chat-bot';
@@ -14,10 +14,10 @@ import { useUser } from '@/firebase/auth/use-user';
 import { LanguageProvider } from '@/context/language-context';
 
 const navLinks = [
-  { href: '/dashboard', label: 'Dashboard' },
-  { href: '/dashboard/health-analysis', label: 'Health Analysis' },
-  { href: '/dashboard/plant-details', label: 'Plants & Crops' },
-  { href: '/dashboard/user', label: 'Profile' },
+  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { href: '/dashboard/health-analysis', label: 'Health Analysis', icon: HeartPulse },
+  { href: '/dashboard/plant-details', label: 'Plants & Crops', icon: Leaf },
+  { href: '/dashboard/user', label: 'Profile', icon: User },
 ];
 
 export default function DashboardLayout({
@@ -58,10 +58,11 @@ export default function DashboardLayout({
           className="absolute top-0 left-0 w-full h-full -z-10 bg-gradient-to-br from-theme-start to-theme-end"
         />
         <TopNavBar />
-        <main className="flex-1 overflow-y-auto">
+        <main className="flex-1 overflow-y-auto pb-24 md:pb-0">
           {children}
         </main>
         <AiChatBot />
+        <BottomNavBar />
       </div>
     </LanguageProvider>
   );
@@ -69,7 +70,6 @@ export default function DashboardLayout({
 
 function TopNavBar() {
   const pathname = usePathname();
-  const [isSheetOpen, setIsSheetOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-30 flex h-24 items-center justify-center px-4 md:px-6">
@@ -104,58 +104,29 @@ function TopNavBar() {
             );
           })}
         </nav>
-
-        <div className='flex items-center gap-2'>
-            {/* Mobile Navigation */}
-            <div className="md:hidden">
-              <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-                <SheetTrigger asChild>
-                  <Button variant="ghost" size="icon" className='text-slate-100'>
-                    <Menu className="h-6 w-6" />
-                    <span className="sr-only">Toggle navigation menu</span>
-                  </Button>
-                </SheetTrigger>
-                <SheetContent side="left" className="bg-black/60 backdrop-blur-xl border-r-white/10 p-0">
-                   <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
-                   <SidebarContent onLinkClick={() => setIsSheetOpen(false)} />
-                </SheetContent>
-              </Sheet>
-            </div>
-        </div>
+        <div className='hidden md:flex w-24' />
       </div>
     </header>
   );
 }
 
 
-function SidebarContent({ onLinkClick }: { onLinkClick?: () => void }) {
-  const pathname = usePathname();
-  return (
-    <div className="flex h-full flex-col">
-      <div className="flex h-20 items-center justify-center border-b border-white/10">
-        <Link href="/" className="flex items-center gap-2 font-bold text-xl text-foreground">
-          <Leaf className="h-7 w-7 text-primary" />
-          <span className='text-slate-100'>Triphase Agro</span>
-        </Link>
-      </div>
-      <nav className="flex-1 space-y-2 p-4">
-        {navLinks.map(link => (
-          <Link
-            key={link.href}
-            href={link.href}
-            onClick={onLinkClick}
-            className={cn(
-              'flex items-center justify-center gap-3 rounded-full px-4 py-3 text-lg font-medium transition-all',
-              'text-slate-300 hover:bg-white/20 hover:text-white',
-               pathname === link.href
-                ? 'bg-white/20 text-white shadow-lg'
-                : 'bg-white/10'
-            )}
-          >
-            {link.label}
-          </Link>
-        ))}
-      </nav>
-    </div>
-  );
+function BottomNavBar() {
+    const pathname = usePathname();
+
+    return (
+        <nav className="fixed bottom-0 left-0 right-0 h-20 bg-black/50 backdrop-blur-2xl border-t border-white/10 md:hidden z-40">
+            <div className="flex h-full items-center justify-around">
+                {navLinks.map((link) => {
+                    const isActive = pathname === link.href;
+                    return (
+                        <Link key={link.href} href={link.href} className="flex flex-col items-center justify-center gap-1 text-xs">
+                             <link.icon className={cn("h-6 w-6 transition-colors", isActive ? "text-primary" : "text-slate-400")} />
+                             <span className={cn("transition-colors", isActive ? "text-slate-100" : "text-slate-400")}>{link.label}</span>
+                        </Link>
+                    )
+                })}
+            </div>
+        </nav>
+    )
 }
