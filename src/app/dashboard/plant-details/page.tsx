@@ -77,25 +77,24 @@ function PlantCard({ plant, onSelect }: { plant: Plant; onSelect: () => void }) 
   return (
     <Card
       onClick={onSelect}
-      className="cursor-pointer group overflow-hidden bg-white/5 backdrop-blur-xl border border-white/10 shadow-lg hover:shadow-primary/20 transition-all duration-300"
+      className="cursor-pointer group relative aspect-square overflow-hidden bg-white/5 backdrop-blur-xl border border-white/10 shadow-lg hover:shadow-primary/20 transition-all duration-300"
     >
-      <CardContent className="p-0">
-        <div className="relative aspect-square">
-          {plant.image ? (
-            <Image
-              src={plant.image}
-              alt={plant.name}
-              fill
-              className="object-cover group-hover:scale-105 transition-transform duration-300"
-              data-ai-hint="plant professional photo"
-            />
-          ) : (
-            <div className="w-full h-full bg-green-900/30 flex items-center justify-center">
-              <Leaf className="w-12 h-12 text-green-400/50" />
-            </div>
-          )}
-        </div>
-        <div className="p-4">
+      <CardContent className="p-0 h-full">
+        {plant.image ? (
+          <Image
+            src={plant.image}
+            alt={plant.name}
+            fill
+            className="object-cover group-hover:scale-105 transition-transform duration-300"
+            data-ai-hint="plant professional photo"
+          />
+        ) : (
+          <div className="w-full h-full bg-green-900/30 flex items-center justify-center">
+            <Leaf className="w-12 h-12 text-green-400/50" />
+          </div>
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+        <div className="absolute bottom-0 left-0 right-0 p-4">
           <h3 className="font-bold text-lg text-center text-slate-100 truncate">{plant.name}</h3>
         </div>
       </CardContent>
@@ -134,7 +133,7 @@ function PlantDetailModal({ plant, isOpen, onClose }: { plant: Plant; isOpen: bo
           {/* Growth Timeline */}
           <div className="space-y-4">
              <h3 className="text-xl font-bold text-slate-100">Growth Timeline</h3>
-             <div className="relative flex justify-between items-start w-full pt-4">
+             <div className="relative flex justify-between pt-4">
               <div className="absolute top-1/2 left-0 w-full h-0.5 bg-border -translate-y-1/2"></div>
                {plant.growth.stages.map((stage) => (
                 <div key={stage.name} className="relative z-10 flex flex-col items-center w-1/4">
@@ -168,7 +167,7 @@ const CareItem = ({ icon: Icon, title, value }: { icon: React.ElementType; title
     <div className="p-2 bg-black/20 rounded-full flex-shrink-0 h-9 w-9 flex items-center justify-center">
       <Icon className="h-5 w-5 text-primary" />
     </div>
-    <div className="flex-1">
+    <div>
       <p className="font-semibold text-slate-100">{title}</p>
       <p className="text-slate-300">{value}</p>
     </div>
