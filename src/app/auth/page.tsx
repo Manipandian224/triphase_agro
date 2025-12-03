@@ -109,8 +109,8 @@ export default function AuthPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center">
-      <div className="w-full h-screen">
+    <div className="flex min-h-screen items-center justify-center p-4">
+      <div className="w-full max-w-5xl h-[700px] bg-white/5 backdrop-blur-2xl border border-white/10 shadow-lg rounded-2xl overflow-hidden">
         <div className="grid grid-cols-1 md:grid-cols-2 h-full">
           {/* Left Panel: Image */}
           <div className="relative hidden h-full md:block">
@@ -127,7 +127,7 @@ export default function AuthPage() {
           </div>
 
           {/* Right Panel: Form */}
-          <div className="flex flex-col justify-center p-8 sm:p-12 text-slate-100 bg-background md:bg-transparent">
+          <div className="flex flex-col justify-center p-8 sm:p-12 text-slate-100 bg-background/30 md:bg-transparent overflow-y-auto">
             <div className="mb-8 text-center">
               <Leaf className="mx-auto mb-3 h-10 w-10 text-primary" />
               <h1 className="text-3xl font-extrabold tracking-tighter text-foreground">
