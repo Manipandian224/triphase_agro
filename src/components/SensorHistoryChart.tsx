@@ -115,32 +115,33 @@ export function SensorHistoryChart() {
                 backgroundColor: 'hsla(var(--background), 0.8)',
                 borderColor: 'hsla(var(--border), 0.5)',
                 color: 'hsl(var(--foreground))',
+                borderRadius: 'var(--radius)'
               }}
             />
             <Legend wrapperStyle={{fontSize: "14px"}}/>
             <Line
               type="monotone"
               dataKey="Temperature"
-              stroke="#8884d8"
+              stroke="#38bdf8"
               strokeWidth={2}
-              dot={{ r: 2 }}
-              activeDot={{ r: 6 }}
+              dot={{ r: 2, fill: '#38bdf8' }}
+              activeDot={{ r: 6, fill: '#38bdf8' }}
             />
             <Line
               type="monotone"
               dataKey="Humidity"
-              stroke="#82ca9d"
+              stroke="#f471b5"
               strokeWidth={2}
-               dot={{ r: 2 }}
-              activeDot={{ r: 6 }}
+               dot={{ r: 2, fill: '#f471b5' }}
+              activeDot={{ r: 6, fill: '#f471b5' }}
             />
             <Line
               type="monotone"
               dataKey="Soil Moisture"
-              stroke="#ffc658"
+              stroke="#fb923c"
               strokeWidth={2}
-               dot={{ r: 2 }}
-              activeDot={{ r: 6 }}
+               dot={{ r: 2, fill: '#fb923c' }}
+              activeDot={{ r: 6, fill: '#fb923c' }}
             />
           </LineChart>
         </ResponsiveContainer>
