@@ -238,10 +238,10 @@ export function AiChatBot() {
             className="flex-1 bg-black/20 border-white/20 text-slate-100"
           />
            <input type="file" ref={fileInputRef} onChange={handleImageUpload} accept="image/*" className="hidden" />
-          <Button variant="ghost" size="icon" onClick={() => fileInputRef.current?.click()} className="text-slate-300 hover:text-slate-100">
+          <Button size="icon" onClick={() => fileInputRef.current?.click()} className="bg-[#212121] text-slate-300 hover:bg-gray-700 hover:text-slate-100">
             <ImageIcon className="h-5 w-5" />
           </Button>
-          <Button variant="ghost" size="icon" className="text-slate-300 hover:text-slate-100">
+          <Button size="icon" className="bg-[#212121] text-slate-300 hover:bg-gray-700 hover:text-slate-100">
             <Mic className="h-5 w-5" />
           </Button>
           <Button size="icon" onClick={handleSend} disabled={isThinking}>
