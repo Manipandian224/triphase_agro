@@ -72,7 +72,7 @@ function TopNavBar() {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-30 flex h-24 items-center justify-center px-4 md:px-6">
+    <header className="sticky top-0 z-30 hidden md:flex h-24 items-center justify-center px-4 md:px-6">
       <div className="flex items-center justify-between w-full max-w-7xl h-16 px-4 bg-white/5 backdrop-blur-2xl rounded-2xl border border-white/10 shadow-lg shadow-black/20">
         <Link href="/" className="flex items-center gap-2 font-bold text-xl text-foreground">
           <Leaf className="h-7 w-7 text-primary" />
