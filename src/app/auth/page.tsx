@@ -7,6 +7,7 @@ import { useFirebase } from '@/firebase/client-provider';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  updateProfile,
 } from 'firebase/auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -64,7 +65,12 @@ export default function AuthPage() {
           setIsLoading(false);
           return;
         }
-        await createUserWithEmailAndPassword(auth, email, password);
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        if (userCredential.user) {
+          await updateProfile(userCredential.user, {
+            displayName: name,
+          });
+        }
         toast({ title: 'Account created successfully!' });
         router.push('/dashboard');
       } else {
@@ -112,9 +118,8 @@ export default function AuthPage() {
               <Image
                 src={heroImage.imageUrl}
                 alt={heroImage.description}
-                layout="fill"
-                objectFit="cover"
-                className="rounded-l-3xl"
+                fill
+                className="object-cover rounded-l-3xl"
                 data-ai-hint={heroImage.imageHint}
               />
             )}

@@ -9,16 +9,66 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import { User, Bell, Palette } from 'lucide-react';
+import { useUser } from '@/firebase/auth/use-user';
+import { updateProfile } from 'firebase/auth';
+import { useFirebase } from '@/firebase/client-provider';
+import { useToast } from '@/hooks/use-toast';
 
 export default function UserProfilePage() {
+  const { user } = useUser();
+  const { auth } = useFirebase();
+  const { toast } = useToast();
+
   const [isClient, setIsClient] = useState(false);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
   const [emailNotifications, setEmailNotifications] = useState(true);
   const [pushNotifications, setPushNotifications] = useState(false);
   const [darkMode, setDarkMode] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
-  }, []);
+    if (user) {
+      setName(user.displayName || '');
+      setEmail(user.email || '');
+    }
+  }, [user]);
+
+  const handleSaveChanges = async () => {
+    if (!user || !auth) {
+      toast({
+        variant: 'destructive',
+        title: 'Not authenticated',
+        description: 'You must be logged in to save changes.',
+      });
+      return;
+    }
+
+    setIsSaving(true);
+    try {
+      await updateProfile(user, {
+        displayName: name,
+      });
+      
+      // Note: Updating email requires re-authentication and is a more complex flow.
+      // We will only update the display name for now.
+
+      toast({
+        title: 'Profile Updated',
+        description: 'Your changes have been saved successfully.',
+      });
+    } catch (error: any) {
+      toast({
+        variant: 'destructive',
+        title: 'Update Failed',
+        description: error.message || 'Could not save your changes.',
+      });
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
 
   return (
     <div className="container mx-auto p-4 md:p-8">
@@ -35,16 +85,13 @@ export default function UserProfilePage() {
         {/* Left Column: User Info */}
         <div className="md:col-span-1 flex flex-col items-center text-center">
           <Avatar className="w-32 h-32 mb-4 border-4 border-primary/50">
-            <AvatarImage src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fDE?w=200" />
+            <AvatarImage src={user?.photoURL || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fDE?w=200"} />
             <AvatarFallback>
               <User className="w-16 h-16" />
             </AvatarFallback>
           </Avatar>
-          <h2 className="text-2xl font-bold text-slate-100">Alex Doe</h2>
-          <p className="text-slate-400">alex.doe@example.com</p>
-          <Button variant="outline" className="mt-4">
-            Edit Profile
-          </Button>
+          <h2 className="text-2xl font-bold text-slate-100">{user?.displayName || 'User'}</h2>
+          <p className="text-slate-400">{user?.email}</p>
         </div>
 
         {/* Right Column: Settings */}
@@ -62,11 +109,11 @@ export default function UserProfilePage() {
                 <div className="grid gap-4 text-slate-300">
                   <div className="space-y-2">
                     <Label htmlFor="name" className="text-slate-300">Full Name</Label>
-                    <Input id="name" defaultValue="Alex Doe" className="bg-black/20 border-white/20 text-slate-100"/>
+                    <Input id="name" value={name} onChange={(e) => setName(e.target.value)} className="bg-black/20 border-white/20 text-slate-100"/>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="email" className="text-slate-300">Email Address</Label>
-                    <Input id="email" type="email" defaultValue="alex.doe@example.com" className="bg-black/20 border-white/20 text-slate-100"/>
+                    <Input id="email" type="email" value={email} disabled className="bg-black/20 border-white/20 text-slate-100 disabled:opacity-70"/>
                   </div>
                 </div>
               </div>
@@ -105,7 +152,9 @@ export default function UserProfilePage() {
 
 
               <div className="pt-4 text-right">
-                <Button>Save Changes</Button>
+                <Button onClick={handleSaveChanges} disabled={isSaving}>
+                  {isSaving ? 'Saving...' : 'Save Changes'}
+                </Button>
               </div>
             </CardContent>
           </Card>
