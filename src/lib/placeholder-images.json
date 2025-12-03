@@ -23,6 +23,12 @@
       "description": "Artistic representation of agriculture technology",
       "imageUrl": "/images/plants/auth-hero.jpg",
       "imageHint": "futuristic agriculture"
+    },
+    {
+      "id": "agribot-avatar",
+      "description": "Avatar for the AI assistant, AgriBot.",
+      "imageUrl": "/images/agribot-avatar.jpg",
+      "imageHint": "robot mascot"
     }
   ]
 }

@@ -159,7 +159,7 @@ export function AiChatBot() {
         <div className="flex items-center gap-3">
           <Avatar>
             <AvatarFallback>A</AvatarFallback>
-            <AvatarImage src="https://images.unsplash.com/photo-1563233309-c96792900762?w=100&q=80" />
+            <AvatarImage src="/images/agribot-avatar.jpg" />
           </Avatar>
           <CardTitle className="text-slate-100">AgriBot Assistant</CardTitle>
         </div>
@@ -184,7 +184,7 @@ export function AiChatBot() {
                 {message.role === 'model' && (
                     <Avatar className='w-8 h-8'>
                         <AvatarFallback>A</AvatarFallback>
-                        <AvatarImage src="https://images.unsplash.com/photo-1563233309-c96792900762?w=100&q=80" />
+                        <AvatarImage src="/images/agribot-avatar.jpg" />
                     </Avatar>
                 )}
                 <div
@@ -213,7 +213,7 @@ export function AiChatBot() {
               <div className="flex items-start gap-3 justify-start">
                 <Avatar className='w-8 h-8'>
                     <AvatarFallback>A</AvatarFallback>
-                    <AvatarImage src="https://images.unsplash.com/photo-1563233309-c96792900762?w=100&q=80" />
+                    <AvatarImage src="/images/agribot-avatar.jpg" />
                 </Avatar>
                 <div className="bg-black/20 rounded-2xl p-3 text-sm rounded-bl-none">
                   <div className="flex items-center gap-2">
