@@ -151,7 +151,7 @@ export function AiChatBot() {
 
   return (
     <Card className={cn(
-      "flex flex-col shadow-2xl bg-white/5 backdrop-blur-2xl border border-white/10", 
+      "flex flex-col shadow-2xl shadow-black/20 bg-white/5 backdrop-blur-2xl border border-white/10", 
       isMobile ? "rounded-none" : "rounded-2xl",
       cardPosition
       )}>
@@ -189,7 +189,7 @@ export function AiChatBot() {
                 )}
                 <div
                   className={cn(
-                    'max-w-[80%] rounded-2xl p-3 text-sm',
+                    'max-w-[80%] rounded-2xl p-3 text-sm shadow-lg shadow-black/10',
                     message.role === 'user'
                       ? 'bg-primary text-primary-foreground rounded-br-none'
                       : 'bg-black/20 text-slate-200 rounded-bl-none'
@@ -252,5 +252,3 @@ export function AiChatBot() {
     </Card>
   );
 }
-
-    
