@@ -173,7 +173,7 @@ export default function HealthAnalysisPage() {
                             alt="Selected or placeholder crop"
                             fill
                             className="object-cover"
-                            data-ai-hint={takePhotoImage?.imageHint || 'take photo illustration'}
+                            data-ai-hint={takePhotoImage?.imageHint || 'camera illustration'}
                             crossOrigin='anonymous'
                         />
                         {selectedImage && (
@@ -232,7 +232,7 @@ export default function HealthAnalysisPage() {
         <Card className="bg-white/5 backdrop-blur-2xl border border-white/10 shadow-lg min-h-[500px]">
           <CardHeader>
             <CardTitle className="text-slate-100">Analysis Report</CardTitle>
-            <CardDescription className="text-slate-400">
+            <CardDescription className="text-slate-300">
               Review the diagnosis and recommended actions below.
             </CardDescription>
           </CardHeader>
@@ -240,7 +240,7 @@ export default function HealthAnalysisPage() {
             {isLoading && <AnalysisLoadingSkeleton />}
             {error && <p className="text-destructive">{error}</p>}
             {!isLoading && !analysisResult && (
-              <div className="text-center text-slate-400 py-12">
+              <div className="text-center text-slate-300 py-12">
                 <Info className="mx-auto h-12 w-12 mb-4" />
                 <p>Your analysis report will appear here.</p>
               </div>
