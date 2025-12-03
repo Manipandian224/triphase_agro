@@ -17,6 +17,12 @@
       "description": "An illustration showing a camera icon, representing the action of taking a photo.",
       "imageUrl": "https://images.unsplash.com/photo-1593414899535-5193933a36c3?w=800",
       "imageHint": "camera illustration"
+    },
+    {
+      "id": "auth-hero",
+      "description": "Artistic representation of agriculture technology",
+      "imageUrl": "https://images.unsplash.com/photo-1593011033489-38501174693a?w=800",
+      "imageHint": "futuristic agriculture"
     }
   ]
 }
