@@ -98,7 +98,7 @@ export default function AuthPage() {
   
   const heroImage = PlaceHolderImages.find(img => img.id === 'crop-leaf');
 
-  if (isUserLoading) {
+  if (isUserLoading && !isClient) {
     return null; // Or a loading spinner
   }
 
@@ -151,11 +151,11 @@ export default function AuthPage() {
                   />
                   <label htmlFor="terms" className="text-sm text-slate-400">
                     I agree to the{' '}
-                    <a href="#" className="text-primary hover:underline">
+                    <a href="#" className="font-semibold text-primary hover:underline">
                       Terms
                     </a>{' '}
                     and{' '}
-                    <a href="#" className="text-primary hover:underline">
+                    <a href="#" className="font-semibold text-primary hover:underline">
                       Privacy Policy
                     </a>
                   </label>
