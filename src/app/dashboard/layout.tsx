@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetTrigger, SheetContent } from '@/components/ui/sheet';
+import { Sheet, SheetTrigger, SheetContent, SheetTitle } from '@/components/ui/sheet';
 import { Menu, Leaf, Loader } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
@@ -116,6 +116,7 @@ function TopNavBar() {
                   </Button>
                 </SheetTrigger>
                 <SheetContent side="left" className="bg-black/60 backdrop-blur-xl border-r-white/10 p-0">
+                   <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
                    <SidebarContent onLinkClick={() => setIsSheetOpen(false)} />
                 </SheetContent>
               </Sheet>
