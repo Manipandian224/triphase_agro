@@ -5,8 +5,8 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetTrigger, SheetContent, SheetTitle } from '@/components/ui/sheet';
-import { Menu, Leaf, Loader, LayoutDashboard, HeartPulse, User } from 'lucide-react';
+import { Sheet, SheetTrigger, SheetContent, SheetTitle, SheetClose } from '@/components/ui/sheet';
+import { Menu, Leaf, Loader, LayoutDashboard, HeartPulse, User, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { AiChatBot } from '@/components/ai-chat-bot';
@@ -104,7 +104,56 @@ function TopNavBar() {
             );
           })}
         </nav>
-        <div className='hidden md:flex w-24' />
+
+        {/* Mobile Navigation Trigger */}
+         <div className="md:hidden">
+           <Sheet>
+            <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" className="text-slate-100">
+                    <Menu />
+                    <span className="sr-only">Open Menu</span>
+                </Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="w-full max-w-sm bg-black/80 backdrop-blur-2xl border-r-white/10 text-slate-100 p-0">
+                 <SheetHeader className="flex flex-row items-center justify-between p-4 border-b border-white/10">
+                    <SheetTitle>
+                        <Link href="/" className="flex items-center gap-2 font-bold text-xl text-foreground">
+                            <Leaf className="h-7 w-7 text-primary" />
+                            <span className="text-slate-100">Triphase Agro</span>
+                        </Link>
+                    </SheetTitle>
+                    <SheetClose className="relative right-0 top-0 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary">
+                        <X className="h-6 w-6" />
+                        <span className="sr-only">Close</span>
+                    </SheetClose>
+                </SheetHeader>
+                <nav className="flex flex-col p-4 space-y-2">
+                    {navLinks.map((link) => {
+                        const isActive = pathname === link.href;
+                        return (
+                            <SheetClose asChild key={link.href}>
+                                <Link
+                                    href={link.href}
+                                    className={cn(
+                                        'flex items-center gap-4 rounded-full p-4 text-lg font-semibold transition-colors',
+                                        isActive
+                                            ? 'bg-primary text-primary-foreground'
+                                            : 'hover:bg-white/10'
+                                    )}
+                                >
+                                    <link.icon className="h-6 w-6" />
+                                    {link.label}
+                                </Link>
+                            </SheetClose>
+                        );
+                    })}
+                </nav>
+            </SheetContent>
+        </Sheet>
+        </div>
+
+
+        <div className='hidden md:flex w-24 justify-end' />
       </div>
     </header>
   );
@@ -130,3 +179,4 @@ function BottomNavBar() {
         </nav>
     )
 }
+
