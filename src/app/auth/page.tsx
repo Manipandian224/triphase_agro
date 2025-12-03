@@ -109,25 +109,25 @@ export default function AuthPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-4">
-      <div className="w-full max-w-5xl rounded-3xl bg-white/5 shadow-2xl backdrop-blur-2xl border border-white/10">
-        <div className="grid grid-cols-1 md:grid-cols-2">
+    <div className="flex min-h-screen items-center justify-center">
+      <div className="w-full h-screen">
+        <div className="grid grid-cols-1 md:grid-cols-2 h-full">
           {/* Left Panel: Image */}
-          <div className="relative hidden h-full min-h-[600px] rounded-l-3xl md:block">
+          <div className="relative hidden h-full md:block">
             {heroImage && (
               <Image
                 src={heroImage.imageUrl}
                 alt={heroImage.description}
                 fill
-                className="object-cover rounded-l-3xl"
+                className="object-cover"
                 data-ai-hint={heroImage.imageHint}
               />
             )}
-            <div className="absolute inset-0 rounded-l-3xl bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
           </div>
 
           {/* Right Panel: Form */}
-          <div className="flex flex-col justify-center p-8 sm:p-12 text-slate-100">
+          <div className="flex flex-col justify-center p-8 sm:p-12 text-slate-100 bg-background md:bg-transparent">
             <div className="mb-8 text-center">
               <Leaf className="mx-auto mb-3 h-10 w-10 text-primary" />
               <h1 className="text-3xl font-extrabold tracking-tighter text-foreground">
@@ -138,7 +138,7 @@ export default function AuthPage() {
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4 max-w-sm mx-auto w-full">
               {isSignUp && (
                  <AuthInput icon={User} placeholder="Full Name" value={name} onChange={e => setName(e.target.value)} type="text" />
               )}
@@ -176,7 +176,7 @@ export default function AuthPage() {
               >
                 {isLoading ? 'Processing...' : (isSignUp ? 'Create Account' : 'Log In')}
               </Button>
-            </form>
+            
 
             <div className="my-6 flex items-center">
               <div className="flex-grow border-t border-slate-700"></div>
@@ -202,6 +202,7 @@ export default function AuthPage() {
                 </>
               )}
             </p>
+          </form>
           </div>
         </div>
       </div>
