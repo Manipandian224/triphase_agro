@@ -96,7 +96,7 @@ export default function AuthPage() {
     }
   };
   
-  const heroImage = PlaceHolderImages.find(img => img.id === 'crop-leaf');
+  const heroImage = PlaceHolderImages.find(img => img.id === 'auth-hero');
 
   if (isUserLoading && !isClient) {
     return null; // Or a loading spinner
@@ -108,14 +108,16 @@ export default function AuthPage() {
         <div className="grid grid-cols-1 md:grid-cols-2">
           {/* Left Panel: Image */}
           <div className="relative hidden h-full min-h-[600px] rounded-l-3xl md:block">
-            <Image
-              src={heroImage?.imageUrl || "https://in.images.search.yahoo.com/search/images;_ylt=Awrx_LCoPDBp9AEASZy7HAx.;_ylu=Y29sbwNzZzMEcG9zAzEEdnRpZAMEc2VjA3BpdnM-?p=irrigation&fr2=piv-web&type=E210IN826G0&fr=mcafee#id=1&iurl=https%3A%2F%2Fwww.gvsprinklers.com.au%2Fwp-content%2Fuploads%2F2017%2F10%2Fsprinklerirrigation.jpg&action=click"}
-              alt="Artistic representation of agriculture technology"
-              layout="fill"
-              objectFit="cover"
-              className="rounded-l-3xl"
-              data-ai-hint={heroImage?.imageHint || 'futuristic agriculture'}
-            />
+            {heroImage && (
+              <Image
+                src={heroImage.imageUrl}
+                alt={heroImage.description}
+                layout="fill"
+                objectFit="cover"
+                className="rounded-l-3xl"
+                data-ai-hint={heroImage.imageHint}
+              />
+            )}
             <div className="absolute inset-0 rounded-l-3xl bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
           </div>
 
