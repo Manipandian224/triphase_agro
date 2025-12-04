@@ -27,7 +27,7 @@
     {
       "id": "agribot-avatar",
       "description": "Avatar for the AI assistant, AgriBot.",
-      "imageUrl": "/images/agribot-avatar.jpg",
+      "imageUrl": "/images/plants/agribot-avatar.jpg",
       "imageHint": "robot mascot"
     }
   ]

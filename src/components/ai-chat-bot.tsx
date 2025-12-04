@@ -158,8 +158,9 @@ export function AiChatBot() {
       <CardHeader className="flex flex-row items-center justify-between border-b border-white/10">
         <div className="flex items-center gap-3">
           <Avatar>
-            <AvatarFallback>A</AvatarFallback>
-            <AvatarImage src="/images/agribot-avatar.jpg" />
+            <AvatarFallback ></AvatarFallback>
+            <AvatarImage src="/images/plants/agribot-avatar.jpg" />
+           
           </Avatar>
           <CardTitle className="text-slate-100">AgriBot Assistant</CardTitle>
         </div>
@@ -183,8 +184,9 @@ export function AiChatBot() {
               >
                 {message.role === 'model' && (
                     <Avatar className='w-8 h-8'>
-                        <AvatarFallback>A</AvatarFallback>
-                        <AvatarImage src="/images/agribot-avatar.jpg" />
+                      <AvatarFallback></AvatarFallback>
+                        <AvatarImage src="/images/plants/agribot-avatar.jpg" />
+                        
                     </Avatar>
                 )}
                 <div
