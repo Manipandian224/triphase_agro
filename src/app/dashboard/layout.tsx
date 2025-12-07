@@ -18,6 +18,7 @@ const navLinks = [
   { href: '/dashboard/health-analysis', label: 'Health Analysis', icon: HeartPulse },
   { href: '/dashboard/plant-details', label: 'Plants & Crops', icon: Leaf },
   { href: '/dashboard/user', label: 'Profile', icon: User },
+  
 ];
 
 export default function DashboardLayout({
@@ -60,8 +61,10 @@ export default function DashboardLayout({
         <TopNavBar />
         <main className="flex-1 overflow-y-auto pb-24 md:pb-0">
           {children}
-        </main>
-        <AiChatBot />
+          </main>
+          <div className="fixed bottom-24 right-4 md:bottom-8 md:right-8 z-50">
+            <AiChatBot />
+          </div>
         <BottomNavBar />
       </div>
     </LanguageProvider>

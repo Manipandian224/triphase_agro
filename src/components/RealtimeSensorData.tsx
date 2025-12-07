@@ -74,7 +74,7 @@ export function RealtimeSensorData() {
 
 
   return (
-    <div className="grid gap-6 md:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4">
+    <div className="grid gap-6 md:gap-8 grid-cols-2 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4">
       <CircularProgressCard
         title="Temperature"
         value={data.Temperature}
@@ -108,15 +108,18 @@ export function RealtimeSensorData() {
 // == SUBCOMPONENTS ==
 
 const CardWrapper = ({ children, className }: { children: ReactNode, className?: string }) => (
-  <div className={cn(
-    'relative h-full rounded-2xl p-6 shadow-lg',
-    'bg-white/5 backdrop-blur-2xl border border-white/10',
-    'transition-all duration-300 hover:shadow-2xl hover:border-white/20',
-    className
-  )}>
+  <div
+    className={cn(
+      'relative h-full rounded-2xl p-4 sm:p-4 shadow-lg', // ⬅️ p-4 on mobile, p-6 on md+
+      'bg-white/5 backdrop-blur-2xl border border-white/10',
+      'transition-all duration-300 hover:shadow-2xl hover:border-white/20',
+      className
+    )}
+  >
     <div className="relative z-10 flex flex-col h-full">{children}</div>
   </div>
 );
+
 
 const CornerTriangle = ({ isPositive, className }: { isPositive: boolean; className?: string }) => (
   <div
@@ -137,20 +140,29 @@ interface CircularProgressCardProps {
   isPositive: boolean;
 }
 
-const CircularProgressCard: FC<CircularProgressCardProps> = ({ title, value, displayValue, percentage = 0, isPositive }) => {
-
+const CircularProgressCard: FC<CircularProgressCardProps> = ({
+  title,
+  value,
+  displayValue,
+  percentage = 0,
+  isPositive,
+}) => {
   return (
     <CardWrapper className="items-center justify-between">
       <CornerTriangle isPositive={isPositive} className="top-0 right-0 transform rotate-90" />
-      <h3 className="text-lg font-medium text-slate-200 w-full text-left">{title}</h3>
-      <div className="relative w-40 h-40 my-4">
+      <h3 className="text-base sm:text-lg font-medium text-slate-200 w-full text-left">
+        {title}
+      </h3>
+
+      {/* Smaller on mobile, normal on bigger screens */}
+      <div className="relative w-28 h-28 my-2 sm:w-40 sm:h-40 sm:my-4">
         <ResponsiveContainer width="100%" height="100%">
           <RadialBarChart
             cx="50%"
             cy="50%"
             innerRadius="80%"
             outerRadius="100%"
-            barSize={12}
+            barSize={10}
             data={[{ value: percentage, fill: 'hsl(var(--primary))' }]}
             startAngle={90}
             endAngle={-270}
@@ -164,15 +176,20 @@ const CircularProgressCard: FC<CircularProgressCardProps> = ({ title, value, dis
             />
           </RadialBarChart>
         </ResponsiveContainer>
+
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           {value !== undefined ? (
-            <span className="text-4xl font-bold text-slate-100">{displayValue}</span>
+            <span className="text-3xl sm:text-4xl font-bold text-slate-100">
+              {displayValue}
+            </span>
           ) : (
             <span className="text-lg text-slate-400">No data</span>
           )}
         </div>
       </div>
-       <p className='text-transparent text-sm'>hidden</p>
+
+      {/* Remove this spacer OR actually hide it */}
+      {/* <p className="hidden text-sm">hidden</p> */}
     </CardWrapper>
   );
 };
@@ -220,7 +237,7 @@ const PumpStatusCard: FC<PumpStatusCardProps> = ({ pumpStatus, onToggle }) => {
 };
 
 const DashboardLoadingSkeleton = () => (
-  <div className="grid gap-6 md:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4">
+  <div className="grid gap-6 md:gap-8 grid-cols-2 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4">
     <Skeleton className="h-[220px] bg-white/5 rounded-2xl" />
     <Skeleton className="h-[220px] bg-white/5 rounded-2xl" />
     <Skeleton className="h-[220px] bg-white/5 rounded-2xl" />
