@@ -1,0 +1,91 @@
+{
+  "entities": {
+    "SensorData": {
+      "title": "Sensor Data",
+      "description": "A collection of sensor readings at a specific point in time.",
+      "type": "object",
+      "properties": {
+        "timestamp": {
+            "type": "number",
+            "description": "The epoch timestamp when the reading was taken."
+        },
+        "pumpStatus": {
+          "type": "string",
+          "description": "The status of the pump (e.g., 'ON', 'OFF').",
+          "enum": ["ON", "OFF"]
+        },
+        "threePhasePower": {
+          "type": "string",
+          "description": "The status of the 3-phase power (e.g., 'OK', 'FAULT').",
+          "enum": ["OK", "FAULT"]
+        },
+        "connectivity": {
+          "type": "string",
+          "description": "The connectivity status of the system (e.g., 'Online', 'Offline').",
+          "enum": ["Online", "Offline"]
+        },
+        "soilMoisture": {
+          "type": "number",
+          "description": "The soil moisture level as a percentage."
+        },
+        "airTemp": {
+          "type": "number",
+          "description": "The air temperature in degrees Celsius."
+        },
+        "humidity": {
+          "type": "number",
+          "description": "The relative humidity as a percentage."
+        },
+        "waterLevel": {
+          "type": "number",
+          "description": "The water level in meters."
+        },
+        "phValue": {
+          "type": "number",
+          "description": "The pH value of the water."
+        },
+        "waterFlow": {
+          "type": "number",
+          "description": "The water flow rate in Liters per minute."
+        }
+      },
+      "required": [
+        "timestamp",
+        "pumpStatus",
+        "threePhasePower",
+        "connectivity",
+        "soilMoisture",
+        "airTemp",
+        "humidity",
+        "waterFlow",
+        "waterLevel",
+        "phValue"
+      ]
+    },
+    "SensorHistory": {
+        "title": "Sensor History",
+        "description": "A map of historical sensor readings, where the key is a unique ID.",
+        "type": "object",
+        "additionalProperties": {
+            "$ref": "#/entities/SensorData"
+        }
+    }
+  },
+  "auth": {
+    "providers": ["anonymous"]
+  },
+  "firestore": {
+    "/sensors/{sensorId}": {
+      "schema": {
+        "$ref": "#/entities/SensorData"
+      },
+      "description": "Stores the latest sensor data for a device."
+    },
+    "/sensors/{sensorId}/history/{readingId}": {
+      "schema": {
+        "$ref": "#/entities/SensorData"
+      },
+      "description": "Stores a time-series of historical sensor readings."
+    }
+  }
+}
